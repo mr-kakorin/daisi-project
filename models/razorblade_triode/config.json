@@ -1,0 +1,8 @@
+{
+  "type": "triode",
+  "emission_type": "autoemission",
+  "potentials": { "emitter": [0], "anode": [2.5, 10.0] , "gateway": [0.5,5.5,10.5] },
+  "project_path": "<absolute path>",
+  "timeout": 0.0002,
+  "num_cores": 1
+}

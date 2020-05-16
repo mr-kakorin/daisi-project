@@ -1,0 +1,14 @@
+*.sw*
+*.user
+*.sln
+*.vcxproj*
+*.ycm*
+.ropeproject
+
+*.o
+*.so
+
+*.lib
+*.dll
+.vscode/
+\.vscode/

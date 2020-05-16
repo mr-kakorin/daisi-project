@@ -1,0 +1,21 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 10,
+    "allow_maximization": false,
+    "borders_type": "MANUAL",
+    "borders": {
+        "problem_dimension": 10,
+        "x_left": [-10],
+        "x_right": [10],
+        "x_0": [2]
+    },
+    "methods": [{
+        "type": "Particle swarm",
+        "is_gauss": false,
+        "n_agents": 200,
+        "maximal_iterations": 7000,
+        "required_accuracy": 1e-5,
+        "accuracy_type": "ZERO",
+        "accuracy_source_type": "FITNESS"
+    }]
+}

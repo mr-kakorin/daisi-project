@@ -1,0 +1,8 @@
+{
+  "type": "diode",
+  "emission_type": "autoemission",
+  "potentials": { "emitter": [0], "anode": [3.41, 4.88, 6.44, 7.54, 9.12, 11.19, 18.75] },
+  "project_path": "<absolute path>",
+  "timeout": 0.0005,
+  "num_cores": 1
+}

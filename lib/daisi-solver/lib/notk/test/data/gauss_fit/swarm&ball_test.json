@@ -1,0 +1,35 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 1,
+    "allow_maximization": true,
+    "borders_type": "VECTOR",
+    "methods": [
+        {
+            "type": "Particle swarm",
+            "is_gauss": false,
+            "n_agents": 200,
+            "maximal_iterations": 200,
+            "required_accuracy": 1e-3,
+            "accuracy_type": "ZERO",
+            "accuracy_source_type": "FITNESS"
+        },
+        {
+            "type": "Heavy ball",
+            "gradient_calc_step": 0.001,
+            "weight": 0.1,
+            "maximal_iterations": 10,
+            "required_accuracy": 1e-3,
+            "accuracy_type": "ZERO",
+            "accuracy_source_type": "FITNESS",
+            "searcher1d": {
+                "type": "Uniform 1d search",
+                "maximal_iterations": 10,
+                "required_accuracy": 1e-10,
+                "n_divisions_first": 20,
+                "n_divisions": 10,
+                "accuracy_type": "RELATIVE",
+                "accuracy_source_type": "ARGUMENT"
+            }
+        }
+    ]
+}

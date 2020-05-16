@@ -1,0 +1,14 @@
+{
+    "version": "0.3",
+    "initial_search_borders": {
+        "borders_type": "VECTOR" // "manual" or "vector"
+    },
+    "methods": [{
+        "type": "Box-Wilson",
+        "gradient_calc_step": 0.01,
+        "maximal_iterations": 100,
+        "required_accuracy": 1e-3,
+        "accuracy_type": "ZERO",
+        "accuracy_source_type": "FITNESS"
+    }]
+}

@@ -1,0 +1,15 @@
+*.sw*
+*.user
+*.sln
+*.vcxproj*
+
+*.o
+*.so
+
+*.lib
+*.dll
+*.log
+
+\.log
+
+\.vscode/

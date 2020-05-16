@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+#Build
+cmake-build-*
+solver-build-*
+.idea/*
+\.idea/*
+.idea
+Makefile
+.cbp
+CMakeFiles

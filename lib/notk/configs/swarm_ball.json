@@ -1,0 +1,38 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 10,
+    "allow_maximization": false,
+    "borders_type": "MANUAL",
+    "borders": {
+        "problem_dimension": 10,
+        "x_left": [-10],
+        "x_right": [10],
+        "x_0": [2]
+    },
+    "methods": [{
+        "type": "Particle swarm",
+        "is_gauss": false,
+        "n_agents": 100,
+        "maximal_iterations": 10000,
+        "required_accuracy": 1e-5,
+        "accuracy_type": "ZERO",
+        "accuracy_source_type": "FITNESS"
+    }, {
+        "type": "Heavy ball",
+        "gradient_calc_step": 0.01,
+        "weight": 0.1,
+        "maximal_iterations": 30,
+        "required_accuracy": 1e-5,
+        "accuracy_type": "ZERO",
+        "accuracy_source_type": "FITNESS",
+        "searcher1d": {
+            "type": "Uniform 1d search",
+            "maximal_iterations": 10,
+            "required_accuracy": 1e-6,
+            "n_divisions_first": 10,
+            "n_divisions": 10,
+            "accuracy_type": "RELATIVE",
+            "accuracy_source_type": "ARGUMENT"
+        }
+    }]
+}

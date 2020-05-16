@@ -1,0 +1,4 @@
+#ifndef AccelModelTemplateIncludeN_H
+#define AccelModelTemplateIncludeN_H
+
+#endif

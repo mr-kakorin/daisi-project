@@ -1,0 +1,17 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 1,
+    "allow_maximization": false,
+    "borders_type": "VECTOR",
+    "methods": [
+        {
+            "type": "Particle swarm",
+            "is_gauss": false,
+            "n_agents": 200,
+            "maximal_iterations": 500,
+            "required_accuracy": 1e-3,
+            "accuracy_type": "ZERO",
+            "accuracy_source_type": "FITNESS"
+        }
+    ]
+}

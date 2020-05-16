@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 2.8)
+project(daisi_solver)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-std=c++14 -fopenmp -fext-numeric-literals")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    if(MSVC)
+        if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+            string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        else()
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+        endif()
+    elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wno-long-long -pedantic")
+    endif()
+else()
+    if(MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /Ox")
+    elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -flto")
+    endif()
+endif()
+add_definitions(-DBOOST_LOG_DYN_LINK)
+add_definitions(-DBOOST_SP_USE_SPINLOCK -DBOOST_SP_USE_PTHREADS)
+set(Boost_USE_STATIC_LIBS Off)
+set(Boost_USE_MULTITHREAD On)
+set(Boost_USE_STATIC_RUNTIME Off)
+add_definitions(-DARMA_USE_CXX11 -DARMA_USE_LAPACK)
+add_definitions(-DNUCL -DSIM -DUSE_BLAS)
+set(CMAKE_CXX_STANDARD 14) 
+
+find_package(VTK REQUIRED)
+
+
+include_directories (include)
+include_directories (include/daisi-solver)
+include_directories (lib/include)
+include_directories (lib/common_tools/include)
+include_directories (lib/notk/include)
+include_directories (${VTK_INCLUDE_DIRS})
+
+add_subdirectory(lib/notk)
+
+add_subdirectory(src)
+
+add_subdirectory(test_app)

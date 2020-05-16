@@ -1,0 +1,26 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 1,
+    "allow_maximization": false,
+    "borders_type": "VECTOR",
+    "methods": [
+        {
+            "type": "Gauss search",
+            "use_random": false,
+            "maximal_iterations": 100,
+            "maximal_preprocess_iterations": 10,
+            "required_accuracy": 1e-3,
+            "accuracy_type": "RELATIVE",
+            "accuracy_source_type": "FITNESS",
+            "searcher1d": {
+                "type": "Uniform 1d search",
+                "maximal_iterations": 10,
+                "required_accuracy": 1e-5,
+                "n_divisions_first": 30,
+                "n_divisions": 10,
+                "accuracy_type": "RELATIVE",
+                "accuracy_source_type": "ARGUMENT"
+            }
+        }
+    ]
+}

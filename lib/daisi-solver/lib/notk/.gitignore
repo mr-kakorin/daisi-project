@@ -1,0 +1,17 @@
+*.sw*
+*.user
+*.sln
+*.vcxproj*
+*.ycm*
+.ropeproject
+*.db
+*.o
+*.so
+*.log
+*.db
+*.lib
+*.dll
+vscode/
+html/
+latex/
+.vscode/

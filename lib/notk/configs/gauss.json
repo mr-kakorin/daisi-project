@@ -1,0 +1,30 @@
+{
+    "version": "0.3",
+    "log_each_iteration": 10,
+    "allow_maximization": false,
+    "borders_type": "MANUAL",
+    "borders": {
+        "problem_dimension": 10,
+        "x_left": [-10],
+        "x_right": [10],
+        "x_0": [2]
+    },
+    "methods": [{
+        "type": "Gauss search",
+        "use_random": true,
+        "maximal_iterations": 1000,
+        "maximal_preprocess_iterations": 10,
+        "required_accuracy": 1e-5,
+        "accuracy_type": "ZERO",
+        "accuracy_source_type": "FITNESS",
+        "searcher1d": {
+            "type": "Uniform 1d search",
+            "maximal_iterations": 10,
+            "required_accuracy": 1e-4,
+            "n_divisions_first": 30,
+            "n_divisions": 20,
+            "accuracy_type": "RELATIVE",
+            "accuracy_source_type": "FITNESS"
+        }
+    }]
+}
