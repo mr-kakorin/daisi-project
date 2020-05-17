@@ -8,7 +8,8 @@
 #include <vector>
 #include <string>
 #include "json/json.hpp"
-#include "TasksCreator.h"
+#include "DiodeTasksCreator.h"
+#include "TriodeTasksCreator.h"
 
 using json = nlohmann::json;
 

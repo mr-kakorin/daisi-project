@@ -45,7 +45,7 @@ include_directories(src)
 aux_source_directory(src SRC)
 
 add_executable(${PROJECT_NAME} 
-               ${SRC})
+               ${SRC} src/ITasksCreator.cpp src/DiodeTasksCreator.cpp src/DiodeTasksCreator.h src/TriodeTasksCreator.cpp src/TriodeTasksCreator.h)
 
 target_link_libraries(${PROJECT_NAME}
                       ${Boost_LIBRARIES}
