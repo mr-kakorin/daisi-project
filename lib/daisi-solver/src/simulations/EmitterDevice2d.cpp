@@ -6,7 +6,7 @@
 #include "Particle.h"
 #include "ParticleSource.h"
 #include "Tools.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 #include <random>
 
 static std::default_random_engine       generator;
@@ -42,7 +42,7 @@ double IntegrateVelocity(double a, double b, double t0, double m, double charge,
     {
 
         tmpT[thread][i] =
-            sqrt(m / (2 * commtools::PI() * t0 * std::abs(charge))) *
+            sqrt(m / (2 * PI() * t0 * std::abs(charge))) *
             exp(-(m * stepsT[thread][i] * stepsT[thread][i]) / (2 * t0 * std::abs(charge)));
     }
 
@@ -138,7 +138,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
         y1 = tmp[5];
 
         double alpha = tmp[4];
-        // double alpha = commtools::PI() - atan((y1 - y) / (x1 - x));
+        // double alpha = PI() - atan((y1 - y) / (x1 - x));
 
         cellNumb = int(tmp[6]);
 
@@ -157,7 +157,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             // vTang = 0;
 
             double v    = sqrt(vNorm * vNorm + vTang * vTang);
-            double beta = v / commtools::LIGHT_VELOCITY();
+            double beta = v / LIGHT_VELOCITY();
 
             double gamma = 1 / sqrt(1 - beta * beta);
 
@@ -175,9 +175,9 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             }
 
             particlesData->Get_px()[index] =
-                gamma * (vNorm * std::cos(alpha) - vTang * std::sin(alpha)) / commtools::LIGHT_VELOCITY();
+                gamma * (vNorm * std::cos(alpha) - vTang * std::sin(alpha)) / LIGHT_VELOCITY();
             particlesData->Get_py()[index] =
-                gamma * (vNorm * std::sin(alpha) + vTang * std::cos(alpha)) / commtools::LIGHT_VELOCITY();
+                gamma * (vNorm * std::sin(alpha) + vTang * std::cos(alpha)) / LIGHT_VELOCITY();
 
             particlesData->Get_x()[index] = x;
             particlesData->Get_y()[index] = y;
@@ -307,7 +307,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
     PointType CphRPhi;
     PointType phPhiR;
     PointType current;
-    PointType dphiXY = commtools::PI() / nParticlesXYLoc;
+    PointType dphiXY = PI() / nParticlesXYLoc;
 
     int       k    = 0;
     int       k1   = 0;
@@ -331,14 +331,14 @@ void EmitterDevice2d<PointType>::GenerateParticles(
     PointType EnergyAv = std::abs(energyAverage);
 
     PointType velocityRight = 0;
-    PointType dAv           = sqrt(restMass / (2 * commtools::PI() * EnergyAv * std::abs(charge))) *
+    PointType dAv           = sqrt(restMass / (2 * PI() * EnergyAv * std::abs(charge))) *
                     exp(-(restMass * 0 * 0) / (2 * EnergyAv * std::abs(charge)));
 
     while (1)
     {
         velocityRight = velocityRight + 1000;
         PointType dAvT =
-            sqrt(restMass / (2 * commtools::PI() * EnergyAv * std::abs(charge))) *
+            sqrt(restMass / (2 * PI() * EnergyAv * std::abs(charge))) *
             exp(-(restMass * velocityRight * velocityRight) / (2 * EnergyAv * std::abs(charge)));
         if (dAvT < 0.01 * dAv)
             break;
@@ -348,8 +348,8 @@ void EmitterDevice2d<PointType>::GenerateParticles(
 
     PointType dvPhi = (velocityRight - velocityLeft) / nParticlesEnergyLoc;
 
-    restEnergy = -restMass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() /
-                 commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    restEnergy = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() /
+                 ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     PointType gammaR  = (restEnergy + std::abs(energyAverage)) / restEnergy;
     PointType betaR   = sqrt(gammaR * gammaR - 1) / gammaR;
@@ -391,10 +391,10 @@ void EmitterDevice2d<PointType>::GenerateParticles(
 
             gamma = (restEnergy + std::abs(EnergyAv)) / restEnergy;
             beta  = sqrt(gamma * gamma - 1) / gamma;
-            vR    = beta * commtools::LIGHT_VELOCITY();
+            vR    = beta * LIGHT_VELOCITY();
 
             v    = sqrt(vR * vR + vPhi * vPhi);
-            beta = v / commtools::LIGHT_VELOCITY();
+            beta = v / LIGHT_VELOCITY();
 
             gamma = 1 / sqrt(1 - beta * beta);
 
@@ -427,7 +427,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             PointType alphaN = EdgeIntersection.alpha();
 
             curr = curr + currentFrom_dl;
-            // CphXY = 0.5 * currentFrom_dl / IntegrateCurrent(0, commtools::PI() / 2, phiXY);
+            // CphXY = 0.5 * currentFrom_dl / IntegrateCurrent(0, PI() / 2, phiXY);
 
             if (k < empty)
             {
@@ -440,7 +440,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
                 k1++;
             }
 
-            phXY0 = -commtools::PI() / 2;
+            phXY0 = -PI() / 2;
 
             if (flagLocate)
             {
@@ -461,19 +461,19 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             particlesData->GetPointerToPosition1()[index] = rtmp;
 
             particlesData->GetPointerToMomentum1()[index] =
-                (vR / commtools::LIGHT_VELOCITY()) * gamma * Dmath::sign(alphaEdge);
-            particlesData->Get_pphi()[index] = (vPhi / commtools::LIGHT_VELOCITY()) * gamma *
+                (vR / LIGHT_VELOCITY()) * gamma * Dmath::sign(alphaEdge);
+            particlesData->Get_pphi()[index] = (vPhi / LIGHT_VELOCITY()) * gamma *
                                                particlesData->GetPointerToPosition1()[index];
 
             if (particlesData->GetPointerToPosition1()[index] > 0.05 &&
                 particlesData->GetPointerToPosition1()[index] < 0.12)
             {
                 //	if (alphaEdge < 0)
-                //		alphaEdge = std::abs(2 * commtools::PI() - phitmp) - commtools::PI(); //
-                //�������!! 	else 		alphaEdge = std::abs(2 * commtools::PI() - phitmp); //
+                //		alphaEdge = std::abs(2 * PI() - phitmp) - PI(); //
+                //�������!! 	else 		alphaEdge = std::abs(2 * PI() - phitmp); //
                 //�������!!
 
-                phXY = commtools::PI();
+                phXY = PI();
 
                 particlesData->SetCartesianMomentum(
                     index, {pTotal * std::cos(phXY + alphaEdge), pTotal * std::sin(phXY + alphaEdge)});
@@ -533,15 +533,15 @@ void EmitterDevice2d<PointType>::GenerateParticlesLinac(
     double frequency         = this->DistribParams[3];
     int    particlesPerBunch = this->NumbersParams[0];
 
-    double restEnergy = -restMass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() /
-                        commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    double restEnergy = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() /
+                        ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     double gamma = (restEnergy + std::abs(energyAverage)) / restEnergy;
     double beta  = sqrt(gamma * gamma - 1) / gamma;
 
     std::vector<int> sliceIndexesParallel;
-    double           t1 = particlesData->Time / commtools::LIGHT_VELOCITY();
-    double           t2 = particlesData->Time / commtools::LIGHT_VELOCITY() + dt;
+    double           t1 = particlesData->Time / LIGHT_VELOCITY();
+    double           t2 = particlesData->Time / LIGHT_VELOCITY() + dt;
 
     double phMin;
     double phMax;
@@ -578,14 +578,14 @@ void EmitterDevice2d<PointType>::GenerateParticlesLinac(
         else
         {
             double frequency = this->DistribParams[3];
-            double dtBunch   = (phMax - phMin) / (2 * commtools::PI() * frequency);
-            double add       = beta * commtools::LIGHT_VELOCITY() *
-                         (2 * commtools::PI() * t2 * frequency - phMax) /
-                         (2 * commtools::PI() * frequency);
+            double dtBunch   = (phMax - phMin) / (2 * PI() * frequency);
+            double add       = beta * LIGHT_VELOCITY() *
+                         (2 * PI() * t2 * frequency - phMax) /
+                         (2 * PI() * frequency);
             particlesData->Get_z()[index] =
                 add +
                 ((phMax - (this->Data)[4][sliceIndexesParallel[k]]) / (phMax - phMin)) * beta *
-                    commtools::LIGHT_VELOCITY() * dtBunch;
+                    LIGHT_VELOCITY() * dtBunch;
         }
 
         particlesData->Get_x()[index] = (this->Data)[0][sliceIndexesParallel[k]];
@@ -596,7 +596,7 @@ void EmitterDevice2d<PointType>::GenerateParticlesLinac(
         particlesData->Get_pz()[index] = (this->Data)[5][sliceIndexesParallel[k]];
 
         particlesData->q[index] =
-            this->DistribParams[0] / (this->NumbersParams[0] * commtools::LIGHT_VELOCITY() * beta);
+            this->DistribParams[0] / (this->NumbersParams[0] * LIGHT_VELOCITY() * beta);
     }
 
     if (empty < totalParticles)
@@ -697,8 +697,8 @@ void EmitterDevice2d<PointType>::PreliminaryGeneration(
 
     int    particlesPerBunch = this->NumbersParams[0] * this->NumbersParams[1];
     double energyAverage     = this->DistribParams[1];
-    double restEnergy = -restMass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() /
-                        commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    double restEnergy = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() /
+                        ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     double gamma = (restEnergy + std::abs(energyAverage)) / restEnergy;
     double beta  = sqrt(gamma * gamma - 1) / gamma;
@@ -717,7 +717,7 @@ void EmitterDevice2d<PointType>::PreliminaryGeneration(
         particlesData->Get_pz()[j] = (this->Data)[5][j];
 
         particlesData->q[j] = this->DistribParams[0] / (this->NumbersParams[0] *
-        commtools::LIGHT_VELOCITY() * beta);*/
+        LIGHT_VELOCITY() * beta);*/
 
         particlesDataZ0->Get_x()[j] = (this->Data)[0][j];
         particlesDataZ0->Get_y()[j] = (this->Data)[2][j];

@@ -1,5 +1,0 @@
-if(EXISTS "/home/mrkakorin/diploma/daisi-client/lib/daisi-solver/lib/notk/lib/serreflection/test/serreflection.tests[1]_tests.cmake")
-  include("/home/mrkakorin/diploma/daisi-client/lib/daisi-solver/lib/notk/lib/serreflection/test/serreflection.tests[1]_tests.cmake")
-else()
-  add_test(serreflection.tests_NOT_BUILT serreflection.tests_NOT_BUILT)
-endif()

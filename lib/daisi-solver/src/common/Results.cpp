@@ -2,7 +2,7 @@
 #include "Dmath.h"
 #include "FlagStringsSolver.h"
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 SimulationDataAccel::SimulationDataAccel(const std::vector<std::string>& dataFlagsInput,
                                          const std::string& tagIn, int size1, int size2)
@@ -385,31 +385,6 @@ DynamicsData::serialize<boost::archive::binary_iarchive>(boost::archive::binary_
 template void
 DynamicsData::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
                                                          const unsigned int file_version);
-
-template <class Archive>
-void DynamicsData::save(Archive& ar, const unsigned int) const
-{
-    ar& TimeArray;
-    ar& data;
-    ar& mass;
-    ar& charge;
-    ar& lambda;
-    ar& TimeArrayAdd;
-    ar& dataAdd;
-    ar& tag;
-}
-template <class Archive>
-void DynamicsData::load(Archive& ar, const unsigned int)
-{
-    ar& TimeArray;
-    ar& data;
-    ar& mass;
-    ar& charge;
-    ar& lambda;
-    ar& TimeArrayAdd;
-    ar& dataAdd;
-    ar& tag;
-}
 
 template void
 SimulationDataAccel::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,

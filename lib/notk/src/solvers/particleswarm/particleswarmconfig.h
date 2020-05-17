@@ -6,7 +6,7 @@
 
 namespace notk
 {
-class ParticleSwarmConfig : public BaseOptConfig
+class ParticleSwarmConfig final : public BaseOptConfig
 {
   public:
     size_t get_n_agents();
@@ -18,6 +18,6 @@ class ParticleSwarmConfig : public BaseOptConfig
 }
 
 SERIALIZIBLE_STRUCT(notk::ParticleSwarmConfig, srfl::CheckModes::FATAL,
-                    SER_BASE()(size_t, n_agents, srfl::nan, 1, srfl::inf)(bool, is_gauss, DEF_D()))
+                    SER_BASE()(size_t, n_agents, srfl::nan, 1.0, srfl::inf)(bool, is_gauss, DEF_D()))
 
 #endif

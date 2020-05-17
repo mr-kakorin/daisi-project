@@ -1691,8 +1691,8 @@ void ParticleGridInterface<PointType>::axsPolar(
     PointType phi;
 
     double dphi = 0.058177641733144;
-    double border1 = 1.5 * commtools::PI() - dphi / 2;
-    double border2 = 1.5 * commtools::PI() + dphi / 2;
+    double border1 = 1.5 * PI() - dphi / 2;
+    double border2 = 1.5 * PI() + dphi / 2;
 
     int res;
 
@@ -1724,8 +1724,8 @@ void ParticleGridInterface<PointType>::axsPolar(
             }
 
 
-            if (phi < 1.5 * commtools::PI())
-                    phi = 1.5 * commtools::PI() + (1.5 * commtools::PI() - phi);
+            if (phi < 1.5 * PI())
+                    phi = 1.5 * PI() + (1.5 * PI() - phi);
 
 
             if (particles->cellsNumbersAdd[i] == 0)

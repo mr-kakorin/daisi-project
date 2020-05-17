@@ -1,7 +1,7 @@
 #include "BoundaryConditions.h"
 #include "Geom.h"
 #include "VTKIncludeSolver.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 const static std::vector<std::string> flowBoundaryTypeNames = {
     "Transparency", "Reflection", "Backscattering", "Absolut Absorbtion"};
@@ -275,7 +275,7 @@ double PropertyCondition::GetPotential(double t) const
 {
     return conditionProperties[0][0] +
            conditionProperties[0][1] *
-               std::cos(2 * commtools::PI() * conditionProperties[0][2] * t + conditionProperties[0][3]);
+               std::cos(2 * PI() * conditionProperties[0][2] * t + conditionProperties[0][3]);
 };
 double PropertyCondition::GetPotential(double t, double z, int& status) const
 {
@@ -293,7 +293,7 @@ double PropertyCondition::GetPotential(double t, double z, int& status) const
     status = 1;
     return conditionProperties[i][0] +
            conditionProperties[i][1] *
-               std::cos(2 * commtools::PI() * conditionProperties[i][2] * t + conditionProperties[i][3]);
+               std::cos(2 * PI() * conditionProperties[i][2] * t + conditionProperties[i][3]);
 };
 
 template void

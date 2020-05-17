@@ -15,5 +15,5 @@ class UniformSearch1dConfig : public BaseOptConfig
 }
 
 SERIALIZIBLE_STRUCT(notk::UniformSearch1dConfig, srfl::CheckModes::FATAL,
-                    SER_BASE()(size_t, n_divisions_first, srfl::nan, 2,
-                               srfl::inf)(size_t, n_divisions, srfl::nan, 2, srfl::inf))
+                    SER_BASE()(size_t, n_divisions_first, srfl::nan, 2.0,
+                               srfl::inf)(size_t, n_divisions, srfl::nan, 2.0, srfl::inf))

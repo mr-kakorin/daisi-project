@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include <boostlog0/boostlog.h>
+#include <common_tools/boostlog.hpp>
 #include <common_tools/arrays.h>
 
 #include "iconfig.h"
@@ -83,7 +83,7 @@ bool BaseOptConfig::check_accuracy(const it_res_t<Targ, Tfit>& result_prev,
     }
     if (do_log)
     {
-        LOG(sev_lvl::trace) << "call: check_accuracy done, currentAccuracy = " << currentAccuracy;
+        BL_TRACE() << "call: check_accuracy done, currentAccuracy = " << currentAccuracy;
     }
     if (accuracy_source_type == AccuracySourceType::FITNESS && accuracy_type == AccuracyType::ZERO)
     {

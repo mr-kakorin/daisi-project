@@ -1,6 +1,6 @@
 #include "Geom.h"
 #include "VTKIncludeSolver.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 using namespace DGeo;
 
@@ -159,7 +159,7 @@ template <class PointType>
 PointType Edge<PointType>::alpha() const
 {
     if (point1.x == point2.x)
-        return commtools::PI() / 2;
+        return PI() / 2;
 
     /*	r = sqrt(x*x + y*y);
             if (x > 0 && y >= 0)
@@ -168,22 +168,22 @@ PointType Edge<PointType>::alpha() const
             }
             if (x > 0 && y < 0)
             {
-                    phi = atan(y / x) + 2 * commtools::PI();
+                    phi = atan(y / x) + 2 * PI();
 
             }
             if (x < 0)
             {
-                    phi = atan(y / x) + commtools::PI();
+                    phi = atan(y / x) + PI();
 
             }
             if (std::abs(x)<1e-7 && y>0)
             {
-                    phi = commtools::PI() / 2;
+                    phi = PI() / 2;
 
             }
             if (std::abs(x)<1e-7 && y<0)
             {
-                    phi = 3 * commtools::PI() / 2;
+                    phi = 3 * PI() / 2;
 
             }*/
 

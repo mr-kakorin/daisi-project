@@ -17,7 +17,7 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
     PointType kphN = 20;
     PointType phi0 = 0;
     PointType phi  = 0;
-    PointType dphi = 2 * commtools::PI() / kphN;
+    PointType dphi = 2 * PI() / kphN;
     PointType tmp1;
     PointType tmp2;
 
@@ -25,7 +25,7 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
     PointType sinPh;
 
     PointType xtmp;
-    PointType K = commtools::VACUUM_PERMEABILITY() / (4 * commtools::PI());
+    PointType K = VACUUM_PERMEABILITY() / (4 * PI());
 
     PointType dlz;
 
@@ -69,15 +69,15 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
 
                     //		gridData->GetBphi()[k] = gridData->GetBphi()[k] + (dlz /
                     // electrodes[i]->ElectrodeEdges[j
-                    //+  1].length())*commtools::VACUUM_PERMEABILITY()*tmp[j] / (2 *
-                    // commtools::PI()*gridData->Getr()[k]);
+                    //+  1].length())*VACUUM_PERMEABILITY()*tmp[j] / (2 *
+                    // PI()*gridData->Getr()[k]);
                     volatile PointType I = electrodes[i]->averageCollectedCurrentDensitySim[j] * 2 *
-                                           commtools::PI() *
+                                           PI() *
                                            electrodes[i]->ElectrodeEdges[j].point1.x;
 
                     gridData->GetBphi()[k] = gridData->GetBphi()[k] +
-                                             commtools::VACUUM_PERMEABILITY() * I /
-                                                 (2 * commtools::PI() * gridData->Getr()[k]);
+                                             VACUUM_PERMEABILITY() * I /
+                                                 (2 * PI() * gridData->Getr()[k]);
                     break;
                 }
             }

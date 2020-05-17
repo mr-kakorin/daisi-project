@@ -12,8 +12,10 @@ namespace notk
 template class ParticleSwarm<double, double>;
 template class ParticleSwarm<float, float>;
 
-REGISTER_CHILD(ParticleSwarm<double COMMA double>, IOptimizationStep<double COMMA double>)
-REGISTER_CHILD(ParticleSwarm<float COMMA float>, IOptimizationStep<float COMMA float>)
+REGISTER_CHILD(ParticleSwarm<double COMMA double>, IOptimizationStep<double COMMA double>,
+               "Particle swarm")
+REGISTER_CHILD(ParticleSwarm<float COMMA float>, IOptimizationStep<float COMMA float>,
+               "Particle swarm")
 
 template <class Targ, class Tfit>
 it_res_t<Targ, Tfit>
@@ -103,8 +105,8 @@ ParticleSwarm<Targ, Tfit>::do_preprocess(const it_res_t<Targ, Tfit>& iter_result
 
 template <class Targ, class Tfit>
 it_res_t<Targ, Tfit>
-ParticleSwarm<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
-                                        const it_res_t<Targ, Tfit>&  iter_result,
+ParticleSwarm<Targ, Tfit>::do_iteration(const size_t                iter_counter,
+                                        const it_res_t<Targ, Tfit>& iter_result,
                                         const borders_t<Targ>& current_borders)
 {
     const size_t problem_dim = current_borders.first.size();
@@ -223,10 +225,9 @@ ParticleSwarm<Targ, Tfit>::do_iteration(const size_t                 iter_counte
 }
 
 template <class Targ, class Tfit>
-borders_t<Targ>
-ParticleSwarm<Targ, Tfit>::squeez_borders(const size_t                 iter_counter,
-                                          const it_res_t<Targ, Tfit>&  iter_result,
-                                          const borders_t<Targ>& current_borders)
+borders_t<Targ> ParticleSwarm<Targ, Tfit>::squeez_borders(const size_t                iter_counter,
+                                                          const it_res_t<Targ, Tfit>& iter_result,
+                                                          const borders_t<Targ>& current_borders)
 {
     return current_borders;
 }

@@ -1,4 +1,4 @@
-#include <boostlog0/boostlog.h>
+#include <common_tools/boostlog.hpp>
 #include <common_tools/json_helper.h>
 
 #include <notk/notkresult.hpp>
@@ -30,7 +30,7 @@ IOptimizationStep<Targ, Tfit>::create_step(const boost::property_tree::ptree& pt
 
     if (!result)
     {
-        LOG(sev_lvl::error) << "unexpected solver type: " << type;
+        BL_ERROR() << "unexpected solver type: " << type;
     }
 
     return result;
@@ -62,9 +62,8 @@ bool IOptimizationStep<Targ, Tfit>::set_fitness(
 
 template <class Targ, class Tfit>
 void IOptimizationStep<Targ, Tfit>::opt_routine(
-    NOTKResults<Targ, Tfit>& result, std::vector<Targ>& x_best,
-    borders_t<Targ>& current_borders, const unsigned log_each_iteration,
-    const bool allow_maximization, bool& flag_abort, bool do_log,
+    NOTKResults<Targ, Tfit>& result, std::vector<Targ>& x_best, borders_t<Targ>& current_borders,
+    const unsigned log_each_iteration, const bool allow_maximization, bool& flag_abort, bool do_log,
     const std::list<commtools::pc_shared_ptr<NOTKObserver>>& observers)
 {
     check_data();
@@ -75,8 +74,8 @@ void IOptimizationStep<Targ, Tfit>::opt_routine(
 
     if (do_log)
     {
-        LOG_CH(sev_lvl::trace, "NOTK_RES") << fit_best;
-        LOG(sev_lvl::trace) << "Iteration: " << iter_counter << ", fitness: " << fit_best;
+        BL_TRACE_CH("NOTK_RES") << fit_best;
+        BL_TRACE() << "Iteration: " << iter_counter << ", fitness: " << fit_best;
     }
 
     result.add_data(x_best, fit_best);
@@ -85,8 +84,8 @@ void IOptimizationStep<Targ, Tfit>::opt_routine(
 
     if (do_log)
     {
-        LOG_CH(sev_lvl::trace, "NOTK_RES") << fit_best;
-        LOG(sev_lvl::trace) << "Preprocess, fitness: " << result.get_fitness();
+        BL_TRACE_CH("NOTK_RES") << fit_best;
+        BL_TRACE() << "Preprocess, fitness: " << result.get_fitness();
     }
 
     bool accuracy_achieved =
@@ -119,7 +118,7 @@ void IOptimizationStep<Targ, Tfit>::opt_routine(
 
         if (do_log)
         {
-            LOG_CH(sev_lvl::trace, "NOTK_RES") << iter_result.second;
+            BL_TRACE_CH("NOTK_RES") << iter_result.second;
 
             std::stringstream log_msg;
 
@@ -130,12 +129,13 @@ void IOptimizationStep<Targ, Tfit>::opt_routine(
 
             for (const auto& obs : observers)
             {
-                obs->handle_event(log_msg.str());
+                obs->handle_event(log_msg.str(),
+                                  iter_counter / double(m_config->get_maxNumIterations()));
             }
 
             if (log_local)
             {
-                LOG(sev_lvl::trace) << log_msg.str();
+                BL_TRACE() << log_msg.str();
             }
         }
     }

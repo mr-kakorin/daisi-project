@@ -5,7 +5,7 @@
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include <boostlog0/boostlog.h>
+#include <common_tools/boostlog.hpp>
 
 #include "config.h"
 #include "enums.h"
@@ -153,7 +153,7 @@ struct WaitJSON : public boost::msm::front::state<Base>
     template <class Event, class FSM>
     void on_entry(const Event& ev, FSM& fsm)
     {
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
     }
     virtual std::string name() const override final
     {
@@ -168,7 +168,7 @@ struct Configure : public boost::msm::front::state<Base>
     {
         fsm.reset_result();
 
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
 
         fsm.read_problem_config(ev.m_json);
 
@@ -200,7 +200,7 @@ struct WaitFitnessAndBorders : public boost::msm::front::state<Base>
     template <class Event, class FSM>
     void on_entry(const Event& ev, FSM& fsm)
     {
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
     }
 
     virtual std::string name() const override final
@@ -215,7 +215,7 @@ struct WaitFitness : public boost::msm::front::state<Base>
     template <class Event, class FSM>
     void on_entry(const Event& ev, FSM& fsm)
     {
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
     }
     virtual std::string name() const override final
     {
@@ -228,7 +228,7 @@ struct WaitProcessJSONBorders : public boost::msm::front::state<Base>
     template <class Event, class FSM>
     void on_entry(const Event& ev, FSM& fsm)
     {
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
     }
     virtual std::string name() const override final
     {
@@ -241,7 +241,7 @@ struct WaitProcessVectorBorders : public boost::msm::front::state<Base>
     template <class Event, class FSM>
     void on_entry(const Event& ev, FSM& fsm)
     {
-        LOG(sev_lvl::info) << "enter state: " << name();
+        BL_INFO() << "enter state: " << name();
     }
     virtual std::string name() const override final
     {

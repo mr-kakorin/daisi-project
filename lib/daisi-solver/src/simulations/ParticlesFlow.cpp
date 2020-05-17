@@ -11,7 +11,7 @@
 #include <cmath>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>;
 template class ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>;
@@ -105,7 +105,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetRmsEmitt
     };
     emittance[0] = 4 * betaAv * emittance[0] * 1e5;
     emittance[1] = 4 * betaAv * emittance[1] * 1e5;
-    emittance[2] = 4 * 1e9 * emittance[2] / (betaAv * commtools::LIGHT_VELOCITY());
+    emittance[2] = 4 * 1e9 * emittance[2] / (betaAv * LIGHT_VELOCITY());
 
     for (int i = 0; i < 3; i++)
     {
@@ -326,8 +326,8 @@ std::vector<double>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetFlowMCNumbers()
 {
     std::vector<double> result(3);
-    result[0] = mass / commtools::PROTON_MASS();
-    result[1] = charge / std::abs(commtools::ELECTRON_CHARGE());
+    result[0] = mass / PROTON_MASS();
+    result[1] = charge / std::abs(ELECTRON_CHARGE());
     result[2] = maxTime;
     return result;
 }
@@ -335,8 +335,8 @@ template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::SetFlowMCNumbers(
     std::vector<double> numbers)
 {
-    mass    = commtools::PROTON_MASS() * numbers[0];
-    charge  = std::abs(commtools::ELECTRON_CHARGE()) * numbers[1];
+    mass    = PROTON_MASS() * numbers[0];
+    charge  = std::abs(ELECTRON_CHARGE()) * numbers[1];
     maxTime = numbers[2];
 }
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
@@ -362,7 +362,7 @@ PointType ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetCha
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 PointType ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetAlpha()
 {
-    return charge / (mass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY());
+    return charge / (mass * LIGHT_VELOCITY() * LIGHT_VELOCITY());
 };
 // EmitterDeviceType*  EmitterDeviceStatus;
 
@@ -450,8 +450,8 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
         std::shared_ptr<EmitterDeviceType>(new EmitterDeviceType(DistributionStyleIn));
     ParticlesType      = ParticlesTypeIn;
     DistributionStyle  = DistributionStyleIn;
-    mass               = commtools::PROTON_MASS() * MassNumber;
-    charge             = std::abs(commtools::ELECTRON_CHARGE()) * ChargeNumber;
+    mass               = PROTON_MASS() * MassNumber;
+    charge             = std::abs(ELECTRON_CHARGE()) * ChargeNumber;
     maxTime            = 200;
     boundaryConditions = std::shared_ptr<BoundaryConditions>(new BoundaryConditions());
     boundaryConditions->SetDefaultConditionsList(boundariesList);
@@ -463,7 +463,7 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 bool ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CheckTimeLimit(int thread)
 {
-    if (maxTime * 1e-9 * commtools::LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time)
+    if (maxTime * 1e-9 * LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time)
         return true;
     return false;
 };
@@ -476,8 +476,8 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
     EmitterDeviceStatus = std::shared_ptr<EmitterDeviceType>(new EmitterDeviceType());
     ParticlesType       = ParticlesTypeIn;
     DistributionStyle   = DistributionStyleIn;
-    mass                = commtools::ELECTRON_MASS();
-    charge              = commtools::ELECTRON_CHARGE();
+    mass                = ELECTRON_MASS();
+    charge              = ELECTRON_CHARGE();
     maxTime             = 200;
     boundaryConditions  = std::shared_ptr<BoundaryConditions>(new BoundaryConditions());
     boundaryConditions->SetDefaultConditionsList(boundariesList);

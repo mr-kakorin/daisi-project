@@ -2186,7 +2186,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 	int size = systemSize;
 	std::vector<int> strElements;
 	double tempValue;
-	double eps0 = commtools::VACUUM_PERMITTIVITY();
+	double eps0 = VACUUM_PERMITTIVITY();
 	int flag = 0;
 	double tmp_sum = 0.;
 	volatile double diff_sum = 0.;
@@ -2695,7 +2695,7 @@ void PoissonSolver<PointType>::solveCharge(
 	int size = systemSize;
 	std::vector<int> strElements;
 	double tempValue;
-	double eps0 = commtools::VACUUM_PERMITTIVITY();
+	double eps0 = VACUUM_PERMITTIVITY();
 	int flag = 0;
 	double tmp_sum = 0;
 	volatile double diff_sum = 0;

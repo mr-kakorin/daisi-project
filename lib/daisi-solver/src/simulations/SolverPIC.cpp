@@ -6,7 +6,6 @@
 #include "EmitterDevice3d.h"
 #include "FlagStringsSolver.h"
 #include "GridData.h"
-// #include "LinacModels.h"
 #include "MagneticFieldSolver.h"
 #include "MeshGenerator.h"
 #include "Particle.h"
@@ -16,7 +15,7 @@
 #include "PoissonSolver.h"
 #include "Results.h"
 #include <iostream>
-// #include <windows.h>
+#include <omp.h>
 
 template class Solver<float>;
 template class Solver<double>;
@@ -130,7 +129,7 @@ void Solver<PointType>::SimulateCPUPIC(
 #pragma omp single
             {
                 deviceStatus->SyncronizeThreads(step, particleMover->GetTimeStep(0, 0) /
-                                                          (commtools::LIGHT_VELOCITY() * (1e-9)));
+                                                          (LIGHT_VELOCITY() * (1e-9)));
 
                 plotMutex.lock();
                 nonZeros.clear();
@@ -143,22 +142,22 @@ void Solver<PointType>::SimulateCPUPIC(
                             deviceStatus->GetGridData(), deviceStatus->Getmesh(),
                             deviceStatus->GetboundaryConditions(),
                             deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                                (commtools::LIGHT_VELOCITY()),
+                                (LIGHT_VELOCITY()),
                             progressLoc);
 
                     fieldSolver->FieldSimulateCharge(
                         deviceStatus->GetGridData(), deviceStatus->Getmesh(),
                         deviceStatus->GetboundaryConditions(),
                         deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                            (commtools::LIGHT_VELOCITY()),
+                            (LIGHT_VELOCITY()),
                         nonZeros, step);
                     //	magneticFieldSolver->FieldSimulate(deviceStatus->GetElectrodes(),
                     // deviceStatus->GetGridData(),
-                    // particleMover->GetTimeStep(0, 0) / commtools::LIGHT_VELOCITY());
+                    // particleMover->GetTimeStep(0, 0) / LIGHT_VELOCITY());
                     deviceStatus->GetGridData()->ApplyTimeDepending(
                         deviceStatus->GetglobalFieldConditions(),
                         deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                            (commtools::LIGHT_VELOCITY()));
+                            (LIGHT_VELOCITY()));
                 }
                 plotMutex.unlock();
 
@@ -180,7 +179,7 @@ void Solver<PointType>::SimulateCPUPIC(
                     emissionCurrentSolverPIC->UpdateEmissionCurrent(
                         deviceStatus->GetFlow(i)->GetEmitterDevice(), particleGridInterface,
                         deviceStatus->GetGridData(),
-                        particleMover->GetTimeStep(i, 0) / commtools::LIGHT_VELOCITY(), i, step,
+                        particleMover->GetTimeStep(i, 0) / LIGHT_VELOCITY(), i, step,
                         deviceStatus->GetFlow(i)->GetMass(), deviceStatus->GetFlow(i)->GetCharge(),
                         deviceStatus->GetFlow(i)->GetDistributionStyle());
 
@@ -189,7 +188,7 @@ void Solver<PointType>::SimulateCPUPIC(
 
                 step++;
                 progress = deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                           (maxtime * 1e-9 * commtools::LIGHT_VELOCITY());
+                           (maxtime * 1e-9 * LIGHT_VELOCITY());
                 progressLoc = progress;
                 //	if (step>1 && (flagAbort == false || (iterationErrorEr<1.0e-9 && step>300)
                 //||
@@ -198,7 +197,7 @@ void Solver<PointType>::SimulateCPUPIC(
                 volatile double tt = deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time;
                 if ((step > 1 && (flagAbort == false ||
                                   deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time >
-                                      maxtime * 1e-9 * commtools::LIGHT_VELOCITY())))
+                                      maxtime * 1e-9 * LIGHT_VELOCITY())))
                     flagAllBreak = 1;
                 else
                 {
@@ -281,7 +280,7 @@ void Solver<PointType>::SimulateCPUPIC(
                         deviceStatus->GetElectrodes(),
                         deviceStatus->GetFlow(iflow)->GetDynamicsDataTmp(thread0),
                         deviceStatus->GetFlow(iflow)->GetDynamicsData(thread0),
-                        particleMover->GetTimeStep(iflow, 0) / commtools::LIGHT_VELOCITY(),
+                        particleMover->GetTimeStep(iflow, 0) / LIGHT_VELOCITY(),
                         deviceStatus->GetFlow(iflow)->GetCharge(),
                         deviceStatus->GetFlow(iflow)->GetMass(), i1, i2, thread0);
 
@@ -304,7 +303,7 @@ void Solver<PointType>::SimulateCPUPIC(
                     outputData.back()[t][iflow]->SetData(
                         deviceStatus->GetFlow(iflow)->GetDynamicsData(thread0)->GetData(),
                         deviceStatus->GetFlow(iflow)->GetDynamicsData(thread0)->Time /
-                            (commtools::LIGHT_VELOCITY()),
+                            (LIGHT_VELOCITY()),
                         thread0, saveParam, 1);
                     outputData.back()[t][iflow]->SetEmptyPlaces(EmptyPlacesPIC[iflow][thread0],
                                                                 thread0);
@@ -313,10 +312,10 @@ void Solver<PointType>::SimulateCPUPIC(
 
                 if (deviceStatus->GetFlow(iflow)->GetDynamicsData(thread0)->Time <
                     deviceStatus->GetFlow(iflow)->GetFlowProperties()[4] * 1e-9 *
-                        commtools::LIGHT_VELOCITY())
+                        LIGHT_VELOCITY())
                     deviceStatus->GetFlow(iflow)->GenerateParticlesThreaded(
                         thread0, numThreads, EmptyPlacesPIC[iflow][thread0], 1,
-                        particleMover->GetTimeStep(iflow, thread0) / commtools::LIGHT_VELOCITY(),
+                        particleMover->GetTimeStep(iflow, thread0) / LIGHT_VELOCITY(),
                         step, deviceStatus->GetGridData(), 0, 1); // deviceStatus->GetGridData()
 
                 deviceStatus->GetFlow(iflow)->GetDynamicsData(thread0)->searchBadParticle(

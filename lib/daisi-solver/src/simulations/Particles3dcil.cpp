@@ -1,6 +1,6 @@
 #include "Particle.h"
 #include "Dmath.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class Particles3dcil<double>;
 template class Particles3dcil<float>;
@@ -14,8 +14,8 @@ void Particles3dcil<PointType>::GetBeamMeasuriments(std::vector<std::vector<Poin
     PointType pyTmp;
     PointType beta2;
 
-    float en = commtools::LIGHT_VELOCITY()* commtools::LIGHT_VELOCITY()*mass / (1e3 *
-commtools::ELECTRON_CHARGE());
+    float en = LIGHT_VELOCITY()* LIGHT_VELOCITY()*mass / (1e3 *
+ELECTRON_CHARGE());
 
 
 
@@ -32,8 +32,8 @@ commtools::ELECTRON_CHARGE());
             if (r[i]>0.006 || std::abs((energy - energyAv) / energyAv) > 0.05)
                     continue;
 
-            beta2 = pz[i] / gamma[i];commtools::PI()commtools::PI()
-commtools::PI()commtools::PI()
+            beta2 = pz[i] / gamma[i];PI()PI()
+PI()PI()
             pxTmp = (pr[i] * std::cos(2 * Dconst::PI - phi[i]) + (pphi[i] / r[i])* std::sin(2 * Dconst::PI -
 phi[i])) / (gamma[i]
     * beta2); pyTmp = (pr[i] * std::sin(2 * Dconst::PI - phi[i]) - (pphi[i] / r[i]) * std::cos(2 * Dconst::PI
@@ -72,9 +72,9 @@ void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>
     /*data.resize(2);
     data[0].resize(r.size());
     data[1].resize(r.size());
-    PointType en = commtools::LIGHT_VELOCITY()* commtools::LIGHT_VELOCITY()*mass;
+    PointType en = LIGHT_VELOCITY()* LIGHT_VELOCITY()*mass;
 
-    double enAv = 0;commtools::PI()
+    double enAv = 0;PI()
     double zAv = 0;
     double omega = 2 * Dconst::PI / lambda;
 
@@ -87,7 +87,7 @@ void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>
 
             for (int i = 0; i < gamma.size(); i++)
             {
-                    data[1][i]=-(gamma[i] - 1)*en;commtools::PI()
+                    data[1][i]=-(gamma[i] - 1)*en;PI()
                     enAv = enAv + (-(gamma[i] - 1)*en);
                     data[0][i] = 180 * z[i] * omega / Dconst::PI;
                     while (data[0][i]>180)
@@ -109,7 +109,7 @@ void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>
     case 1:
             for (int i = 0; i < gamma.size(); i++)
             {
-                    beta2 = pz[i] / gamma[i];commtools::PI()commtools::PI()
+                    beta2 = pz[i] / gamma[i];PI()PI()
                     Dmath::Polar2Cartesian(float(r[i]), float(phi[i]), data[0][i], tmp);
                     data[1][i] = (pr[i] * std::cos(2 * Dconst::PI - phi[i]) + (pphi[i] / r[i])* std::sin(2 *
     Dconst::PI - phi[i]))
@@ -119,7 +119,7 @@ void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>
     case 2:
             for (int i = 0; i < gamma.size(); i++)
             {
-                    beta2 = pz[i] / gamma[i];commtools::PI()commtools::PI()
+                    beta2 = pz[i] / gamma[i];PI()PI()
                     Dmath::Polar2Cartesian(float(r[i]), float(phi[i]), tmp, data[0][i]);
                     data[1][i] = (pr[i] * std::sin(2 * Dconst::PI - phi[i]) - (pphi[i] / r[i]) * std::cos(2 *
     Dconst::PI -
@@ -176,7 +176,7 @@ void Particles3dcil<PointType>::GammaCalc(std::vector<PointType>& gamma)
 template <class PointType>
 PointType Particles3dcil<PointType>::GetEnergy(int number, PointType mass)
 {
-    PointType en    = commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() * mass;
+    PointType en    = LIGHT_VELOCITY() * LIGHT_VELOCITY() * mass;
     PointType gamma = sqrt(1 + this->momentums[0][number] * this->momentums[0][number] +
                            this->momentums[1][number] * this->momentums[1][number] +
                            (this->momentums[2][number] / this->positions[0][number]) *

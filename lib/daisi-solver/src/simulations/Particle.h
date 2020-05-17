@@ -4,7 +4,7 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 #include <cmath>
 
 template <class PointType>
@@ -366,10 +366,10 @@ class Particles3dcil : public ParticlesBase<PointType>
     PointType GetEnergy(int number, PointType mass);
     void SetCartesianMomentumPolar(int i, PointType PX, PointType PY)
     {
-        this->momentums[0][i] = PX * std::cos(2 * commtools::PI() - this->positions[2][i]) +
-                                PY * std::sin(2 * commtools::PI() - this->positions[2][i]);
-        this->momentums[2][i] = PX * std::sin(2 * commtools::PI() - this->positions[2][i]) -
-                                PY * std::cos(2 * commtools::PI() - this->positions[2][i]);
+        this->momentums[0][i] = PX * std::cos(2 * PI() - this->positions[2][i]) +
+                                PY * std::sin(2 * PI() - this->positions[2][i]);
+        this->momentums[2][i] = PX * std::sin(2 * PI() - this->positions[2][i]) -
+                                PY * std::cos(2 * PI() - this->positions[2][i]);
         this->momentums[2][i] = this->momentums[2][i] * this->positions[0][i];
     }
 };

@@ -7,7 +7,7 @@
 #include "Particle.h"
 #include "ParticleSource.h"
 #include "Tools.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class EmitterDevice3d<float>;
 template class EmitterDevice3d<double>;
@@ -87,7 +87,7 @@ void EmitterDevice3d<PointType>::GenerateParticles(
     PointType CphRPhi;
     PointType phPhiR;
     PointType current;
-    PointType dphiXY = commtools::PI() / nParticlesXYLoc;
+    PointType dphiXY = PI() / nParticlesXYLoc;
     PointType dZ = (Z2-Z1) / nParticlesZ;
     PointType z = Z1 + dZ/2;
 
@@ -126,8 +126,8 @@ void EmitterDevice3d<PointType>::GenerateParticles(
                     int sign = energyAverage / std::abs(energyAverage);
                     particleEnergy = std::abs(energyAverage); // ��� ����� ������ �������� ����������
     �������������, �� ���-������ � ������ ��� restEnergy =
-    -restMass*commtools::LIGHT_VELOCITY()*commtools::LIGHT_VELOCITY() /
-    commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ��������������� gamma = (restEnergy +
+    -restMass*LIGHT_VELOCITY()*LIGHT_VELOCITY() /
+    ELECTRON_CHARGE(); // ������� ����� ������� � ��������������� gamma = (restEnergy +
     std::abs(energyAverage)) / restEnergy; beta = sqrt(gamma * gamma - 1) / gamma; pTotal = beta * gamma;
     for (int i1 = 0; i1 < nParticlesEmitter; i1++)
                     {
@@ -165,10 +165,10 @@ void EmitterDevice3d<PointType>::GenerateParticles(
 
 
                             curr = curr + currentFrom_dl;
-                            CphXY = 0.5 * currentFrom_dl / IntegrateCurrent(0, commtools::PI() / 2,
+                            CphXY = 0.5 * currentFrom_dl / IntegrateCurrent(0, PI() / 2,
     phiXY);
 
-                            phXY0 = -commtools::PI() / 2;
+                            phXY0 = -PI() / 2;
                             for (int i2 = 0; i2 < nParticlesXYLoc; i2++)
                             {
                                     phXY1 = phXY0 + dphiXY;
@@ -269,8 +269,8 @@ void EmitterDevice3d<PointType>::GenerateParticlesLinac(
 
             double totalCurrent = DistribParams[1];
 
-            double restEnergy = -restMass*commtools::LIGHT_VELOCITY()*commtools::LIGHT_VELOCITY() /
-       commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+            double restEnergy = -restMass*LIGHT_VELOCITY()*LIGHT_VELOCITY() /
+       ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
             int nowParticles = particlesData->NParticles(); // ������� �� ������
             int empty = int(EmptyPlaces.size());
@@ -380,8 +380,8 @@ void EmitterDevice3d<PointType>::PreliminaryGeneration(
 
     double totalCurrent = DistribParams[1];
 
-    double restEnergy = -restMass*commtools::LIGHT_VELOCITY()*commtools::LIGHT_VELOCITY() /
-    commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    double restEnergy = -restMass*LIGHT_VELOCITY()*LIGHT_VELOCITY() /
+    ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     int nowParticles = particlesData->NParticles(); // ������� �� ������
 

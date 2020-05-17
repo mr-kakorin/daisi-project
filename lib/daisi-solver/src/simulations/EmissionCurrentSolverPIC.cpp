@@ -8,7 +8,7 @@
 #include "GridData.h"
 #include "ParticleGridInterface.h"
 #include "ParticleSource.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template
 class EmissionCurrentSolverPIC<float>;
@@ -172,7 +172,7 @@ void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
     return;
   PointType dcurrentDensity = 0;
   dcurrentDensity = (current - emitter->GetParticleSource()->GetEmissionCurrent(1)) /
-                    (2 * commtools::PI() *
+                    (2 * PI() *
                      emitter->GetParticleSource()->sourceSurface[0].extractingEdge->Middle().x *
                      emitter->GetParticleSource()->length());
   for (int i = 0; i < emitter->GetParticleSource()->sourceSurface.size(); i++) {
@@ -252,7 +252,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
 
     double dV = std::abs(V1 - V0);
     dvs.push_back(dV);
-    double jnew = 4.0 * commtools::VACUUM_PERMITTIVITY() * (1.0 / 9.0) *
+    double jnew = 4.0 * VACUUM_PERMITTIVITY() * (1.0 / 9.0) *
                   sqrt(2.0 * std::abs(charge) / mass) * (sqrt(dV) * dV) / (d * d);
 
     if (cathField * charge > 0)
@@ -310,7 +310,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
           gridData->interpolatePoint(x0, (y0 + y1) / 2, 0, Ex, Ey);
           gridData->interpolatePoint(x1, (y0 + y1) / 2, 0, Ex1, Ey1);
 
-          double CellFlow1 = (Ex - Ex1)*(y0 - y1)*commtools::VACUUM_PERMITTIVITY();
+          double CellFlow1 = (Ex - Ex1)*(y0 - y1)*VACUUM_PERMITTIVITY();
 
 
 
@@ -345,9 +345,9 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
   Ey*this->nearCathodeVolumes[flowNumber][i].normalY[0]);
 
           double cathFlow = 4*cathField*this->nearCathodeVolumes[flowNumber][i].Areas[1] *
-  commtools::VACUUM_PERMITTIVITY();
+  VACUUM_PERMITTIVITY();
 
-          CellFlow = CellFlow*commtools::VACUUM_PERMITTIVITY();
+          CellFlow = CellFlow*VACUUM_PERMITTIVITY();
 
           double x1 = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
           double x0 = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[1];
@@ -394,9 +394,9 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
           gridData->interpolatePoint(x00, (y00 + y01) / 2, 0, Ex11, Ey);
           gridData->interpolatePoint(x01, (y00 + y01) / 2, 0, Ex111, Ey1);
 
-          double CellFlow1 = (Ex - Ex1)* dy *commtools::VACUUM_PERMITTIVITY();
+          double CellFlow1 = (Ex - Ex1)* dy *VACUUM_PERMITTIVITY();
 
-          double CellFlow11 = (Ex11 - Ex111)* (y00 - y01) *commtools::VACUUM_PERMITTIVITY();
+          double CellFlow11 = (Ex11 - Ex111)* (y00 - y01) *VACUUM_PERMITTIVITY();
 
 
           PointType rho2 = gridData->interpolatePoint((x1+ x0)/2, y0, 0, std::string("Charge
@@ -535,12 +535,12 @@ void EmissionCurrentSolverPIC<PointType>::ChargeConserving(
     Er = gridData->interpolatePoint(r1, z1, 0, std::string("Er, V/m"), 0) +
          gridData->interpolatePoint(r1, z1, 0, std::string("Er, V/m"), 1);
 
-    PointType v1 = commtools::VACUUM_PERMITTIVITY() * Er * 2 * r1;
+    PointType v1 = VACUUM_PERMITTIVITY() * Er * 2 * r1;
     PointType v2 = 1 > gridData->Getrho()[base] * (r2 * r2 - r1 * r1);
 
-    PointType qold = 1 > gridData->Getrho()[base] * (r2 * r2 - r1 * r1) * commtools::PI() * dz;
+    PointType qold = 1 > gridData->Getrho()[base] * (r2 * r2 - r1 * r1) * PI() * dz;
     PointType qnew =
-        -commtools::VACUUM_PERMITTIVITY() * Er * 2 * commtools::PI() * r1 * dz - qold;
+        -VACUUM_PERMITTIVITY() * Er * 2 * PI() * r1 * dz - qold;
 
     PointType rho1 = gridData->interpolatePoint(r1, gridData->Getz()[base], 0,
                                                 std::string("Charge density, cl/m^3"), 0);
@@ -553,23 +553,23 @@ void EmissionCurrentSolverPIC<PointType>::ChargeConserving(
         gridData->interpolatePoint(gridData->Getr()[base] + dr / 2, gridData->Getz()[base], 0,
                                    std::string("Charge density, cl/m^3"), 0);
 
-    //	J = (-commtools::VACUUM_PERMITTIVITY()*Er * 2 * r1 - 1 > gridData->rho()[base] *
+    //	J = (-VACUUM_PERMITTIVITY()*Er * 2 * r1 - 1 > gridData->rho()[base] *
     //(r2*r2 - r1*r1)) / (timeStep
     //* 2 * r2);
 
     if (flowNumber == 0)
-      J = (-commtools::VACUUM_PERMITTIVITY() * Er * 2 * r1 -
+      J = (-VACUUM_PERMITTIVITY() * Er * 2 * r1 -
            1 * rho * (gridData->Getr()[base] > gridData->Getr()[base] - r1 * r1)) /
           (emitter->GetEmitPeriod() * timeStep * 2 > gridData->Getr()[base]);
 
     if (flowNumber == 1)
-      J = (commtools::VACUUM_PERMITTIVITY() * Er * 2 * (r1) - 1 * (rho) *
+      J = (VACUUM_PERMITTIVITY() * Er * 2 * (r1) - 1 * (rho) *
                                                               ((r1) * (r1) - gridData->Getr()[base] >
                                                                gridData->Getr()[base])) /
           (emitter->GetEmitPeriod() * timeStep * 2 > gridData->Getr()[base]);
 
     // phoOld[k] = rho;
-    //	J = (commtools::VACUUM_PERMITTIVITY()*Er * 2 * r1 - 1 * rho * (r1*r1 -
+    //	J = (VACUUM_PERMITTIVITY()*Er * 2 * r1 - 1 * rho * (r1*r1 -
     // gridData->Getr()[base] >
     // gridData->Getr()[base])) / (emitter->GetEmitPeriod()*timeStep * 2 >
     // gridData->Getr()[base]);
@@ -925,9 +925,9 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode1(
       /*if (CathodeFields[flowNumber][i] * charge < 0)
        dV = dV / 2;*/
 
-      jnew = 4.0 * commtools::PI() * commtools::VACUUM_PERMITTIVITY() * (2.0 / 9.0) *
+      jnew = 4.0 * PI() * VACUUM_PERMITTIVITY() * (2.0 / 9.0) *
              sqrt(2.0 * std::abs(charge) / mass) * (sqrt(dV) * dV) /
-             (r1 * beta * beta * 2.0 * commtools::PI() * r0);
+             (r1 * beta * beta * 2.0 * PI() * r0);
     } else {
 
       double rr0 = sqrt(r0 * r0 + (z0 - zCenter) * (z0 - zCenter));
@@ -939,9 +939,9 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode1(
       double alpha = gammas - 0.3 * pow(gammas, 2.0) + 0.075 * pow(gammas, 3.0) -
                      0.014318 * pow(gammas, 4.0) + 0.0022161 * pow(gammas, 5.0);
 
-      jnew = 8.0 * commtools::PI() * commtools::VACUUM_PERMITTIVITY() * (2.0 / 9.0) *
+      jnew = 8.0 * PI() * VACUUM_PERMITTIVITY() * (2.0 / 9.0) *
              sqrt(2.0 * std::abs(charge) / mass) * (sqrt(dV) * dV) /
-             (alpha * alpha * 4 * commtools::PI() * rr0 * rr0);
+             (alpha * alpha * 4 * PI() * rr0 * rr0);
     }
     /* rr0 = r0;
      rr1 = r1;
@@ -953,8 +953,8 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode1(
     0.014318*pow(gammas, 4.0) + 0.0022161*pow(gammas, 5.0);
 
 
-    double jnew1 = 8.0 * commtools::PI()*commtools::VACUUM_PERMITTIVITY()*(2.0 / 9.0)*sqrt(2.0 *
-    std::abs(charge) / mass)*(sqrt(dV)*dV) / (alpha * alpha * 4 * commtools::PI() * rr0 * rr0);
+    double jnew1 = 8.0 * PI()*VACUUM_PERMITTIVITY()*(2.0 / 9.0)*sqrt(2.0 *
+    std::abs(charge) / mass)*(sqrt(dV)*dV) / (alpha * alpha * 4 * PI() * rr0 * rr0);
 
     */
 
@@ -1052,8 +1052,8 @@ void EmissionCurrentSolverPIC<PointType>::Poisson(
 
           double dV = std::abs(V1 - V0);
 
-          double A = 4.0 * commtools::VACUUM_PERMITTIVITY()*sqrt(2.0 * charge / mass) / (9 *
-  commtools::PI());
+          double A = 4.0 * VACUUM_PERMITTIVITY()*sqrt(2.0 * charge / mass) / (9 *
+  PI());
 
           double omega = 0.3;
 

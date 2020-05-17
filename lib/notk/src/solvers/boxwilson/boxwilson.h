@@ -10,21 +10,21 @@ namespace notk
 {
 
 template <class Targ, class Tfit>
-class BoxWilson : public IOptimizationStep<Targ, Tfit>
+class BoxWilson final : public IOptimizationStep<Targ, Tfit>
 {
   private:
-    virtual it_res_t<Targ, Tfit>
-    do_iteration(const size_t iter_counter, const it_res_t<Targ, Tfit>& iter_result,
-                 const borders_t<Targ>& current_borders) override final;
+    it_res_t<Targ, Tfit> do_iteration(const size_t                iter_counter,
+                                      const it_res_t<Targ, Tfit>& iter_result,
+                                      const borders_t<Targ>& current_borders) override;
 
-    virtual borders_t<Targ>
-    squeez_borders(const size_t iter_counter, const it_res_t<Targ, Tfit>& iter_result,
-                   const borders_t<Targ>& current_borders) override final;
+    borders_t<Targ> squeez_borders(const size_t iter_counter,
+                                   const it_res_t<Targ, Tfit>& iter_result,
+                                   const borders_t<Targ>& current_borders) override;
 
   public:
-    BUILD_CHILD(BoxWilson<Targ COMMA Tfit>, IOptimizationStep<Targ COMMA Tfit>, "Box-Wilson")
+    BUILD_CHILD(BoxWilson<Targ COMMA Tfit>, IOptimizationStep<Targ COMMA Tfit>)
     BoxWilson() = default;
-    virtual bool read_config(const boost::property_tree::ptree& config) override final;
+    bool read_config(const boost::property_tree::ptree& config) override;
 
     std::shared_ptr<BoxWilsonConfig> config() const;
 };

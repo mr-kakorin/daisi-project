@@ -10,26 +10,26 @@ namespace notk
 class HeavyBallConfig;
 
 template <class Targ, class Tfit>
-class HeavyBall : public IOptimizationStep<Targ, Tfit>
+class HeavyBall final : public IOptimizationStep<Targ, Tfit>
 {
   private:
-    virtual it_res_t<Targ, Tfit>
-    do_iteration(const size_t iter_counter, const it_res_t<Targ, Tfit>& iter_result,
-                 const borders_t<Targ>& current_borders) override final;
+    it_res_t<Targ, Tfit> do_iteration(const size_t                iter_counter,
+                                      const it_res_t<Targ, Tfit>& iter_result,
+                                      const borders_t<Targ>& current_borders) override;
 
-    virtual borders_t<Targ>
-    squeez_borders(const size_t iter_counter, const it_res_t<Targ, Tfit>& iter_result,
-                   const borders_t<Targ>& current_borders) override final;
+    borders_t<Targ> squeez_borders(const size_t iter_counter,
+                                   const it_res_t<Targ, Tfit>& iter_result,
+                                   const borders_t<Targ>& current_borders) override;
 
     std::vector<Targ> last_x;
 
     std::shared_ptr<IOptimizationStep<Targ, Tfit>> m_searcher1d;
 
   public:
-    BUILD_CHILD(HeavyBall<Targ COMMA Tfit>, IOptimizationStep<Targ COMMA Tfit>, "Heavy ball")
+    BUILD_CHILD(HeavyBall<Targ COMMA Tfit>, IOptimizationStep<Targ COMMA Tfit>)
 
     HeavyBall() = default;
-    virtual bool read_config(const boost::property_tree::ptree& config) override final;
+    bool read_config(const boost::property_tree::ptree& config) override;
     std::shared_ptr<HeavyBallConfig> config() const;
 };
 }

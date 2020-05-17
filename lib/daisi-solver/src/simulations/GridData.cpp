@@ -121,7 +121,7 @@ void GridDataBase<PointType>::ApplyTimeDepending(PointType frequency, PointType 
                                                  PointType time, std::vector<int>& nonZeros)
 {
 
-    PointType k = std::cos(2 * commtools::PI() * frequency * time + phase);
+    PointType k = std::cos(2 * PI() * frequency * time + phase);
 };
 
 template <class PointType>
@@ -131,7 +131,7 @@ void GridDataBase<PointType>::ApplyTimeDepending(const std::vector<double>& glob
     if (globalPar[0] < 1e-7)
         k = std::cos(globalPar[1]);
     else
-        k = std::cos(2 * commtools::PI() * globalPar[0] * time + globalPar[1]);
+        k = std::cos(2 * PI() * globalPar[0] * time + globalPar[1]);
 
     for (int j = 0; j < E.size(); j++)
         for (int i  = 0; i < E[j].size(); i++)
@@ -151,7 +151,7 @@ void GridDataBase<PointType>::ApplyTimeDepending(PointType frequency, PointType 
     /*if (frequency < 1e-3)
     return;
 
-    PointType k = std::cos(2 * commtools::PI()*frequency*time + phase);
+    PointType k = std::cos(2 * PI()*frequency*time + phase);
     for (int i = 0; i < E[0].size(); i++)
     {
     E[0][i] = ErA[i] * k + ErCol[i];
@@ -354,18 +354,18 @@ NearCathodeVolume<PointType>::NearCathodeVolume(DGeo::Edge<PointType> Edge1In,
         if (flag == 2)
         {
             if (std::abs(Edge[i].point1.y - Edge[i].point2.y) < 1e-12)
-                Areas[i] = commtools::PI() * std::abs(Edge[i].point1.x * Edge[i].point1.x -
+                Areas[i] = PI() * std::abs(Edge[i].point1.x * Edge[i].point1.x -
                                                  Edge[i].point2.x * Edge[i].point2.x);
             else
                 Areas[i] =
-                    commtools::PI() * (Edge[i].point1.x + Edge[i].point2.x) * Edge[i].length();
+                    PI() * (Edge[i].point1.x + Edge[i].point2.x) * Edge[i].length();
         }
     }
     /*	if (flag == 2)
             {
                     if (std::abs(Edge[i].point1.y - Edge[i].point2.y) < 1e-12)
-                            volume = commtools::PI()*std::abs(Edge[i].point1.x*Edge[i].point1.x -
-       Edge[i].point2.x* Edge[i].point2.x); else Areas[i] = commtools::PI()*(Edge[i].point1.x +
+                            volume = PI()*std::abs(Edge[i].point1.x*Edge[i].point1.x -
+       Edge[i].point2.x* Edge[i].point2.x); else Areas[i] = PI()*(Edge[i].point1.x +
        Edge[i].point2.x)*Edge[i].length();
             }*/
 

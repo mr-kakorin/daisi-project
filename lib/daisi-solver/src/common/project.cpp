@@ -1,10 +1,6 @@
 #include <iostream>
 
 #include "project.h"
-#ifdef NUCL
-#include "../accel/RFQ/RFQModel.h"
-#include "../accel/Synchrotron/SynchrotronModel.h"
-#endif
 #ifdef SIM
 #include "../simulations/Model2d.h"
 #include "../simulations/Model2daxs.h"
@@ -181,22 +177,6 @@ void project::SaveCurrentModel(std::string currentModelFileNameIn, std::string v
     switch (problemType)
     {
 
-#ifdef NUCL
-    case 9:
-    {
-        SynchrotronModel* ser1 = dynamic_cast<SynchrotronModel*>(accelModel);
-        oa << *ser1;
-    }
-    break;
-
-    case 7:
-    {
-        RFQModel* ser1 = dynamic_cast<RFQModel*>(accelModel);
-        oa << *ser1;
-    }
-    break;
-#endif
-
 #ifdef SIM
     // case 8:
     // {
@@ -333,22 +313,6 @@ void project::ModelLoad(std::string modelFilePath, std::string version, std::str
 
         switch (problemType)
         {
-#ifdef NUCL
-
-        case 9:
-        {
-            SynchrotronModel* ser1 = dynamic_cast<SynchrotronModel*>(accelModel);
-            ia >> *ser1;
-        }
-        break;
-
-        case 7:
-        {
-            RFQModel* ser1 = dynamic_cast<RFQModel*>(accelModel);
-            ia >> *ser1;
-        }
-        break;
-#endif
 
 #ifdef SIM
 
@@ -444,16 +408,6 @@ void project::ModelCreate()
     switch (problemType)
     {
 
-#ifdef NUCL
-
-    case 9:
-        accelModel = new SynchrotronModel(projectFolder + "/dataFiles/");
-        break;
-
-    case 7:
-        accelModel = new RFQModel(projectFolder + "/dataFiles/");
-        break;
-#endif
 
 #ifdef SIM
 
@@ -529,24 +483,6 @@ void project::ModelDelete()
 {
     switch (problemType)
     {
-
-#ifdef NUCL
-
-    case 9:
-    {
-        SynchrotronModel* model = dynamic_cast<SynchrotronModel*>(accelModel);
-        delete model;
-    }
-    break;
-
-    case 7:
-    {
-        RFQModel* model = dynamic_cast<RFQModel*>(accelModel);
-        delete model;
-    }
-    break;
-
-#endif
 
 #ifdef SIM
     // case 8:

@@ -4,8 +4,8 @@
 #include "MeshContainer3d.h"
 #include "MeshGenerator.h"
 #include "ParticleGridInterface.h"
-#include <fstream>
-#include <iostream>
+#include <omp.h>
+
 template class MeshGenerator<float>;
 template class MeshGenerator<double>;
 
@@ -45,7 +45,6 @@ MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
       int er = sscanf(ss, "%lf %lf %lf %lf", &tmp[0], &tmp[1], &tmp[2], &tmp[3]);
       for (int ti = 0; ti < 4; ti++)
       {
-        std::cout<<tmp[ti]<<std::endl;
         if (std::isnan(tmp[ti]))
         {
           fclose(fp);
@@ -235,7 +234,7 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
   mesh->h1       = tmp;
   // mesh->h1 = meshParams.GetStep(rMin, 0);
 
-  phiMax         = phiMin + commtools::PI() / 60;
+  phiMax         = phiMin + PI() / 60;
   mesh->nVertexY = meshParams.GetNumberOfSteps(1, phiMin, phiMax, tmp) + 4;
   mesh->h2       = tmp;
   // mesh->h2 = meshParams.GetStep(phiMin, 1);
@@ -293,8 +292,8 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
     };
 
     RayTracePolar(epsilon, meshParams, CurrentPoint, mesh->flagMatrix,
-                  std::cos(double(2 * commtools::PI() - phiCurrent)),
-                  std::sin(double(2 * commtools::PI() - phiCurrent)), yNum, boundary);
+                  std::cos(double(2 * PI() - phiCurrent)),
+                  std::sin(double(2 * PI() - phiCurrent)), yNum, boundary);
     yNum++;
     h2         = meshParams.GetStep(phiCurrent, 1);
     phiCurrent = phiCurrent + h2;
@@ -311,8 +310,8 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
     std::vector<DGeo::Point<PointType>>* tmpL1 = new std::vector<DGeo::Point<PointType>>();
 
     MeshAssemblyPolar(meshParams, CurrentPoint, tmpL1, mesh->templNumb, mesh->flagMatrix,
-                      std::cos(2. * commtools::PI() - phiCurrent),
-                      std::sin(2. * commtools::PI() - phiCurrent), yNum, number, boundary,
+                      std::cos(2. * PI() - phiCurrent),
+                      std::sin(2. * PI() - phiCurrent), yNum, number, boundary,
                       mesh->linearToTemplNumb);
     if (tmpL1->size() != 0)
       mesh->meshData.push_back(*tmpL1);
@@ -623,8 +622,6 @@ void MeshGenerator<PointType>::RayTrace(
         Dmath::imat& flagMartix, PointType h1, PointType h2, int yNum,
         const std::shared_ptr<BoundaryContainer2d<PointType>> boundary)
 {
-  std::ofstream outfile;
-  outfile.open("/home/mrkakorin/diploma/mesh.txt", std::ios::app);
   int j = 1;
 
   PointType xmax = StartPoint.x;
@@ -645,7 +642,6 @@ void MeshGenerator<PointType>::RayTrace(
 
   if (val != 2)
   {
-    outfile << "val!=2" << val << " " << epsilon << StartPoint.x <<" "<< StartPoint.y <<" "<< StartPoint.z <<std::endl;
     intersections           = -1; //�� �������
     flagMartix(1, yNum + 1) = 1;
     // f1 = 2;

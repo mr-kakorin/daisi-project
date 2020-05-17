@@ -23,34 +23,33 @@ else()
     if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /Ox")
     elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -flto")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Os")
     endif()
 endif()
-set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 
-include(cotire)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 
-add_definitions(-DBOOST_LOG_DYN_LINK)
-add_definitions(-DBOOST_SP_USE_SPINLOCK -DBOOST_SP_USE_PTHREADS -DBOOST_THREAD_PROVIDES_FUTURE)
+find_package(Boost 1.55 COMPONENTS)
+
+add_definitions(-DBOOST_LOG_DYN_LINK=1)
 
 add_definitions(-DBOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)
 add_definitions(-DBOOST_MPL_LIMIT_VECTOR_SIZE=30)
 
-
+if(NOT TARGET common_tools)
 add_subdirectory(lib/common_tools)
-add_subdirectory(lib/serreflection)
+endif()
 
 include_directories (include)
-include_directories (lib/boostlog0/include)
 include_directories (lib/common_tools/include)
 include_directories (lib/serreflection/include)
+include_directories (${Boost_INCLUDE_DIRS})
+
 add_subdirectory(src)
 
-#option(BUILD_TEST "Build and run test" ON)
+option(BUILD_TEST "Build and run test" ON)
 
-#if(BUILD_TEST)
-#    enable_testing()
-#    add_subdirectory(test)
-#endif()
-
-# set(CMAKE_INSTALL_PREFIX "/usr/notk/")
+if(BUILD_TEST)
+    enable_testing()
+    add_subdirectory(test)
+endif()

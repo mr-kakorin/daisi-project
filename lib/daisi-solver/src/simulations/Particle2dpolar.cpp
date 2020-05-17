@@ -1,6 +1,6 @@
 #include "Particle.h"
 #include "Dmath.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 //// 0 r 1 phi 2 x 3 y 4 phiReal 5 xReal 6 yReal,
 ////
@@ -41,25 +41,25 @@ void Particles2dpolar<PointType>::load(Archive& ar, const unsigned int)
 template <class PointType>
 void Particles2dpolar<PointType>::SetCartesianMomentum(int i, const std::vector<PointType>& PX)
 {
-    this->momentums[0][i] = PX[0] * std::cos(2 * commtools::PI() - this->positions[1][i]) +
-                            PX[1] * std::sin(2 * commtools::PI() - this->positions[1][i]);
-    this->momentums[1][i] = PX[0] * std::sin(2 * commtools::PI() - this->positions[1][i]) -
-                            PX[1] * std::cos(2 * commtools::PI() - this->positions[1][i]);
+    this->momentums[0][i] = PX[0] * std::cos(2 * PI() - this->positions[1][i]) +
+                            PX[1] * std::sin(2 * PI() - this->positions[1][i]);
+    this->momentums[1][i] = PX[0] * std::sin(2 * PI() - this->positions[1][i]) -
+                            PX[1] * std::cos(2 * PI() - this->positions[1][i]);
     this->momentums[1][i] = this->momentums[1][i] * this->positions[0][i];
 };
 template <class PointType>
 PointType Particles2dpolar<PointType>::GetCartesianPX(int i)
 {
-    return this->momentums[0][i] * std::cos(2 * commtools::PI() - this->positions[1][i]) +
+    return this->momentums[0][i] * std::cos(2 * PI() - this->positions[1][i]) +
            (this->momentums[1][i] / this->positions[0][i]) *
-               std::sin(2 * commtools::PI() - this->positions[1][i]);
+               std::sin(2 * PI() - this->positions[1][i]);
 };
 template <class PointType>
 PointType Particles2dpolar<PointType>::GetCartesianPY(int i)
 {
-    return this->momentums[0][i] * std::sin(2 * commtools::PI() - this->positions[1][i]) -
+    return this->momentums[0][i] * std::sin(2 * PI() - this->positions[1][i]) -
            (this->momentums[1][i] / this->positions[0][i]) *
-               std::cos(2 * commtools::PI() - this->positions[1][i]);
+               std::cos(2 * PI() - this->positions[1][i]);
 };
 
 template <class PointType>
@@ -82,8 +82,8 @@ template <class PointType>
 void Particles2dpolar<PointType>::PeriodicalEvent()
 {
     double dphi    = 0.058177641733144;
-    double border1 = 1.5 * commtools::PI() - dphi / 2;
-    double border2 = 1.5 * commtools::PI() + dphi / 2;
+    double border1 = 1.5 * PI() - dphi / 2;
+    double border2 = 1.5 * PI() + dphi / 2;
 
     std::vector<PointType> tmp = this->positions[1];
 
@@ -100,11 +100,11 @@ void Particles2dpolar<PointType>::PeriodicalEvent()
         while (this->positions[1][i] > border2)
             this->positions[1][i] = this->positions[1][i] - dphi;
 
-        if (this->positions[1][i] < 1.5 * commtools::PI())
+        if (this->positions[1][i] < 1.5 * PI())
             this->positions[1][i] =
-                1.5 * commtools::PI() + (1.5 * commtools::PI() - this->positions[1][i]);
+                1.5 * PI() + (1.5 * PI() - this->positions[1][i]);
 
-        if (!(this->positions[1][i] > 1.5 * commtools::PI() && this->positions[1][i] < border2))
+        if (!(this->positions[1][i] > 1.5 * PI() && this->positions[1][i] < border2))
         {
             int tt = 0;
         };
@@ -163,7 +163,7 @@ void Particles2dpolar<PointType>::GetBetaComponents(PointType& beta1, PointType&
 template <class PointType>
 PointType Particles2dpolar<PointType>::GetEnergy(int number, PointType mass)
 {
-    PointType en = commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() * mass;
+    PointType en = LIGHT_VELOCITY() * LIGHT_VELOCITY() * mass;
 
     PointType gamma = sqrt(1 + this->momentums[0][number] * this->momentums[0][number] +
                            (this->momentums[1][number] / this->positions[0][number]) *

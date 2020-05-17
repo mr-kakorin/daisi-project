@@ -3,7 +3,7 @@
 #include "BoundaryContainer3d.h"
 #include "Geom.h"
 #include "geomTools.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class ElectrodeCurrent<float>;
 template class ElectrodeCurrent<double>;
@@ -345,7 +345,7 @@ void ElectrodeCurrent<PointType>::PowerAndCurrentsCalculate(int k, double t, dou
     {
         PointType koef;
         if (type == 2)
-            koef = 2 * commtools::PI() * ElectrodeEdges[j].point1.x;
+            koef = 2 * PI() * ElectrodeEdges[j].point1.x;
         else
             koef                             = 1;
         averageCollectedCurrentDensitySim[j] = averageCollectedCurrentDensitySim[j] / koef;
@@ -391,7 +391,7 @@ void ElectrodeCurrent<PointType>::PowerAndCurrentsCalculate(int k, double t, dou
         {
             PointType koef;
             if (type == 2)
-                koef = 2 * commtools::PI() * ElectrodeEdges[j].point1.x;
+                koef = 2 * PI() * ElectrodeEdges[j].point1.x;
             else
                 koef = 1;
             averageIrradiatedCurrentDensity[j] =

@@ -196,31 +196,31 @@ void Dmath::Cartesian2Polar(PointType x, PointType y, PointType& r, PointType& p
     if (x > 0 && y >= 0)
     {
         phi = atan(y / x);
-        phi = 2 * commtools::PI() - phi;
+        phi = 2 * PI() - phi;
         return;
     }
     if (x > 0 && y < 0)
     {
-        phi = atan(y / x) + 2 * commtools::PI();
-        phi = 2 * commtools::PI() - phi;
+        phi = atan(y / x) + 2 * PI();
+        phi = 2 * PI() - phi;
         return;
     }
     if (x < 0)
     {
-        phi = atan(y / x) + commtools::PI();
-        phi = 2 * commtools::PI() - phi;
+        phi = atan(y / x) + PI();
+        phi = 2 * PI() - phi;
         return;
     }
     if (std::abs(x) < 1e-7 && y > 0)
     {
-        phi = commtools::PI() / 2;
-        phi = 2 * commtools::PI() - phi;
+        phi = PI() / 2;
+        phi = 2 * PI() - phi;
         return;
     }
     if (std::abs(x) < 1e-7 && y < 0)
     {
-        phi = 3 * commtools::PI() / 2;
-        phi = 2 * commtools::PI() - phi;
+        phi = 3 * PI() / 2;
+        phi = 2 * PI() - phi;
         return;
     }
 };
@@ -234,8 +234,8 @@ void Dmath::Polar2Cartesian(PointType* r, PointType* phi, PointType* x, PointTyp
 {
     for (int i = 0; i < size; i++)
     {
-        x[i] = r[i] * std::cos(double(2 * commtools::PI() - phi[i]));
-        y[i] = r[i] * std::sin(double(2 * commtools::PI() - phi[i]));
+        x[i] = r[i] * std::cos(double(2 * PI() - phi[i]));
+        y[i] = r[i] * std::sin(double(2 * PI() - phi[i]));
     }
 };
 
@@ -245,8 +245,8 @@ template void Dmath::Polar2Cartesian<double>(double r, double phi, double& x, do
 template <class PointType>
 void Dmath::Polar2Cartesian(PointType r, PointType phi, PointType& x, PointType& y)
 {
-    x = r * std::cos(double(2 * commtools::PI() - phi));
-    y = r * std::sin(double(2 * commtools::PI() - phi));
+    x = r * std::cos(double(2 * PI() - phi));
+    y = r * std::sin(double(2 * PI() - phi));
 };
 
 template void Dmath::SmoothMovingAverage<float>(std::vector<float>& data, int N);

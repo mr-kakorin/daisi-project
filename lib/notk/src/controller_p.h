@@ -66,7 +66,7 @@ class NOTKController_p_
     template <class FSM, class Event>
     void no_transition(Event const& e, FSM& fsm, int state)
     {
-        LOG(sev_lvl::error) << "no transition from state: " << fsm.get_state_by_id(state)->name()
+        BL_ERROR() << "no transition from state: " << fsm.get_state_by_id(state)->name()
                             << " on event: " << e.name();
     }
 

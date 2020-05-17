@@ -301,9 +301,9 @@ void ParticlesMover<PointType>::updateMomentums(
 
         PointType b = DT[thread] * alpha * particlesDataTmp.Get_Ey()[i - i1];
 
-        PointType B1 = DT[thread] * B * alpha * commtools::LIGHT_VELOCITY() / (2 * gamma12);
+        PointType B1 = DT[thread] * B * alpha * LIGHT_VELOCITY() / (2 * gamma12);
 
-        PointType B2 = -DT[thread] * B * alpha * commtools::LIGHT_VELOCITY() / (2 * gamma12);
+        PointType B2 = -DT[thread] * B * alpha * LIGHT_VELOCITY() / (2 * gamma12);
 
         PointType pxold = particlesData->Get_px()[i];
 
@@ -341,8 +341,8 @@ void ParticlesMover<PointType>::updatePositions(
     PointType phiold;
 
     double dphi    = 0.058177641733144;
-    double border1 = 1.5 * commtools::PI() - dphi / 2;
-    double border2 = 1.5 * commtools::PI() + dphi / 2;
+    double border1 = 1.5 * PI() - dphi / 2;
+    double border2 = 1.5 * PI() + dphi / 2;
 
 #pragma simd
     for (int i = i1; i < i2; i++)
@@ -386,9 +386,9 @@ void ParticlesMover<PointType>::updatePositions(
             particlesData->Get_phi()[i] = particlesData->Get_phi()[i] - dphi * c;
         }
 
-        if (particlesData->Get_phi()[i] < 1.5 * commtools::PI())
+        if (particlesData->Get_phi()[i] < 1.5 * PI())
             particlesData->Get_phi()[i] =
-                1.5 * commtools::PI() + (1.5 * commtools::PI() - particlesData->Get_phi()[i]);
+                1.5 * PI() + (1.5 * PI() - particlesData->Get_phi()[i]);
 
         PointType dd = std::abs(phiold - particlesData->Get_phi()[i]);
 
@@ -425,8 +425,8 @@ void ParticlesMover<PointType>::updateMomentums(
     PointType r12;
 
     double dphi    = 0.058177641733144;
-    double border1 = 1.5 * commtools::PI() - dphi / 2;
-    double border2 = 1.5 * commtools::PI() + dphi / 2;
+    double border1 = 1.5 * PI() - dphi / 2;
+    double border2 = 1.5 * PI() + dphi / 2;
 
 #pragma simd
     for (int i = i1; i < i2; i++)
@@ -479,7 +479,7 @@ void ParticlesMover<PointType>::updateMomentums(
             ph    = ph - dphi * c;
         }
 
-        if (ph < 1.5 * commtools::PI())
+        if (ph < 1.5 * PI())
             particlesDataTmp.Get_Ephi()[i - i1] = -particlesDataTmp.Get_Ephi()[i - i1];
 
         particlesData->Get_pphi()[i] = pphin +
@@ -677,8 +677,8 @@ void ParticlesMover<PointType>::updateMomentums(
     PointType pzn;
 
     double dphi    = 0.058177641733144;
-    double border1 = 1.5 * commtools::PI() - dphi / 2;
-    double border2 = 1.5 * commtools::PI() + dphi / 2;
+    double border1 = 1.5 * PI() - dphi / 2;
+    double border2 = 1.5 * PI() + dphi / 2;
 
     for (int i = i1; i < i2; i++)
     {
@@ -699,11 +699,11 @@ void ParticlesMover<PointType>::updateMomentums(
 
         // particlesData->Get_pr()[i] = (prn + DT[thread] * alpha*(particlesDataTmp.Get_Er()[i - i1]
         // -
-        // particlesDataTmp.Get_Bphi()[i - i1]*commtools::LIGHT_VELOCITY()*pzn/ gamma));
+        // particlesDataTmp.Get_Bphi()[i - i1]*LIGHT_VELOCITY()*pzn/ gamma));
         // particlesData->Get_pz()[i] = (pzn +
         // DT[thread] * alpha*(particlesDataTmp.Get_Ez()[i - i1] + particlesDataTmp.Get_Bphi()[i -
         // i1]*
-        // commtools::LIGHT_VELOCITY()*prn / gamma));
+        // LIGHT_VELOCITY()*prn / gamma));
 
         PointType gamma =
             sqrt(1 + prn * prn + pzn * pzn +
@@ -716,7 +716,7 @@ void ParticlesMover<PointType>::updateMomentums(
         pz0   = pzn + DT[thread] * alpha * particlesDataTmp.Get_Ez()[i - i1] / 2;
         gamma = sqrt(1 + pr0 * pr0 + pz0 * pz0 +
                      (particlesData->Get_pphi()[i] / r) * (particlesData->Get_pphi()[i] / r));
-        B = alpha * commtools::LIGHT_VELOCITY() * particlesDataTmp.Get_Bphi()[i - i1] / (2 * gamma);
+        B = alpha * LIGHT_VELOCITY() * particlesDataTmp.Get_Bphi()[i - i1] / (2 * gamma);
         A_r = alpha * particlesDataTmp.Get_Er()[i - i1] +
               particlesData->Get_pphi()[i] * particlesData->Get_pphi()[i] / (r * r * r * gamma);
         A_z = alpha * particlesDataTmp.Get_Ez()[i - i1];
@@ -745,7 +745,7 @@ void ParticlesMover<PointType>::updateMomentums(
         }
 
 
-        if (ph < 1.5 * commtools::PI())
+        if (ph < 1.5 * PI())
                 particlesData->Ephi[i] = -particlesData->Ephi[i];
 
 

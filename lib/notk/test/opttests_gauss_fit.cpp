@@ -89,11 +89,11 @@ class TestGaussFit : public ::testing::Test
         auto NOTKController = notk::NOTKBuilder<double, double>::build_notk_file_config(
             config, fitness_1, border_x1_1, border_x2_1);
 
-        ASSERT_TRUE(NOTKController);
+        ASSERT_TRUE(static_cast<bool>(NOTKController));
 
         auto result_1 = NOTKController->process(flag_abort);
 
-        ASSERT_TRUE(result_1);
+        ASSERT_TRUE(static_cast<bool>(result_1));
 
         std::cout << " tol = " << tol << std::endl;
 
@@ -106,7 +106,7 @@ class TestGaussFit : public ::testing::Test
 
         auto result_2 = NOTKController->process(flag_abort);
 
-        ASSERT_TRUE(result_2);
+        ASSERT_TRUE(static_cast<bool>(result_2));
 
         EXPECT_NEAR(expected[3], result_2->get_last_argument()[0], expected[3] * tol);
     }

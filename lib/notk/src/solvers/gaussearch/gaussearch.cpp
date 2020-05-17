@@ -14,8 +14,9 @@ namespace notk
 template class GaussSearch<double, double>;
 template class GaussSearch<float, float>;
 
-REGISTER_CHILD(GaussSearch<double COMMA double>, IOptimizationStep<double COMMA double>)
-REGISTER_CHILD(GaussSearch<float COMMA float>, IOptimizationStep<float COMMA float>)
+REGISTER_CHILD(GaussSearch<double COMMA double>, IOptimizationStep<double COMMA double>,
+               "Gauss search")
+REGISTER_CHILD(GaussSearch<float COMMA float>, IOptimizationStep<float COMMA float>, "Gauss search")
 
 template <class Targ, class Tfit>
 Tfit GaussSearch<Targ, Tfit>::fitness1dWrapper(const double x, const std::vector<Targ>& all,
@@ -30,7 +31,7 @@ Tfit GaussSearch<Targ, Tfit>::fitness1dWrapper(const double x, const std::vector
 
 template <class Targ, class Tfit>
 Tfit GaussSearch<Targ, Tfit>::single_iteration(const std::vector<size_t>& indexes,
-                                               std::vector<Targ>& x_current,
+                                               std::vector<Targ>&     x_current,
                                                const borders_t<Targ>& current_borders) const
 {
     size_t problem_dim = indexes.size();
@@ -42,9 +43,8 @@ Tfit GaussSearch<Targ, Tfit>::single_iteration(const std::vector<size_t>& indexe
         m_searcher1d->set_fitness(
             std::bind(&GaussSearch::fitness1dWrapper, this, std::placeholders::_1, x_current, dim));
 
-        borders_t<Targ> borders_1d =
-            std::make_pair(std::vector<Targ>{current_borders.first[dim]},
-                           std::vector<Targ>{current_borders.second[dim]});
+        borders_t<Targ> borders_1d = std::make_pair(std::vector<Targ>{current_borders.first[dim]},
+                                                    std::vector<Targ>{current_borders.second[dim]});
 
         std::vector<Targ> x_current_tmp = {x_current[dim]};
         bool              flag_abort    = true;
@@ -58,9 +58,8 @@ Tfit GaussSearch<Targ, Tfit>::single_iteration(const std::vector<size_t>& indexe
 }
 
 template <class Targ, class Tfit>
-it_res_t<Targ, Tfit>
-GaussSearch<Targ, Tfit>::do_preprocess(const it_res_t<Targ, Tfit>& iter_result,
-                                       const borders_t<Targ>& current_borders)
+it_res_t<Targ, Tfit> GaussSearch<Targ, Tfit>::do_preprocess(const it_res_t<Targ, Tfit>& iter_result,
+                                                            const borders_t<Targ>& current_borders)
 {
     const size_t problem_dim = current_borders.first.size();
 
@@ -89,10 +88,9 @@ GaussSearch<Targ, Tfit>::do_preprocess(const it_res_t<Targ, Tfit>& iter_result,
 }
 
 template <class Targ, class Tfit>
-it_res_t<Targ, Tfit>
-GaussSearch<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
-                                      const it_res_t<Targ, Tfit>&  iter_result,
-                                      const borders_t<Targ>& current_borders)
+it_res_t<Targ, Tfit> GaussSearch<Targ, Tfit>::do_iteration(const size_t iter_counter,
+                                                           const it_res_t<Targ, Tfit>& iter_result,
+                                                           const borders_t<Targ>& current_borders)
 {
     const size_t problem_dim = current_borders.first.size();
 
@@ -121,10 +119,9 @@ GaussSearch<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
 }
 
 template <class Targ, class Tfit>
-borders_t<Targ>
-GaussSearch<Targ, Tfit>::squeez_borders(const size_t                 iter_counter,
-                                        const it_res_t<Targ, Tfit>&  iter_result,
-                                        const borders_t<Targ>& current_borders)
+borders_t<Targ> GaussSearch<Targ, Tfit>::squeez_borders(const size_t                iter_counter,
+                                                        const it_res_t<Targ, Tfit>& iter_result,
+                                                        const borders_t<Targ>& current_borders)
 {
     return current_borders;
 }
@@ -145,7 +142,7 @@ bool GaussSearch<Targ, Tfit>::read_config(const boost::property_tree::ptree& con
     }
     catch (const std::exception& ex)
     {
-        LOG(sev_lvl::error) << "Error read searcher 1d config: " << ex.what();
+        BL_ERROR() << "Error read searcher 1d config: " << ex.what();
         return false;
     }
 }

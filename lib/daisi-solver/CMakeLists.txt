@@ -1,13 +1,18 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12)
 project(daisi_solver)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp=libomp")
+    find_package(OpenMP)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+elseif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "-std=c++14 -fopenmp -fext-numeric-literals")
-endif()
+set(CMAKE_CXX_STANDARD 17)
+
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     if(MSVC)
@@ -16,37 +21,32 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
         else()
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
         endif()
-    elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    else()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wno-long-long -pedantic")
     endif()
 else()
     if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /Ox")
-    elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -flto")
+    else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Os -march=native -flto")
     endif()
 endif()
+
 add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_SP_USE_SPINLOCK -DBOOST_SP_USE_PTHREADS)
 set(Boost_USE_STATIC_LIBS Off)
 set(Boost_USE_MULTITHREAD On)
 set(Boost_USE_STATIC_RUNTIME Off)
+
 add_definitions(-DARMA_USE_CXX11 -DARMA_USE_LAPACK)
-add_definitions(-DNUCL -DSIM -DUSE_BLAS)
-set(CMAKE_CXX_STANDARD 14) 
+add_definitions(-DSIM -DUSE_BLAS)
 
 find_package(VTK REQUIRED)
-
 
 include_directories (include)
 include_directories (include/daisi-solver)
 include_directories (lib/include)
-include_directories (lib/common_tools/include)
-include_directories (lib/notk/include)
+
 include_directories (${VTK_INCLUDE_DIRS})
 
-add_subdirectory(lib/notk)
-
 add_subdirectory(src)
-
-add_subdirectory(test_app)

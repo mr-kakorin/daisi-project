@@ -5,10 +5,10 @@
 
 namespace notk
 {
-class BoxWilsonConfig : public BaseOptConfig
+class BoxWilsonConfig final : public BaseOptConfig
 {
   public:
-    double              get_gradient_calc_step() const;
+    double get_gradient_calc_step() const;
 
   private:
     double gradient_calc_step;

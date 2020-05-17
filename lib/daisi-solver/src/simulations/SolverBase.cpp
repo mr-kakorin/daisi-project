@@ -92,7 +92,7 @@ void Solver<PointType>::TimeStepEstimate(std::vector<double>&               resu
             currentStepDefault = deviceStatus->GetFlow(i)->GetEmitterDevice()->GetLambda() / 10;
         else
             currentStepDefault = deviceStatus->GetFlow(i)->GetFlowProperties()[4] * 1e-9 *
-                                 commtools::LIGHT_VELOCITY() / 100;
+                                 LIGHT_VELOCITY() / 100;
 
         for (int thread = 0; thread < numThreads; thread++)
         {
@@ -110,29 +110,29 @@ void Solver<PointType>::TimeStepEstimate(std::vector<double>&               resu
             //	while (deviceStatus->GetFlow(i)->GetDynamicsData(thread)->NParticles() != 0)
             while (deviceStatus->GetFlow(i)->GetDynamicsData(thread)->Time <
                    deviceStatus->GetFlow(i)->GetFlowProperties()[4] * 1e-9 *
-                       commtools::LIGHT_VELOCITY())
+                       LIGHT_VELOCITY())
             {
                 deviceStatus->GetFlow(i)->GenerateParticlesThreadedTest(
-                    thread, numThreads, v, 0, currentStep / commtools::LIGHT_VELOCITY(), step,
+                    thread, numThreads, v, 0, currentStep / LIGHT_VELOCITY(), step,
                     deviceStatus->GetGridData(), 0, 0);
 
                 progress = allTime / (deviceStatus->GetNumberParticlesFlows() * numThreads *
                                       deviceStatus->GetFlow(i)->GetFlowProperties()[4] * 1e-9 *
-                                      commtools::LIGHT_VELOCITY());
+                                      LIGHT_VELOCITY());
 
                 //	fieldSolver->FieldSimulate(deviceStatus->GetGridData(),
                 // deviceStatus->Getmesh(),
                 // deviceStatus->GetboundaryConditions(),
                 // deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                //(commtools::LIGHT_VELOCITY())); 	if (deviceStatus->LinacParams[0] > 1e-3)
+                //(LIGHT_VELOCITY())); 	if (deviceStatus->LinacParams[0] > 1e-3)
                 //		deviceStatus->GetGridData()->ApplyTimeDepending(deviceStatus->LinacParams[0],
                 // 0,
                 // deviceStatus->GetFlow(i)->GetDynamicsData(thread)->Time /
-                // (commtools::LIGHT_VELOCITY()));
+                // (LIGHT_VELOCITY()));
                 //	deviceStatus->GetGridData()->ApplyTimeDepending(deviceStatus->LinacParams[0],
                 // 0,
                 // deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time /
-                // (commtools::LIGHT_VELOCITY()), nonZeros);
+                // (LIGHT_VELOCITY()), nonZeros);
 
                 i1 = 0;
                 i2 = deviceStatus->GetFlow(i)->GetDynamicsData(thread)->NParticles();
@@ -148,7 +148,7 @@ void Solver<PointType>::TimeStepEstimate(std::vector<double>&               resu
                 deviceStatus->GetGridData()->ApplyTimeDepending(
                     deviceStatus->GetglobalFieldConditions(),
                     deviceStatus->GetFlow(i)->GetDynamicsData(thread)->Time /
-                        (commtools::LIGHT_VELOCITY()));
+                        (LIGHT_VELOCITY()));
 
                 if (step < 2)
                     particleGridInterface->InCellWithEps(
@@ -328,7 +328,7 @@ std::vector<float> Solver<PointType>::estimateError(const std::shared_ptr<device
     boundary->Getboundaries(),
     deviceStatus->GetElectrodes(), deviceStatus->GetFlow(i)->GetDynamicsDataTmp(),
     deviceStatus->GetFlow(i)->GetDynamicsData(), particleMover->GetTimeStep(i) /
-    commtools::LIGHT_VELOCITY(),
+    LIGHT_VELOCITY(),
     deviceStatus->GetFlow(i)->GetCharge(), deviceStatus->GetFlow(i)->GetMass(), i1, i2);
 
                     deviceStatus->GetFlow(i)->GetDynamicsData()->removeParticle(EmptyPlaces[i]);
@@ -356,7 +356,7 @@ std::vector<float> Solver<PointType>::estimateError(const std::shared_ptr<device
                             particleGridInterface->CheckParticlesBoundaries(deviceStatus2.boundaries,
     deviceStatus2.conductorList, deviceStatus2.GetFlow(i)->GetDynamicsDataTmp(),
     deviceStatus2.GetFlow(i)->GetDynamicsData(), particleMover->GetTimeStep(i) /
-    commtools::LIGHT_VELOCITY(),
+    LIGHT_VELOCITY(),
     deviceStatus2.GetFlow(i)->GetCharge(), deviceStatus2.GetFlow(i)->GetMass(), i1, i2);
                     }
                     particleMover->DoubleTimeSteps();

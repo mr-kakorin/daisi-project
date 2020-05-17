@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include <random>
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 #include "Dmath.h"
 #include "EmitterDevice2daxs.h"
@@ -155,7 +155,7 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
 			//double energy = std::abs( EmitterDeviceBase<PointType>::get_energy_distribution() ) * 1.602e-19;
 			double v = 0.1;//sqrt( 2 * energy/ restMass );
             //double v    = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
-            double beta = v / commtools::LIGHT_VELOCITY();
+            double beta = v / LIGHT_VELOCITY();
             double gamma = 1 / sqrt(1 - beta * beta);
             if (k < empty)
             {
@@ -169,11 +169,11 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
             }
 
             particlesData->Get_pr()[index] =
-                gamma * (v*particleData[7]) / commtools::LIGHT_VELOCITY();
+                gamma * (v*particleData[7]) / LIGHT_VELOCITY();
             particlesData->Get_pz()[index] =
-                gamma * (v*particleData[8]) / commtools::LIGHT_VELOCITY();
+                gamma * (v*particleData[8]) / LIGHT_VELOCITY();
 
-            particlesData->Get_pphi()[index] = (v * particleData[9] / commtools::LIGHT_VELOCITY()) * gamma * r;
+            particlesData->Get_pphi()[index] = (v * particleData[9] / LIGHT_VELOCITY()) * gamma * r;
             particlesData->Get_phi()[index]  = 0;
 
             particlesData->Get_r()[index] = r;
@@ -250,8 +250,8 @@ void EmitterDevice2daxs<PointType>::GenerateParticlesLinac(
             double frequency = this->DistribParams[3];
             int particlesPerBunch = this->NumbersParams[2];
 
-            double restEnergy = -restMass*commtools::LIGHT_VELOCITY()*commtools::LIGHT_VELOCITY() /
-       commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+            double restEnergy = -restMass*LIGHT_VELOCITY()*LIGHT_VELOCITY() /
+       ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
             double gamma = (restEnergy + std::abs(energyAverage)) / restEnergy;
             double beta = sqrt(gamma * gamma - 1) / gamma;
@@ -259,8 +259,8 @@ void EmitterDevice2daxs<PointType>::GenerateParticlesLinac(
             if (dt == 0 || dt == 1)
             {
                     double restEnergy =
-       -restMass*commtools::LIGHT_VELOCITY()*commtools::LIGHT_VELOCITY() /
-       commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+       -restMass*LIGHT_VELOCITY()*LIGHT_VELOCITY() /
+       ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
                     particlesData->Get_r().resize(1);
                     particlesData->Get_z()[0] = 0;
@@ -272,8 +272,8 @@ void EmitterDevice2daxs<PointType>::GenerateParticlesLinac(
 
                     return;
             }
-            double t1 = particlesData->Time / commtools::LIGHT_VELOCITY();
-            double t2 = particlesData->Time / commtools::LIGHT_VELOCITY() + dt;
+            double t1 = particlesData->Time / LIGHT_VELOCITY();
+            double t2 = particlesData->Time / LIGHT_VELOCITY() + dt;
 
             double z1 = 2 * M_PI*t1*frequency;
             double z2 = 2 * M_PI* t2*frequency;
@@ -382,7 +382,7 @@ void EmitterDevice2daxs<PointType>::GenerateParticlesLinac(
                             particlesData->Get_z()[index] = 0;
                     else
                             particlesData->Get_z()[index] =(phMax-Data[4][sliceIndexesParallel[i]])
-       / (phMax - phMin)*beta*commtools::LIGHT_VELOCITY()*dt;
+       / (phMax - phMin)*beta*LIGHT_VELOCITY()*dt;
 
 
 
@@ -418,8 +418,8 @@ template <class PointType>
 void EmitterDevice2daxs<PointType>::GenerateSyncParticle(
     const std::shared_ptr<Particles3dcil<PointType>>& particlesData, PointType restMass)
 {
-    double restEnergy = -restMass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() /
-                        commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    double restEnergy = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() /
+                        ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     particlesData->resize(1);
     particlesData->Get_z()[0]    = 0;

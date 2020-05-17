@@ -688,6 +688,6 @@ void DeviceStatus<ParticlesDataType, EmitterDeviceType, GridDataType, PointType,
 
     for (int i = 0; i < conductorList.size(); i++)
         conductorList[i]->PowerAndCurrentsCalculate(step, GetFlow(0)->GetDynamicsData(0)->Time /
-                                                              (commtools::LIGHT_VELOCITY()),
+                                                              (LIGHT_VELOCITY()),
                                                     dt, gridData->GetType());
 };

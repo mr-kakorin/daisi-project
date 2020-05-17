@@ -15,14 +15,13 @@ class BoxWilsonConfig;
 template class BoxWilson<double, double>;
 template class BoxWilson<float, float>;
 
-REGISTER_CHILD(BoxWilson<double COMMA double>, IOptimizationStep<double COMMA double>)
-REGISTER_CHILD(BoxWilson<float COMMA float>, IOptimizationStep<float COMMA float>)
+REGISTER_CHILD(BoxWilson<double COMMA double>, IOptimizationStep<double COMMA double>, "Box-Wilson")
+REGISTER_CHILD(BoxWilson<float COMMA float>, IOptimizationStep<float COMMA float>, "Box-Wilson")
 
 template <class Targ, class Tfit>
-it_res_t<Targ, Tfit>
-BoxWilson<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
-                                    const it_res_t<Targ, Tfit>&  iter_result,
-                                    const borders_t<Targ>& current_borders)
+it_res_t<Targ, Tfit> BoxWilson<Targ, Tfit>::do_iteration(const size_t iter_counter,
+                                                         const it_res_t<Targ, Tfit>& iter_result,
+                                                         const borders_t<Targ>& current_borders)
 {
     auto grad = tools::calc_grad(this->m_fitness_function, iter_result.first,
                                  config()->get_gradient_calc_step());
@@ -62,10 +61,9 @@ BoxWilson<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
 }
 
 template <class Targ, class Tfit>
-borders_t<Targ>
-BoxWilson<Targ, Tfit>::squeez_borders(const size_t                 iter_counter,
-                                      const it_res_t<Targ, Tfit>&  iter_result,
-                                      const borders_t<Targ>& current_borders)
+borders_t<Targ> BoxWilson<Targ, Tfit>::squeez_borders(const size_t                iter_counter,
+                                                      const it_res_t<Targ, Tfit>& iter_result,
+                                                      const borders_t<Targ>& current_borders)
 {
     return current_borders;
 }

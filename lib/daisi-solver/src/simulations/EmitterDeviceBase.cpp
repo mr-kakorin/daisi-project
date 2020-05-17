@@ -5,7 +5,7 @@
 #include "Geom.h"
 #include "ParticleSource.h"
 #include "Tools.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 static std::default_random_engine             generator;
 static std::normal_distribution<double>       distribution(0, 1);
@@ -25,21 +25,21 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
 
     double frequency = DistribParams[3];
 
-    double z1 = 2 * commtools::PI() * t1 * frequency;
-    double z2 = 2 * commtools::PI() * t2 * frequency;
+    double z1 = 2 * PI() * t1 * frequency;
+    double z2 = 2 * PI() * t2 * frequency;
 
     int nBunches = NumbersParams[1];
 
-    if (z2 < nBunches * 2 * commtools::PI())
+    if (z2 < nBunches * 2 * PI())
     {
-        while (z1 > 2 * commtools::PI())
-            z1 = z1 - 2 * commtools::PI();
+        while (z1 > 2 * PI())
+            z1 = z1 - 2 * PI();
 
-        while (z2 > 2 * commtools::PI())
-            z2 = z2 - 2 * commtools::PI();
+        while (z2 > 2 * PI())
+            z2 = z2 - 2 * PI();
     }
-    // double z1 = fmod(t1*frequency, 2 * commtools::PI()) - commtools::PI();
-    // double z2 = fmod(t2*frequency, 2 * commtools::PI()) - commtools::PI();
+    // double z1 = fmod(t1*frequency, 2 * PI()) - PI();
+    // double z2 = fmod(t2*frequency, 2 * PI()) - PI();
     for (int i = 0; i < Data[4].size(); i++)
     {
         if (Data[4][i] > z1 && Data[4][i] < z2)
@@ -119,8 +119,8 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
     int particlesPerBunch = NumbersParams[0] * NumbersParams[1];
 
     double energyAverage = DistribParams[1];
-    double restEnergy    = -restMass * commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() /
-                        commtools::ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
+    double restEnergy    = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() /
+                        ELECTRON_CHARGE(); // ������� ����� ������� � ���������������
 
     double gamma = (restEnergy + std::abs(energyAverage)) / restEnergy;
     double beta  = sqrt(gamma * gamma - 1) / gamma;
@@ -175,7 +175,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
         Minor[i] = std::abs(e[i]) / (Major[i]);
 
         if (Xparam[i] > 0)
-            phi[i] = phi[i] + commtools::PI() / 2;
+            phi[i] = phi[i] + PI() / 2;
     };
 
     Data.resize(6);
@@ -253,7 +253,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
             Data[5][i] = P - P * dp + distributionUn(generator) * (2 * P * dp);
         };
         while (Data[4][i] < 0)
-            Data[4][i] = Data[4][i] + 2 * commtools::PI();
+            Data[4][i] = Data[4][i] + 2 * PI();
     }
 
     std::vector<int> IndexOrder(particlesPerBunch); // indexes of sorted phase
@@ -375,7 +375,7 @@ EmitterDeviceBase<PointType>::EmitterDeviceBase(int DistributionStyleIn)
 template <class PointType>
 double EmitterDeviceBase<PointType>::GetLambda()
 {
-    return commtools::LIGHT_VELOCITY() / DistribParams[3];
+    return LIGHT_VELOCITY() / DistribParams[3];
 };
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetMaxParticles()

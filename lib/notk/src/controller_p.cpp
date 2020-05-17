@@ -1,6 +1,6 @@
 #include <utility>
 
-#include <boostlog0/boostlog.h>
+#include <common_tools/boostlog.hpp>
 #include <common_tools/json_helper.h>
 #include <serreflection/read_json.hpp>
 
@@ -64,7 +64,7 @@ void NOTKController_p_<Targ, Tfit>::process(const statemachine::process& event) 
         borders_t<Targ> borders(m_borders);
         std::vector<Targ> x0(m_x0);
 
-        LOG(sev_lvl::info) << "start calculations";
+        BL_INFO() << "start calculations";
 
         m_result = std::make_shared<NOTKResults<Targ, Tfit>>();
 
@@ -75,20 +75,20 @@ void NOTKController_p_<Targ, Tfit>::process(const statemachine::process& event) 
         }
         if (m_result->m_result.empty())
         {
-            LOG(sev_lvl::error) << "no solution found";
+            BL_ERROR() << "no solution found";
             reset_result();
             return;
         }
-        LOG(sev_lvl::info) << "calculations is done, best fitness = " << m_result->get_fitness();
+        BL_INFO() << "calculations is done, best fitness = " << m_result->get_fitness();
     }
     catch (const std::exception& ex)
     {
-        LOG(sev_lvl::error) << "calculation error: " << ex.what();
+        BL_ERROR() << "calculation error: " << ex.what();
         reset_result();
     }
     catch (...)
     {
-        LOG(sev_lvl::error) << "unknown calculation error";
+        BL_ERROR() << "unknown calculation error";
         reset_result();
     }
 }
@@ -127,12 +127,12 @@ bool NOTKController_p_<Targ, Tfit>::read_steps_config(const boost::property_tree
             }
             if (result == true && n_steps == 0)
             {
-                LOG(sev_lvl::error) << error_msg_prefix << "no steps";
+                BL_ERROR() << error_msg_prefix << "no steps";
                 result = false;
             }
             if (result == true && n_steps != 0)
             {
-                LOG(sev_lvl::info) << "configuration for " << n_steps << " steps success";
+                BL_INFO() << "configuration for " << n_steps << " steps success";
             }
             return result;
         });
@@ -142,7 +142,7 @@ template <class Targ, class Tfit>
 void NOTKController_p_<Targ, Tfit>::read_problem_config(
     const std::shared_ptr<boost::property_tree::ptree>& pt) noexcept
 {
-    LOG(sev_lvl::info) << "set NOTK configuration";
+    BL_INFO() << "set NOTK configuration";
 
     const std::string err_msg = "set NOTK configuration fail";
 
@@ -150,7 +150,7 @@ void NOTKController_p_<Targ, Tfit>::read_problem_config(
 
     if (!pt)
     {
-        LOG(sev_lvl::error) << err_msg;
+        BL_ERROR() << err_msg;
         return;
     }
 
@@ -158,7 +158,7 @@ void NOTKController_p_<Targ, Tfit>::read_problem_config(
 
     if (!m_config)
     {
-        LOG(sev_lvl::error) << err_msg;
+        BL_ERROR() << err_msg;
     }
     else if (notk::InitialBordersType::MANUAL == m_config->borders_type)
     {
@@ -185,7 +185,7 @@ void NOTKController_p_<Targ, Tfit>::read_problem_config(
                 {
                     auto fil_vall = static_cast<Targ>(border.back());
                     std::fill(result.begin() + border.size(), result.end(), fil_vall);
-                    LOG(sev_lvl::info) << "Atomatical border filling, value = " << fil_vall;
+                    BL_INFO() << "Atomatical border filling, value = " << fil_vall;
                 }
                 return result;
             };
@@ -201,17 +201,17 @@ void NOTKController_p_<Targ, Tfit>::read_problem_config(
         }
         catch (const std::exception& ex)
         {
-            LOG(sev_lvl::error) << "Error read optimization borders " << ex.what();
+            BL_ERROR() << "Error read optimization borders " << ex.what();
             m_config = nullptr;
         }
     }
     else if (notk::InitialBordersType::VECTOR == m_config->borders_type)
     {
-        LOG(sev_lvl::info) << "wait set optimization borders from vectors";
+        BL_INFO() << "wait set optimization borders from vectors";
     }
     else
     {
-        LOG(sev_lvl::error) << "unexpected borders type";
+        BL_ERROR() << "unexpected borders type";
         m_config = nullptr;
     }
 
@@ -230,11 +230,11 @@ void NOTKController_p_<Targ, Tfit>::borders_info_msg(const bool correct_borders,
 {
     if (correct_borders)
     {
-        LOG(sev_lvl::info) << "set optimization borders success";
+        BL_INFO() << "set optimization borders success";
     }
     else
     {
-        LOG(sev_lvl::info) << "set optimization borders fail: " << msg;
+        BL_INFO() << "set optimization borders fail: " << msg;
     }
 }
 
@@ -258,7 +258,7 @@ bool NOTKController_p_<Targ, Tfit>::set_borders(const std::vector<Targ>& x_left,
                                                 const std::vector<Targ>& x_right,
                                                 const std::vector<Targ>& x_0) noexcept
 {
-    LOG(sev_lvl::info) << "set optimization borders from x_left, x_right and x_0";
+    BL_INFO() << "set optimization borders from x_left, x_right and x_0";
 
     bool correct_borders = true;
 
@@ -322,7 +322,7 @@ bool NOTKController_p_<Targ, Tfit>::set_borders(const std::vector<Targ>& x_left,
     auto problem_dim = x_left.size();
     m_borders        = std::make_pair(x_left, x_right);
 
-    LOG(sev_lvl::warning) << "set_borders::force set x_0 as average";
+    BL_WARNING() << "set_borders::force set x_0 as average";
     m_x0.resize(problem_dim);
     for (size_t i = 0; i < problem_dim; i++)
     {
@@ -334,7 +334,7 @@ template <class Targ, class Tfit>
 bool NOTKController_p_<Targ, Tfit>::set_borders(const std::vector<Targ>& x_0,
                                                 const Targ& delta) noexcept
 {
-    LOG(sev_lvl::info) << "set optimization borders from x0 and delta";
+    BL_INFO() << "set optimization borders from x0 and delta";
 
     bool correct_borders = true;
 
@@ -380,7 +380,7 @@ bool NOTKController_p_<Targ, Tfit>::set_borders_fitness(
     case statemachine::set_borders_fitness<Targ, Tfit>::InputBordersType::X0_DELTA:
         return set_borders(event.m_x_0, event.m_delta);
     default:
-        LOG(sev_lvl::error) << "unexpected borders type";
+        BL_ERROR() << "unexpected borders type";
         return false;
     }
 }
@@ -393,7 +393,7 @@ bool NOTKController_p_<Targ, Tfit>::set_fitness(
 
     bool correct_fitness = true;
 
-    LOG(sev_lvl::info) << "set optimization fitness";
+    BL_INFO() << "set optimization fitness";
 
     if (!set_steps_fitness(event.m_fitness_function))
     {
@@ -401,11 +401,11 @@ bool NOTKController_p_<Targ, Tfit>::set_fitness(
     }
     if (correct_fitness)
     {
-        LOG(sev_lvl::info) << "set optimization fitness success";
+        BL_INFO() << "set optimization fitness success";
     }
     else
     {
-        LOG(sev_lvl::info) << "set optimization fitness fail";
+        BL_INFO() << "set optimization fitness fail";
     }
     return correct_fitness;
 }

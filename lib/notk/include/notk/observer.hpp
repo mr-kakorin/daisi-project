@@ -8,7 +8,9 @@ namespace notk
 class NOTKObserver
 {
   public:
-    virtual void handle_event(const std::string& status_message) const = 0;
+    virtual ~NOTKObserver() = default;
+
+    virtual void handle_event(const std::string& status_message, const double progress_est) const = 0;
 };
 }
 

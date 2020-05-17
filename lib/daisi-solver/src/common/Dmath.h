@@ -5,7 +5,7 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 #include <functional>
 namespace Dmath
@@ -86,7 +86,7 @@ double integral(double a, double b, _Fn&& _Fx, _Args&&... _Ax)
     function =
         std::bind(std::forward<_Fn>(_Fx), std::placeholders::_1, std::forward<_Args>(_Ax)...);
 
-    int    s      = int((b - a) * 200 / commtools::PI());
+    int    s      = int((b - a) * 200 / PI());
     double result = 0;
     double step   = (b - a) / s;
     // double f1 = f(a, param);

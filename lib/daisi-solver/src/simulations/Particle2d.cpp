@@ -1,7 +1,7 @@
 #include "Particle.h"
 #include "Dmath.h"
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 #ifdef USE_BLAS
 #include <cblas.h>
@@ -25,11 +25,11 @@ void ParticlesBase<PointType>::GetEmittanceData(std::vector<std::vector<float>>&
     data.resize(2);
     data[0].resize(this->positions[0].size());
     data[1].resize(this->positions[0].size());
-    PointType en = commtools::LIGHT_VELOCITY() * commtools::LIGHT_VELOCITY() * mass;
+    PointType en = LIGHT_VELOCITY() * LIGHT_VELOCITY() * mass;
 
     double enAv  = 0;
     double zAv   = 0;
-    double omega = 2 * commtools::PI() / lambda;
+    double omega = 2 * PI() / lambda;
 
     float tmp;
     float beta2;
@@ -46,7 +46,7 @@ void ParticlesBase<PointType>::GetEmittanceData(std::vector<std::vector<float>>&
 
             /*if (gamma < 1.002)
             {
-                    double v = commtools::LIGHT_VELOCITY()*sqrt(this->momentums[0][i] *
+                    double v = LIGHT_VELOCITY()*sqrt(this->momentums[0][i] *
             this->momentums[0][i] +
             this->momentums[1][i] *
             this->momentums[1][i] + this->momentums[2][i] * this->momentums[2][i]); data[1][i] =
@@ -63,7 +63,7 @@ void ParticlesBase<PointType>::GetEmittanceData(std::vector<std::vector<float>>&
             // enAv = enAv + data[1][i];
             enAv       = enAv + this->momentums[2][i];
             data[0][i] = this->positions[2][i];
-            /*data[0][i] = 180 * this->positions[2][i] * omega / commtools::PI();
+            /*data[0][i] = 180 * this->positions[2][i] * omega / PI();
             while (data[0][i] > 180)
                     data[0][i] = data[0][i] - 360;*/
             zAv = zAv + data[0][i];
@@ -678,7 +678,7 @@ void ParticlesBase<PointType>::InsertParticelsEmittances(ParticlesBase*         
         this->positions[2][i + nOld] = prev->Time + (zEm - prev->positions[2][indexes[i]]) / beta2;
 
         this->positions[2][i + nOld] =
-            1e9 * this->positions[2][i + nOld] / commtools::LIGHT_VELOCITY();
+            1e9 * this->positions[2][i + nOld] / LIGHT_VELOCITY();
     };
 };
 

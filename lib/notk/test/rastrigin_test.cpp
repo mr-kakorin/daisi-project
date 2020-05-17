@@ -26,11 +26,11 @@ class Rastrigin : public ::testing::Test
         auto NOTKController =
             notk::NOTKBuilder<double, double>::build_notk_file_config(config, notk::Rastrigin);
 
-        ASSERT_TRUE(NOTKController);
+        ASSERT_TRUE(static_cast<bool>(NOTKController));
 
         auto result_1 = NOTKController->process(flag_abort);
 
-        ASSERT_TRUE(result_1);
+        ASSERT_TRUE(static_cast<bool>(result_1));
 
         EXPECT_TRUE(result_1->get_last_it_res().second <= val);
     }

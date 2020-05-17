@@ -1,6 +1,6 @@
 #include <exception>
 
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 #include "BoundaryContainer2d.h"
 #include "Dmath.h"
@@ -348,7 +348,7 @@ void BoundaryContainer2d<PointType>::GetPlotRotate(std::vector<std::vector<float
                                                    std::vector<std::vector<float>>& Yarr,
                                                    int                              angles)
 {
-    float                  dangle = 2 * commtools::PI() / angles;
+    float                  dangle = 2 * PI() / angles;
     DGeo::Point<PointType> rotatePoint;
     rotatePoint.x = 0;
     rotatePoint.z = 0;
@@ -394,7 +394,7 @@ void BoundaryContainer2d<PointType>::GetPlotRotate1(std::vector<std::vector<floa
                                                     std::vector<std::vector<float>>& Yarr,
                                                     int                              angles)
 {
-    float                  dangle = 2 * commtools::PI() / angles;
+    float                  dangle = 2 * PI() / angles;
     DGeo::Point<PointType> rotatePoint;
     rotatePoint.x = 0;
     rotatePoint.z = 0;
@@ -1115,10 +1115,10 @@ void BoundaryContainer2d<PointType>::AngleRounding(
         {
             VertexRound[i].x =
                 Center.x -
-                roundingRadius * std::cos(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::cos(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].y =
                 Center.y +
-                roundingRadius * std::sin(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::sin(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].z      = 0;
             VertexRound[i].Number = num;
             num++;
@@ -1139,10 +1139,10 @@ void BoundaryContainer2d<PointType>::AngleRounding(
         {
             VertexRound[i].x =
                 Center.x +
-                roundingRadius * std::cos(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::cos(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].y =
                 Center.y -
-                roundingRadius * std::sin(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::sin(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].z      = 0;
             VertexRound[i].Number = num;
             num++;
@@ -1163,10 +1163,10 @@ void BoundaryContainer2d<PointType>::AngleRounding(
         {
             VertexRound[i].x =
                 Center.x +
-                roundingRadius * std::sin(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::sin(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].y =
                 Center.y +
-                roundingRadius * std::cos(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::cos(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].z      = 0;
             VertexRound[i].Number = num;
             num++;
@@ -1187,10 +1187,10 @@ void BoundaryContainer2d<PointType>::AngleRounding(
         {
             VertexRound[i].x =
                 Center.x -
-                roundingRadius * std::sin(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::sin(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].y =
                 Center.y -
-                roundingRadius * std::cos(i * commtools::PI() / 180 * (90 / numberOfPointsOnCurve));
+                roundingRadius * std::cos(i * PI() / 180 * (90 / numberOfPointsOnCurve));
             VertexRound[i].z      = 0;
             VertexRound[i].Number = num;
             num++;

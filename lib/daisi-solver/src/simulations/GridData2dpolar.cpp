@@ -257,7 +257,7 @@ void GridData2dpolar<PointType>::interpolatePoint(double x1, double x2, double x
                                                           this->CICArray[i]);
     EphiTmp = result;
 
-    Exin = ErTmp * std::cos(2 * commtools::PI() - x2) - EphiTmp * std::sin(2 * commtools::PI() - x2);
+    Exin = ErTmp * std::cos(2 * PI() - x2) - EphiTmp * std::sin(2 * PI() - x2);
 
-    Eyin = ErTmp * std::sin(2 * commtools::PI() - x2) + EphiTmp * std::cos(2 * commtools::PI() - x2);
+    Eyin = ErTmp * std::sin(2 * PI() - x2) + EphiTmp * std::cos(2 * PI() - x2);
 }

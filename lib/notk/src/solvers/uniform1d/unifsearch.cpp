@@ -9,13 +9,15 @@ namespace notk
 template class UniformSearch1d<double, double>;
 template class UniformSearch1d<float, float>;
 
-REGISTER_CHILD(UniformSearch1d<double COMMA double>, IOptimizationStep<double COMMA double>)
-REGISTER_CHILD(UniformSearch1d<float COMMA float>, IOptimizationStep<float COMMA float>)
+REGISTER_CHILD(UniformSearch1d<double COMMA double>, IOptimizationStep<double COMMA double>,
+               "Uniform 1d search")
+REGISTER_CHILD(UniformSearch1d<float COMMA float>, IOptimizationStep<float COMMA float>,
+               "Uniform 1d search")
 
 template <class Targ, class Tfit>
 it_res_t<Targ, Tfit>
-UniformSearch1d<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
-                                          const it_res_t<Targ, Tfit>&  iter_result,
+UniformSearch1d<Targ, Tfit>::do_iteration(const size_t                iter_counter,
+                                          const it_res_t<Targ, Tfit>& iter_result,
                                           const borders_t<Targ>& current_borders)
 {
     size_t n_divisions_iter;
@@ -43,14 +45,13 @@ UniformSearch1d<Targ, Tfit>::do_iteration(const size_t                 iter_coun
 }
 
 template <class Targ, class Tfit>
-borders_t<Targ>
-UniformSearch1d<Targ, Tfit>::squeez_borders(const size_t                 iter_counter,
-                                            const it_res_t<Targ, Tfit>&  iter_result,
-                                            const borders_t<Targ>& current_borders)
+borders_t<Targ> UniformSearch1d<Targ, Tfit>::squeez_borders(const size_t iter_counter,
+                                                            const it_res_t<Targ, Tfit>& iter_result,
+                                                            const borders_t<Targ>& current_borders)
 {
-    size_t n_divisions_iter;
-    Targ   dx = calc_dx(iter_counter, current_borders, n_divisions_iter);
-    Targ   x0 = iter_result.first[0];
+    size_t          n_divisions_iter;
+    Targ            dx = calc_dx(iter_counter, current_borders, n_divisions_iter);
+    Targ            x0 = iter_result.first[0];
     borders_t<Targ> result =
         std::make_pair(std::vector<Targ>{std::max(x0 - dx, current_borders.first[0])},
                        std::vector<Targ>{std::min(x0 + dx, current_borders.second[0])});
@@ -59,9 +60,9 @@ UniformSearch1d<Targ, Tfit>::squeez_borders(const size_t                 iter_co
 }
 
 template <class Targ, class Tfit>
-Targ UniformSearch1d<Targ, Tfit>::calc_dx(const size_t                 iter_counter,
+Targ UniformSearch1d<Targ, Tfit>::calc_dx(const size_t iter_counter,
                                           const borders_t<Targ>& current_borders,
-                                          size_t& n_divisions_iter) const
+                                          size_t&                n_divisions_iter) const
 {
     n_divisions_iter = config()->get_n_divisions_first();
 

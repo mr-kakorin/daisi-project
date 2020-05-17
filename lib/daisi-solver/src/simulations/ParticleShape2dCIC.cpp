@@ -424,9 +424,9 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                 PointType znew1 = 0;
 
                 if (isPeriodical[i] == 1)
-                    znew1 = 1.5 * commtools::PI();
+                    znew1 = 1.5 * PI();
                 else
-                    znew1 = 1.5 * commtools::PI() + dphi / 2;
+                    znew1 = 1.5 * PI() + dphi / 2;
 
                 PointType x1;
                 PointType y1;
@@ -1055,7 +1055,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
         hx1 = x1Array[cellNumber + 1] - x1Array[cellNumber];
         hx2 = x2Array[levelHighIn] - x2Array[cellNumber];
         cellVolume[cellNumber] =
-            commtools::PI() * hx2 *
+            PI() * hx2 *
             ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
     }
@@ -1075,7 +1075,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
         {
             hx1 = x1Array[pointsIn[4]] - x1Array[pointsIn[3]];
             cellVolume[cellNumber] =
-                commtools::PI() * hx2 *
+                PI() * hx2 *
                 ((x1Array[cellNumber]) * (x1Array[cellNumber]) -
                  (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
         }
@@ -1084,7 +1084,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
         {
             hx1 = x1Array[pointsIn[5]] - x1Array[pointsIn[4]];
             cellVolume[cellNumber] =
-                commtools::PI() * hx2 *
+                PI() * hx2 *
                 ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                  (x1Array[cellNumber]) * (x1Array[cellNumber]));
         }
@@ -1093,7 +1093,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
         {
             hx1 = x1Array[pointsIn[5]] - x1Array[pointsIn[4]];
             cellVolume[cellNumber] =
-                commtools::PI() * hx2 *
+                PI() * hx2 *
                 ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                  (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
         }

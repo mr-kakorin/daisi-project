@@ -14,19 +14,20 @@ namespace notk
 template class HeavyBall<double, double>;
 template class HeavyBall<float, float>;
 
-REGISTER_CHILD(HeavyBall<double COMMA double>, IOptimizationStep<double COMMA double>)
-REGISTER_CHILD(HeavyBall<float COMMA float>, IOptimizationStep<float COMMA float>)
+REGISTER_CHILD(HeavyBall<double COMMA double>, IOptimizationStep<double COMMA double>, "Heavy ball")
+REGISTER_CHILD(HeavyBall<float COMMA float>, IOptimizationStep<float COMMA float>, "Heavy ball")
 
 template <class Targ, class Tfit>
-it_res_t<Targ, Tfit>
-HeavyBall<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
-                                    const it_res_t<Targ, Tfit>&  iter_result,
-                                    const borders_t<Targ>& current_borders)
+it_res_t<Targ, Tfit> HeavyBall<Targ, Tfit>::do_iteration(const size_t                iter_counter,
+                                                         const it_res_t<Targ, Tfit>& iter_result,
+                                                         const borders_t<Targ>& current_borders)
 {
     auto grad = tools::calc_grad(this->m_fitness_function, iter_result.first,
                                  config()->get_gradient_calc_step());
 
-    double h_0 = 1e-5;
+    double h_0 = config()->get_gradient_calc_step();
+
+    auto start_weight = config()->get_weight();
 
     auto apply_grad = [&](const double h, bool& border) -> std::vector<Targ> {
         std::vector<Targ> cur_x = iter_result.first;
@@ -35,7 +36,7 @@ HeavyBall<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
             Targ ball_coef = 0;
             if (last_x.size())
             {
-                ball_coef = config()->get_weight() * (iter_result.first[i] - last_x[i]);
+                ball_coef = start_weight * (iter_result.first[i] - last_x[i]);
             }
             cur_x[i] = iter_result.first[i] - h * grad[i] + ball_coef;
             if (cur_x[i] > current_borders.second[i])
@@ -54,28 +55,49 @@ HeavyBall<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
 
     bool border = true;
 
-    auto x2 = this->fitness(apply_grad(2 * h_0, border));
-
+    bool   flag = true;
     double h_a;
     double h_b;
 
-    if (x2 < iter_result.second)
+    while (flag)
     {
-        while (this->fitness(apply_grad(h_0, border)) < iter_result.second && border)
+        auto x2 = this->fitness(apply_grad(2 * h_0, border));
+
+        if (x2 < iter_result.second)
         {
-            h_0 = h_0 * 2.0;
+            while (this->fitness(apply_grad(h_0, border)) < iter_result.second && border)
+            {
+                h_0 = h_0 * 2.0;
+            }
+            h_a  = h_0 / 2.0;
+            h_b  = h_0;
+            flag = false;
         }
-        h_a = h_0 / 2.0;
-        h_b = h_0;
-    }
-    else
-    {
-        while (this->fitness(apply_grad(h_0, border)) > iter_result.second && border)
+        else
         {
-            h_0 = h_0 / 2.0;
+            bool ok = true;
+            while (this->fitness(apply_grad(h_0, border)) > iter_result.second && border)
+            {
+                if (h_0 > -1e-200 || start_weight == 0)
+                {
+                    h_0 = h_0 / 2.0;
+                }
+                else
+                {
+                    start_weight = start_weight / 2.0;
+
+                    h_0 = config()->get_gradient_calc_step();
+                    ok  = false;
+                    break;
+                }
+            }
+            if (ok)
+            {
+                flag = false;
+                h_a  = 0;
+                h_b  = 2 * h_0;
+            }
         }
-        h_a = 0;
-        h_b = 2 * h_0;
     }
 
     auto local_fitness = [&](const double h) -> double {
@@ -85,8 +107,8 @@ HeavyBall<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
 
     m_searcher1d->set_fitness(local_fitness);
 
-    borders_t<Targ> borders_1d = std::make_pair(std::vector<Targ>{static_cast<Targ>(h_a)},
-                                                      std::vector<Targ>{static_cast<Targ>(h_b)});
+    borders_t<Targ>   borders_1d    = std::make_pair(std::vector<Targ>{static_cast<Targ>(h_a)},
+                                                std::vector<Targ>{static_cast<Targ>(h_b)});
     std::vector<Targ> x_current_tmp = {static_cast<Targ>((h_a + h_b) / 2.0)};
 
     bool flag_abort = true;
@@ -97,14 +119,15 @@ HeavyBall<Targ, Tfit>::do_iteration(const size_t                 iter_counter,
 
     auto x_best = apply_grad(result_tmp.get_last_argument()[0], border);
 
+    last_x = iter_result.first;
+
     return std::make_pair(x_best, this->fitness(x_best));
 }
 
 template <class Targ, class Tfit>
-borders_t<Targ>
-HeavyBall<Targ, Tfit>::squeez_borders(const size_t                 iter_counter,
-                                      const it_res_t<Targ, Tfit>&  iter_result,
-                                      const borders_t<Targ>& current_borders)
+borders_t<Targ> HeavyBall<Targ, Tfit>::squeez_borders(const size_t                iter_counter,
+                                                      const it_res_t<Targ, Tfit>& iter_result,
+                                                      const borders_t<Targ>&      current_borders)
 {
     return current_borders;
 }
@@ -125,7 +148,7 @@ bool HeavyBall<Targ, Tfit>::read_config(const boost::property_tree::ptree& confi
     }
     catch (const std::exception& ex)
     {
-        LOG(sev_lvl::error) << "Error read searcher 1d config: " << ex.what();
+        BL_ERROR() << "Error read searcher 1d config: " << ex.what();
         return false;
     }
 }
@@ -135,4 +158,4 @@ std::shared_ptr<HeavyBallConfig> HeavyBall<Targ, Tfit>::config() const
 {
     return std::static_pointer_cast<HeavyBallConfig>(this->m_config);
 }
-}
+} // namespace notk

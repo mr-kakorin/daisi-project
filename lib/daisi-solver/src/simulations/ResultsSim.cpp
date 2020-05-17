@@ -6,7 +6,7 @@
 #include "FlagStringsSolver.h"
 #include "Particle.h"
 #include "ParticlesFlow.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template void
 SimulationData::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
@@ -182,7 +182,7 @@ template <class deviceType>
 void SimulationData::addDataPIC(const std::shared_ptr<deviceType>& device)
 {
     XData.push_back(device->GetFlow(0)->GetDynamicsData(0)->Time /
-                    (1e-9 * commtools::LIGHT_VELOCITY()));
+                    (1e-9 * LIGHT_VELOCITY()));
     for (int i = 0; i < device->GetNumberParticlesFlows(); i++)
     {
         if (device->GetFlow(i)->GetDistributionStyle() < 5)

@@ -188,7 +188,7 @@ void ParticleShapeCIC2dStatic<PointType>::CellVolume(const std::vector<PointType
     PointType H1 = rArray[basePoint + 1] - rArray[basePoint];
     PointType H2 = zArray[levelHigh] - zArray[basePoint];
     vol          = 1;
-    vol          = PointType(commtools::PI() * gridSteps<PointType>::H2 *
+    vol          = PointType(PI() * gridSteps<PointType>::H2 *
                     ((rArray[basePoint] + H1 / 2) * (rArray[basePoint] + H1 / 2) -
                      (rArray[basePoint] - H1 / 2) * (rArray[basePoint] - H1 / 2)));
 };

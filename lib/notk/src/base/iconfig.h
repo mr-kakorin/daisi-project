@@ -25,12 +25,12 @@ class BaseOptConfig
     AccuracySourceType accuracy_source_type;
     double             required_accuracy;
 };
-}
+} // namespace notk
 
 #define SER_BASE()                                                                                 \
-    (int, maximal_iterations, srfl::nan, 1,                                                        \
+    (int, maximal_iterations, srfl::nan, 1.0,                                                      \
      srfl::inf)(notk::AccuracyType, accuracy_type,                                                 \
                 DEF_D())(notk::AccuracySourceType, accuracy_source_type,                           \
-                         DEF_D())(double, required_accuracy, srfl::nan, 0, srfl::inf)
+                         DEF_D())(double, required_accuracy, srfl::nan, -1e-200, srfl::inf)
 
 #endif

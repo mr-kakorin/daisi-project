@@ -1,7 +1,7 @@
 #include "ParticleShape2dTSC.h"
 #include "BoundaryContainer2d.h"
 #include "GridData.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class ParticleShape2dTSC<float>;
 template class ParticleShape2dTSC<double>;
@@ -168,7 +168,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
             break;
         case 1:
             cellVolume[cellNumber] =
-                commtools::PI() * hx2 *
+                PI() * hx2 *
                 ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                  (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
             break;
@@ -190,12 +190,12 @@ void ParticleShape2dTSC<PointType>::AddCell(
             case 1:
                 if (cellNumber == pointsIn[1] || cellNumber == pointsIn[3])
                     cellVolume[cellNumber] =
-                        0.5 * commtools::PI() * hx2 *
+                        0.5 * PI() * hx2 *
                         (x1Array[cellNumber] * x1Array[cellNumber] -
                          (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 if (cellNumber == pointsIn[0] || cellNumber == pointsIn[2])
                     cellVolume[cellNumber] =
-                        0.5 * commtools::PI() * hx2 *
+                        0.5 * PI() * hx2 *
                         ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                          x1Array[cellNumber] * x1Array[cellNumber]);
                 break;
@@ -211,7 +211,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
                 break;
             case 1:
                 cellVolume[cellNumber] =
-                    0.5 * commtools::PI() * hx2 *
+                    0.5 * PI() * hx2 *
                     ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                      (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 break;
@@ -228,12 +228,12 @@ void ParticleShape2dTSC<PointType>::AddCell(
             case 1:
                 if (cellNumber == pointsIn[3])
                     cellVolume[cellNumber] =
-                        commtools::PI() * hx2 *
+                        PI() * hx2 *
                         (x1Array[cellNumber] * x1Array[cellNumber] -
                          (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 if (cellNumber == pointsIn[2])
                     cellVolume[cellNumber] =
-                        commtools::PI() * hx2 *
+                        PI() * hx2 *
                         ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                          x1Array[cellNumber] * x1Array[cellNumber]);
                 break;
@@ -250,18 +250,18 @@ void ParticleShape2dTSC<PointType>::AddCell(
             case 1:
                 if (pointsIn[0] == -1 || pointsIn[6] == -1)
                     cellVolume[cellNumber] =
-                        commtools::PI() * hx2 *
+                        PI() * hx2 *
                             (x1Array[cellNumber] * x1Array[cellNumber] -
                              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2)) +
-                        0.5 * commtools::PI() * hx2 *
+                        0.5 * PI() * hx2 *
                             ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                              x1Array[cellNumber] * x1Array[cellNumber]);
                 if (pointsIn[2] == -1 || pointsIn[8] == -1)
                     cellVolume[cellNumber] =
-                        commtools::PI() * hx2 *
+                        PI() * hx2 *
                             ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                              x1Array[cellNumber] * x1Array[cellNumber]) +
-                        0.5 * commtools::PI() * hx2 *
+                        0.5 * PI() * hx2 *
                             (x1Array[cellNumber] * x1Array[cellNumber] -
                              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 break;
@@ -335,13 +335,13 @@ void ParticleShape2dTSC<PointType>::AddCell(
                                     PointType r1 = intersectionPoints[0].x;
                                     PointType r2 = intersectionPoints[1].x;
                                     PointType vol1 = (1.0 /
-    3.0)*commtools::PI()*std::abs(intersectionPoints[0].y -
+    3.0)*PI()*std::abs(intersectionPoints[0].y -
     intersectionPoints[1].y)*(r1*r1 + r1*r2 + r2*r2); PointType vol2 =
-    commtools::PI()*x1Array[outPoints[0]] *
+    PI()*x1Array[outPoints[0]] *
     x1Array[outPoints[0]] * std::abs(x2Array[outPoints[0]] - x2Array[outPoints[1]]); PointType dVol =
     vol2 - vol1;
 
-                                    PointType oldVol = commtools::PI()*std::abs(x2Array[outPoints[0]] -
+                                    PointType oldVol = PI()*std::abs(x2Array[outPoints[0]] -
     x2Array[outPoints[1]])*std::abs(x1Array[pointsIn[0]] * x1Array[pointsIn[0]] - x1Array[pointsIn[1]] *
     x1Array[pointsIn[1]]); PointType newVol = oldVol - dVol;
                     };

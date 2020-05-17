@@ -1,1 +1,0 @@
-small header file for simple configuring of the severity channel boost logger for low-level libs

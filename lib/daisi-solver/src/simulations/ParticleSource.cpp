@@ -5,7 +5,7 @@
 #include "Geom.h"
 #include "GridData.h"
 #include "geomTools.h"
-#include <common_tools/constants.h>
+#include <Constants.h>
 
 template class ParticleSource2d<float>;
 template class ParticleSource2d<double>;
@@ -160,7 +160,7 @@ std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, Po
     if (flag == 0)
         out[2] = (L2 - L1) * jC; // for 2d case
     if (flag == 1)
-        out[2] = (L2 - L1) * jC * 2 * commtools::PI() * sourceSurface[j].extractingEdge->Middle().x;
+        out[2] = (L2 - L1) * jC * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x;
 
     PointType tmp;
     PointType tmp1;
@@ -168,7 +168,7 @@ std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, Po
     Dmath::Cartesian2Polar(PointType(sourceSurface[j].normalX), PointType(sourceSurface[j].normalY),
                            tmp, tmp1);
 
-    out[3] = commtools::PI() - tmp1;
+    out[3] = PI() - tmp1;
     //	out[3] = sourceSurface[j].extractingEdge->alpha();
 
     out[4] = sourceSurface[j].alphaNormal;
@@ -229,7 +229,7 @@ bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L
 	if (flag == 0)
 		out[2] = (L2 - L1) * jC; // for 2d case
 	if (flag == 1)
-		out[2] = (L2 - L1) * jC * 2 * commtools::PI() * sourceSurface[j].extractingEdge->Middle().x;
+		out[2] = (L2 - L1) * jC * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x;
 
 	PointType tmp;
 	PointType tmp1;
@@ -237,7 +237,7 @@ bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L
 	Dmath::Cartesian2Polar(PointType(sourceSurface[j].normalX), PointType(sourceSurface[j].normalY),
 	                       tmp, tmp1);
 
-	out[3] = commtools::PI() - tmp1;
+	out[3] = PI() - tmp1;
 	//	out[3] = sourceSurface[j].extractingEdge->alpha();
 
 	out[4] = sourceSurface[j].alphaNormal;
@@ -286,7 +286,7 @@ double ParticleSource2d<PointType>::GetEmissionCurrent(int flag)
             double jj =
                 std::min(sourceSurface[i].currentDensity, sourceSurface[i].maximalCurrentDensity);
             current = current +
-                      sourceSurface[i].extractingEdge->length() * jj * 2 * commtools::PI() *
+                      sourceSurface[i].extractingEdge->length() * jj * 2 * PI() *
                           sourceSurface[i].extractingEdge->Middle().x;
         };
     }
@@ -385,13 +385,13 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
         double alphaNormal;
         if (2 == flagNormal)
         {
-            alphaNormal = EdgesDataTmp[i].alpha() + commtools::PI() / 2;
+            alphaNormal = EdgesDataTmp[i].alpha() + PI() / 2;
             //	ptmp = EdgesDataTmp[i].GetNormalPoint1(HP);
             // ptmpTest = EdgesDataTmp[i].GetNormalPoint2(HP);
         }
         else
         {
-            alphaNormal = EdgesDataTmp[i].alpha() - commtools::PI() / 2;
+            alphaNormal = EdgesDataTmp[i].alpha() - PI() / 2;
             //	ptmp = EdgesDataTmp[i].GetNormalPoint2(HP);
             //	ptmpTest = EdgesDataTmp[i].GetNormalPoint1(HP);
         }

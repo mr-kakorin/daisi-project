@@ -470,7 +470,7 @@ template <class DeviceType, class PointType>
 float ModelTemplate<DeviceType, PointType>::GetDeviceCurrentTime()
 {
     if (deviceStatus->GetNumberParticlesFlows() != 0)
-        return deviceStatus->GetFlow(0)->GetDynamicsData()->Time / (commtools::LIGHT_VELOCITY());
+        return deviceStatus->GetFlow(0)->GetDynamicsData()->Time / (LIGHT_VELOCITY());
     return 0;
 };
 

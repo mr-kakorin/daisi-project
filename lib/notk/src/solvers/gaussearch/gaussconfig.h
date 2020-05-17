@@ -6,7 +6,7 @@
 
 namespace notk
 {
-class GaussSearchConfig : public BaseOptConfig
+class GaussSearchConfig final : public BaseOptConfig
 {
   public:
     bool   get_use_random();
@@ -18,7 +18,7 @@ class GaussSearchConfig : public BaseOptConfig
 }
 
 SERIALIZIBLE_STRUCT(notk::GaussSearchConfig, srfl::CheckModes::FATAL,
-                    SER_BASE()(size_t, maximal_preprocess_iterations, srfl::nan, 1,
+                    SER_BASE()(size_t, maximal_preprocess_iterations, srfl::nan, 1.0,
                                srfl::inf)(bool, use_random, DEF_D()))
 
 #endif
