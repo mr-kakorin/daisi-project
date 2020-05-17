@@ -279,9 +279,7 @@ void MainMenu::LoadProjectEvent()
         return;
     };
 
-    if ((*currentProject)->problemType >= 7)
-        emit ShowProjectTreeAccel();
-    else
+    if ((*currentProject)->problemType < 7)
         emit ShowProjectTreeSim();
 
     emit clear();
@@ -332,9 +330,7 @@ void MainMenu::LoadModelEvent()
         return;
     };
 
-    if ((*currentProject)->problemType >= 7)
-        emit ShowProjectTreeAccel();
-    else
+    if ((*currentProject)->problemType < 7)
         emit ShowProjectTreeSim();
 };
 void MainMenu::SaveModelEvent()

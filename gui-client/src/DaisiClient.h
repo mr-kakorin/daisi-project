@@ -142,15 +142,9 @@ class Daizy : public QMainWindow
     void AddResultPlot();
     void RemoveResultPlot();
     void AbortSimulations();
-    void ShowProjectTreeAccel();
     void ShowProjectTreeSim();
-    void currItemClickedAccelSave(MyTreeItem* item1);
     void currItemClickedSimSave(MyTreeItem* item1);
 
-    ///////////////Accelerator/////////////
-    void AccelSolve();
-    void AddFlowAccel();
-    void currItemClickedAccel(QTreeWidgetItem*, int);
 
     ///////////////Simulations/////////////
     void AddConductorEvent();

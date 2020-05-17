@@ -21,11 +21,11 @@ else ()
     if (MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /Ox")
     elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -flto")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Os -march=native -flto")
     endif ()
 endif ()
 
-add_subdirectory(../lib/daisi-solver "../../solver-build-${CMAKE_BUILD_TYPE}")
+add_subdirectory(../lib/daisi-solver "${CMAKE_CURRENT_BINARY_DIR}/daisi-solver")
 
 add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_SP_USE_SPINLOCK -DBOOST_SP_USE_PTHREADS)

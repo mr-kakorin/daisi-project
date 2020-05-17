@@ -50,9 +50,7 @@ void Daizy::ShowResultsMenu()
 
     PrepareRightWidget();
 
-    if (currentProject->problemType >= 7)
-        middleWidgetAggregator->showAccelResuts(numberOfResultPlots);
-    else
+    if (currentProject->problemType < 7)
         middleWidgetAggregator->showSimulationsResuts(numberOfResultPlots);
 
     /*QGridLayout *grid = new QGridLayout;

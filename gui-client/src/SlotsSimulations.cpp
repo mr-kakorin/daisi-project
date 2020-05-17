@@ -210,8 +210,6 @@ void Daizy::AddFlow()
     currentClickItem->addChild(newItem);
     currentClickItem->setExpanded(true);
 
-    if (currentProject->problemType >= 7)
-        ShowProjectTreeAccel();
-    else
+    if (currentProject->problemType < 7)
         ShowProjectTreeSim();
 };

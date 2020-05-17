@@ -43,6 +43,18 @@ const static std::vector<std::string> problemTypesNames = {"1d",
                                                            "Dynamics in synchrotron optics"};
 const static std::vector<std::string> precisionNames = {"double", "float"};
 
+void MiddleWidget::InitTrees(int numberOfResultPlots)
+{
+    TreeList.resize(numberOfResultPlots);
+    for (int i = 0; i < numberOfResultPlots; i++)
+    {
+        TreeList[i] = new QTreeWidget();
+        TreeList[i]->setHeaderLabel("Simulations results");
+        middleWidgetGrid->addWidget(TreeList[i], i, 0);
+    }
+    itemvector.resize(numberOfResultPlots);
+};
+
 QGridLayout* MiddleWidget::GetMiddleWidgetGrid()
 {
     return middleWidgetGrid;

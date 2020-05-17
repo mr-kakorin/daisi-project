@@ -13,10 +13,7 @@
 void Daizy::MyConnect()
 {
     connect(middleWidgetAggregator, SIGNAL(CreateNewProject()), this, SLOT(CreateNewProjectEvent()));
-    connect(middleWidgetAggregator, SIGNAL(AddFlowAccel()), this, SLOT(AddFlowAccel()));
-    connect(middleWidgetAggregator, SIGNAL(AccelSolve()), this, SLOT(AccelSolve()));
     connect(middleWidgetAggregator, SIGNAL(ShowProjectTreeSim()), this, SLOT(ShowProjectTreeSim()));
-    connect(middleWidgetAggregator, SIGNAL(ShowProjectTreeAccel()), this, SLOT(ShowProjectTreeAccel()));
     connect(middleWidgetAggregator, SIGNAL(AddPotentialEvent()), this, SLOT(AddPotentialEvent()));
     connect(middleWidgetAggregator, SIGNAL(AddConductorEvent()), this, SLOT(AddConductorEvent()));
     connect(middleWidgetAggregator, SIGNAL(AddFlowConditionEvent()), this, SLOT(AddFlowConditionEvent()));
@@ -30,7 +27,6 @@ void Daizy::MyConnect()
     connect(middleWidgetAggregator, SIGNAL(SimulatePIC()), this, SLOT(SimulatePIC()));
     connect(middleWidgetAggregator, SIGNAL(SimulatePICContinue()), this, SLOT(SimulatePICContinue()));
 
-    connect(mainMenu, SIGNAL(ShowProjectTreeAccel()), this, SLOT(ShowProjectTreeAccel()));
     connect(mainMenu, SIGNAL(ShowProjectTreeSim()), this, SLOT(ShowProjectTreeSim()));
     connect(mainMenu, SIGNAL(ResetFlags()), this, SLOT(ResetFlags()));
     connect(mainMenu, SIGNAL(saveParameters()), this, SLOT(saveParameters()));
@@ -59,9 +55,7 @@ void Daizy::CreateNewProjectEvent()
     currentProject = new Dproject::project(int(parameters1[0][0]), int(parameters1[1][0]), 1, parameters2[0][1],
                                            parameters2[0][0], version);
 
-    if (currentProject->problemType >= 7)
-        ShowProjectTreeAccel();
-    else
+    if (currentProject->problemType < 7)
         ShowProjectTreeSim();
 
     middleWidgetAggregator->clear();
@@ -72,9 +66,7 @@ void Daizy::saveParameters()
 {
     if (!currentProject)
         return;
-    if (currentProject->problemType >= 7)
-        currItemClickedAccelSave(currentClickItem);
-    else
+    if (currentProject->problemType < 7)
         currItemClickedSimSave(currentClickItem);
 };
 void Daizy::ResetFlags()

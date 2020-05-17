@@ -53,13 +53,6 @@ class MiddleWidget : public QWidget
     void GetListsData(std::vector<std::vector<int>>& list1, std::vector<std::vector<int>>& list2);
     void GetListsData(std::vector<std::vector<std::string>>& list1, std::vector<std::vector<std::string>>& list2);
     /////////////////Accelerator///////////////
-    void showAccelParameters(int secN);
-    void ShowAccelSectionParams(int i, int pos);
-    void showAccelSolverMenu(const std::string& solver);
-    void ShowFlowAccel(int flow);
-    void ShowAddFlowAccelMenu();
-    void showAccelParametersCalc(int secN);
-    void showAccelResuts(int numberOfResultPlots);
     void ShowDefaultCondMenu(int currentConditioin, QString name, std::string flag);
 
     ///////////////Simulations///////////////
@@ -116,13 +109,6 @@ class MiddleWidget : public QWidget
     void clear();
     void showSummary();
 
-    ////////////////Accelerator///////////////
-    void listShowAccelSection(QListWidgetItem* item);
-    void SetAccelSectionParameters();
-    void ShowAccelCalcParametersEvent(QListWidgetItem* item);
-    void listLinacControls(QListWidgetItem* item);
-    void listShowResultClickAccel(QTreeWidgetItem* item, int);
-
     //////////////Simulations///////////////
     void listShowResultClick(QTreeWidgetItem* item, int);
     int AddBoundariesEvent(const std::string& input, std::string& errorMsg);
@@ -142,9 +128,6 @@ class MiddleWidget : public QWidget
   signals:
     void DefaultBuilder();
     void CreateNewProject();
-    void AddFlowAccel();
-    void AccelSolve();
-    void ShowProjectTreeAccel();
     void ShowProjectTreeSim();
     void AddPotentialEvent();
     void AddConductorEvent();
