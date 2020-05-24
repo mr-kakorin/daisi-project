@@ -12,6 +12,8 @@ template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
+template <class PointType>
+struct CurvePoints_t;
 };
 
 template <class PointType>
@@ -57,6 +59,7 @@ class EmissionCurrentSolverBase
     std::vector<std::vector<int>>                          istarts;
     std::vector<std::vector<DGeo::Point<PointType>>>       points1;
     std::vector<std::vector<DGeo::Point<PointType>>>       points2;
+    std::vector<DGeo::CurvePoints_t<PointType>>            gradients;
     std::vector<std::vector<DGeo::Edge<PointType>>>        emittingCutEdge;
     std::vector<std::vector<double>>                       CathodeFields;
     std::vector<std::vector<NearCathodeVolume<PointType>>> nearCathodeVolumes;

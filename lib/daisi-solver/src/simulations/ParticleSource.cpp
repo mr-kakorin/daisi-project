@@ -184,22 +184,6 @@ template <class PointType>
 bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L2,
                                                                 int flag, PointType*const& out)
 {
-//    std::vector<double> points11, points22, points33, points44;
-//    points11.reserve(sourceSurface.size());
-//	points22.reserve(sourceSurface.size());
-//	points33.reserve(sourceSurface.size());
-//	points44.reserve(sourceSurface.size());
-//    for(int i=0; i< sourceSurface.size(); ++i){
-//	    points11.push_back(sourceSurface[i].extractingEdge->point1.x);
-//	    points22.push_back(sourceSurface[i].extractingEdge->point1.y);
-//	    points33.push_back(sourceSurface[i].extractingEdge->point2.x);
-//	    points44.push_back(sourceSurface[i].extractingEdge->point2.y);
-//    }
-//
-//	write_out<double>(points11, "./11.csv");
-//	write_out<double>(points22, "./22.csv");
-//	write_out<double>(points33, "./33.csv");
-//	write_out<double>(points44, "./44.csv");
 	PointType              lMiddle = (L1 + L2) / 2;
 	int                    j       = 0;
 

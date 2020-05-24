@@ -102,14 +102,14 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
     PointType dL = this->particleSource->length() / nParticlesEmitter;
     PointType L  = 0;
 
-    //PointType EnergyAv = std::abs(energyAverage);
-    //double    sigma    = sqrt(EnergyAv * std::abs(charge) / restMass);
+    PointType EnergyAv = std::abs(energyAverage);
+    double    sigma    = std::sqrt(EnergyAv * std::abs(charge) / restMass);
 
     this->particleSource->resetSearch();
 
-    double    vNorm;
-    double    vTang;
-    double    vPhi;
+//    double    vNorm;
+//    double    vTang;
+//    double    vPhi;
     double    r, z, r1, z1;
     int       cellNumb;
     double    alphaEdge;
@@ -129,8 +129,9 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
         this->particleSource->GetParticleOptimized(L, L + dL, 1, particleData);
 
         if (particleData[2] == 0)
+        {
             continue;
-
+        }
         alphaEdge = particleData[3];
 
         r = particleData[0];
@@ -149,12 +150,21 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
 	    currentFrom_dl = particleData[2];
         for (int i0 = 0; i0 < nParticlesEnergyLoc; i0++)
         {
-//            vNorm = std::abs(sigma * distribution(generator));
-//            vTang = sigma * distribution(generator);
-//            vPhi  = sigma * distribution(generator);
-			//double energy = std::abs( EmitterDeviceBase<PointType>::get_energy_distribution() ) * 1.602e-19;
-			double v = 0.1;//sqrt( 2 * energy/ restMass );
-            //double v    = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
+
+			double v;
+			if( EmitterDeviceBase<PointType>::get_energy_distribution )
+            {
+                double energy = std::abs( EmitterDeviceBase<PointType>::get_energy_distribution() ) * 1.602e-19;
+                v = sqrt( 2 * energy/ restMass );
+            }
+			else
+            {
+                double vNorm = std::abs(sigma * distribution(generator));
+                double vTang = sigma * distribution(generator);
+                double vPhi  = sigma * distribution(generator);
+                v = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
+            }
+
             double beta = v / LIGHT_VELOCITY();
             double gamma = 1 / sqrt(1 - beta * beta);
             if (k < empty)

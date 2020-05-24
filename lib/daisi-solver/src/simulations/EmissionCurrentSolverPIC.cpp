@@ -609,21 +609,6 @@ void EmissionCurrentSolverPIC<PointType>::ChargeConserving(
   };
 };
 
-#include <fstream>
-
-std::vector<double> gradient(std::vector<double> &x) {
-  std::vector<double> result(x.size());
-  //result.reserve(x.size());
-  double h = 1e-8;
-  result[0] = (x[1] - x[0]) / h;
-  result[result.size() - 1] = (x[result.size() - 1] - x[result.size() - 2]) / h;
-  for (int i = 1; i < result.size() - 1; ++i) {
-    result[i] = (x[i + 1] - x[i - 1]) / (2 * h);
-  }
-  return result;
-}
-
-
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     const std::shared_ptr<EmitterDevice2daxs<PointType>> &emitter,
@@ -632,214 +617,58 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     int stepNumber, double mass, double charge) {
   PointType ErAverage = 0;
   std::vector<double> jv;
-  double jnew;
-  PointType r0, r1, z0, z1;
-
-  double wf = 3.5;
+  double wf = 4;
   double A = 1.54141e-6;
   double B = 6.8309e9;
-  //double t2 = 1.11619;
   double yc = 0.3795e-4;
-  double max = 0;
-  double pol[5] = {-7.535610479528366e-39, 1.094842614232595e-29, 7.580173203931757e-20, -2.183803187849293e-10,
-                   2.848487403712323 + 50};
-  //double powerlaw[2] = {0.601106264666250  -0.018556094759490};
-  auto polylaw = [pol](double E) {
-    double K = 0.;
-    for (int j = 0; j < 5; ++j) {
-      K += pol[j] * pow(E, 4 - j);
-    }
-    return K;
-  };
-  double powers[2] = {9.592000846639715, -1.032789333272806};
-//  auto powerlaw = [powers](double E) {
-//    return pow(10, powers[0]) * pow(E, powers[1]);
-//  };
-  double powers2[2] = {6.23830494009342,
-                       -0.661449170433808};//{3.11703131996135, -0.305484211026773};//{3.77621334008232,	-0.117650789685004};
-//  auto powerlaw = [powers](double E) {
-//    return pow(10, powers[0]) * pow(E, powers[1]);
-//  };
-  auto powerlaw = [powers2](double E) {
+
+  auto powerlaw = [](double E) {
+    double powers2[2] = {6.23830494009342,
+                         -0.661449170433808};
     double lin[2] = {-0.000000013559322,
-                     5.067796610169492};//{-0.000000010169492,   5.050847457627119};//{-0.000000015384615,   5.076923076923077};//{-0.000000020000000,   5.448608000000000};//{-0.000000050000000,   5.621520000000000};//{-0.000000080000000,   6.794432000000001};//{-0.000000100000000,   9.243040000000001};
-    auto c = lin[0] * E + lin[1];
-    return c * (pow(10, powers2[0]) * pow(E, powers2[1]));// + (powers2[1]) * log10(E)));
-    //return pow(10, powers[0]) * pow(E, powers[1]);
+                     5.067796610169492};
+    double c = lin[0] * E + lin[1];
+    return c * (pow(10, powers2[0]) * pow(E, powers2[1]));
   };
-  std::vector<double> x;
-  std::vector<double> y;
 
-  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
-    x.push_back(this->points1[flowNumber][i].x);
-    y.push_back(this->points1[flowNumber][i].y);
-  }
-  auto dx = gradient(x);
-  auto dy = gradient(y);
-  //std::ofstream out;
-  //out.open("nearCathodeVolumes_polylaw");
-  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
-    double Er;
-    double Ez;
-    //double r = this->points1[flowNumber][i].x;
-    //double z = this->points1[flowNumber][i].y;
-    double r = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
-    double z = this->nearCathodeVolumes[flowNumber][i].fieldPointsY[0];
-    gridData->interpolatePoint(this->points1[flowNumber][i].x, this->points1[flowNumber][i].y, 0, Er,
-                               Ez);
-    //gridData->interpolatePoint(r,
-    //                           z, 0, Er,
-    //                           Ez);
-    //double cathField = (Er * this->nearCathodeVolumes[flowNumber][i].normalX[0] +
-    //                    Ez * this->nearCathodeVolumes[flowNumber][i].normalY[0]);
-    double cathField = (Er * (-dy[i]) +
-                        Ez * (dx[i]));
-    double E_napryazennost = sqrt(Er * Er + Ez * Ez);
-    double K_rough = powerlaw(E_napryazennost);
-
+  auto const& grad = this->gradients[flowNumber];
+  auto const& source_points = this->points1[flowNumber];
+  for (int i = 0; i < source_points.size(); ++i) {
+    double jnew = 0;
+    double Er, Ez;
+    double r = source_points[i].x,
+           z = source_points[i].y;
+    double norm_r = -grad.y[i],
+           norm_z = grad.x[i];
+//    double r = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
+//    double z = this->nearCathodeVolumes[flowNumber][i].fieldPointsY[0];
+//    double norm_r = this->nearCathodeVolumes[flowNumber][i].normalX[0];
+//    double norm_z = this->nearCathodeVolumes[flowNumber][i].normalY[0];
+    gridData->interpolatePoint(r, z, 0, Er,Ez);
+    double cathField = (Er * norm_r + Ez * norm_z);
     if (cathField * charge > 0) {
-      jnew = 0;
-//      out << r << " "
-//          << z << " " << E_napryazennost << " " << K_rough
-//          << " " << jnew << std::endl;
       ErAverage = ErAverage + std::abs(cathField);
       jv.push_back(jnew);
       continue;
     }
 
+    double E = std::sqrt(Er * Er + Ez * Ez);
+    double betta_eff = powerlaw(E);
+    double E_eff = betta_eff * E;
+    double y_coeff = yc * std::sqrt(E_eff) / wf;
+    double y_coeff2 = y_coeff* y_coeff;
+    double log_y_coeff = std::log(y_coeff);
+	double v  = 1 - y_coeff2 / 3 * (3 - log_y_coeff);
+	double t2 = 1 + y_coeff2 / 9 * (1 - log_y_coeff);
 
-    double KE = E_napryazennost * K_rough;
-    //double v  = 0.9387 - yc * yc * KE / (wf * wf);
-    //double t2 = 0.9387 + yc * yc * KE / (wf * wf) / 3;
-    double y_coeff = yc * sqrt(KE) / wf;
-	double v  = 1 - y_coeff* y_coeff / 3 * (3 - log(y_coeff));
-	double t2 = 1 + y_coeff* y_coeff / 9 * (1 - log(y_coeff));
+    jnew = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
 
-    jnew = A * KE * KE * exp(-B * (sqrt(wf) * wf) * v / KE) / (wf * t2);
-//    out << r << " "
-//        << z << " " << E_napryazennost << " " << K_rough
-//        << " " << jnew << std::endl;
-    if (std::abs(jnew) > max)
-      max = std::abs(jnew);
     ErAverage = ErAverage + std::abs(cathField);
 
     jv.push_back(jnew);
-  };
-//  out << "END" << std::endl;
-//  out.close();
+  }
   this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
-};
-
-//template<class PointType>
-//void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
-//    const std::shared_ptr<EmitterDevice2daxs<PointType>> &emitter,
-//    const std::shared_ptr<ParticleGridInterface<PointType>> &particleGridInterface,
-//    const std::shared_ptr<GridData2daxs<PointType>> &gridData, PointType timeStep, int flowNumber,
-//    int stepNumber, double mass, double charge) {
-//  PointType ErAverage = 0;
-//  std::vector<double> jv;
-//  double jnew;
-//  PointType r0, r1, z0, z1;
-//
-//  double wf = 3.5;
-//  double A = 1.54141e-6;
-//  double B = 6.8309e9;
-//  double t2 = 1.11619;
-//  double yc = 0.3795e-4;
-//  double max = 0;
-//  double pol[5] = {-7.535610479528366e-39, 1.094842614232595e-29, 7.580173203931757e-20, -2.183803187849293e-10,
-//                   2.848487403712323 + 50};
-//  //double powerlaw[2] = {0.601106264666250  -0.018556094759490};
-//  auto polylaw = [pol](double E) {
-//    double K = 0.;
-//    for (int j = 0; j < 5; ++j) {
-//      K += pol[j] * pow(E, 4 - j);
-//    }
-//    return K;
-//  };
-//  double powers[2] = {9.592000846639715, -1.032789333272806};
-//  double powers2[2] = {6.23830494009342,
-//                       -0.661449170433808};//{3.11703131996135, -0.305484211026773};//{3.77621334008232,	-0.117650789685004};
-//  //double hypdata[3] = {-0.000000013856303 * 1e9, 5.108321354040379 * 1e9, 0.012775077318344 * 1e9};
-//  //double hypdata[3] = {-0.000000000253663 * 1e9,
-//  //                     3.360986090872413 * 1e9,
-//  //                    0.012857880887026 * 1e9};
-//  double hypdata[3] = {-0.000000000941878 * 1e9,
-//                       3.257770424128304 * 1e9,
-//                       0.006056767808293 * 1e9};
-//  auto hypb = [hypdata](double E) {
-//    return hypdata[0] + hypdata[1] / (E + hypdata[2]);
-//  };
-//  //  auto powerlaw = [powers](double E) {
-////    return pow(10, powers[0]) * pow(E, powers[1]);
-////  };
-//  auto powerlaw = [powers2](double E) {
-//    double lin[2] = {-0.000000013559322,
-//                     5.067796610169492};//{-0.000000010169492,   5.050847457627119};//{-0.000000015384615,   5.076923076923077};//{-0.000000020000000,   5.448608000000000};//{-0.000000050000000,   5.621520000000000};//{-0.000000080000000,   6.794432000000001};//{-0.000000100000000,   9.243040000000001};
-//    //double lin[2] = {-0.000000004512563, 4.522562814070352};
-//    auto c = lin[0] * E + lin[1];
-//    return c * (pow(10, powers2[0]) * pow(E, powers2[1]));// + (powers2[1]) * log10(E)));
-//    //return pow(10, powers[0]) * pow(E, powers[1]);
-//  };
-//  std::ofstream out;
-//  out.open("nearCathodeVolumes_polylaw");
-//  std::vector<double> x;
-//  std::vector<double> y;
-//
-//  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
-//    x.push_back(this->points1[flowNumber][i].x);
-//    y.push_back(this->points1[flowNumber][i].y);
-//  }
-//  auto dx = gradient(x);
-//  auto dy = gradient(y);
-//
-//  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
-//    double Er;
-//    double Ez;
-//    double r = this->points1[flowNumber][i].x;
-//    double z = this->points1[flowNumber][i].y;
-//    //double r = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
-//    //double z = this->nearCathodeVolumes[flowNumber][i].fieldPointsY[0];
-//    //gridData->interpolatePoint(this->points1[flowNumber][i].x, this->points1[flowNumber][i].y, 0, Er,
-//    //                           Ez);
-//    gridData->interpolatePoint(r,
-//                               z, 0, Er,
-//                               Ez);
-//    //double cathField = (Er * this->nearCathodeVolumes[flowNumber][i].normalX[0] +
-//    //                    Ez * this->nearCathodeVolumes[flowNumber][i].normalY[0]);
-//    double cathField = (Er * (-dy[i]) +
-//                        Ez * (dx[i]));
-//
-//    double E_napryazennost = sqrt(Er * Er + Ez * Ez);
-//    double K_rough = powerlaw(E_napryazennost);//powerlaw(E_napryazennost, this->points1[flowNumber].size() / 2, i);
-//
-//    if (cathField * charge > 0) {
-//      jnew = 0;
-//      out << r << " "
-//          << z << " " << E_napryazennost << " " << K_rough
-//          << " " << jnew << std::endl;
-//      ErAverage = ErAverage + std::abs(cathField);
-//      jv.push_back(jnew);
-//      continue;
-//    }
-//
-//
-//    double KE = E_napryazennost * K_rough;
-//    double v = 0.95 - yc * yc * KE / (wf * wf);
-//    jnew = A * KE * KE * exp(-B * (sqrt(wf) * wf) * v / KE) / (wf * t2);
-//    out << r << " "
-//        << z << " " << E_napryazennost << " " << K_rough
-//        << " " << jnew << std::endl;
-//    if (std::abs(jnew) > max)
-//      max = std::abs(jnew);
-//    ErAverage = ErAverage + std::abs(cathField);
-//
-//    jv.push_back(jnew);
-//  };
-//  out << "END" << std::endl;
-//  out.close();
-//  this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
-//};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::VirtualDiode1(

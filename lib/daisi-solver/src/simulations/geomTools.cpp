@@ -57,8 +57,8 @@ void mergeSortResize(int nElements, std::vector<int> list,
                 if (edges[i].point2.isEqual(edges[j].point1, tol) ||
                     edges[i].point2.isEqual(edges[j].point2, tol))
                     flag2++;
-            };
-        };
+            }
+        }
         if (flag1 == 0 && flag2 != 0)
         {
             if (flagisLast == 0)

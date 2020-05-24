@@ -47,6 +47,32 @@ template <class PointType> class Point
     Point(Point<PointType>, PointType, PointType, PointType);
 };
 
+template <typename PointType>
+struct CurvePoints_t
+{
+    std::vector<PointType> x;
+    std::vector<PointType> y;
+    std::vector<PointType> z;
+};
+
+template <typename PointType>
+CurvePoints_t<PointType> calc_grad2d(std::vector<DGeo::Point<PointType>> const& in_vec) {
+    CurvePoints_t<PointType> result;
+    result.x.resize( in_vec.size() );
+    result.y.resize( in_vec.size() );
+    double h = 1e-8;
+    result.x[0] = (in_vec[1].x - in_vec[0].x) / h;
+    result.x[result.x.size() - 1] = (in_vec[result.x.size() - 1].x - in_vec[result.x.size() - 2].x) / h;
+    result.y[0] = (in_vec[1].y - in_vec[0].y) / h;
+    result.y[result.y.size() - 1] = (in_vec[result.y.size() - 1].y - in_vec[result.y.size() - 2].y) / h;
+    std::size_t end = in_vec.size();
+    for (int i = 1; i < end; ++i) {
+        result.x[i] = (in_vec[i + 1].x - in_vec[i - 1].x) / (2 * h);
+        result.y[i] = (in_vec[i + 1].y - in_vec[i - 1].y) / (2 * h);
+    }
+    return result;
+}
+
 template <class PointType> PointType Pfabs(PointType val)
 {
     if (val.x < 0)

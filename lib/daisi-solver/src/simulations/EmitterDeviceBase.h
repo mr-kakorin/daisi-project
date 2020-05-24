@@ -115,7 +115,7 @@ class EmitterDeviceBase
     void GenerateEllipses(double restMass);
     void GetSliceIndexes(std::vector<int>& sliceIndexesParallel, int flagTest, double t1, double t2,
                          double& phMin, double& phMax, int numThreads, int thread);
-    EmitterDeviceBase(){
+    EmitterDeviceBase(): get_energy_distribution( nullptr ){
 
     };
     void SetDirectionPoints(std::vector<double> sP, std::vector<double> eP); //

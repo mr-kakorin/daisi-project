@@ -416,6 +416,7 @@ void EmissionCurrentSolverBase<PointType>::init(
         K.back()[i] = 0.1;
 
     istartstmp.back();
+    gradients.emplace_back( DGeo::calc_grad2d( points1tmp ) );
     points1.push_back(points1tmp);
     points2.push_back(points2tmp);
 
