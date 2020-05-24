@@ -102,8 +102,8 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
     PointType dL = this->particleSource->length() / nParticlesEmitter;
     PointType L  = 0;
 
-    //PointType EnergyAv = std::abs(energyAverage);
-    //double    sigma    = sqrt(EnergyAv * std::abs(charge) / restMass);
+    PointType EnergyAv = std::abs(energyAverage);
+    double    sigma    = sqrt(EnergyAv * std::abs(charge) / restMass);
 
     this->particleSource->resetSearch();
 
@@ -149,12 +149,10 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
 	    currentFrom_dl = particleData[2];
         for (int i0 = 0; i0 < nParticlesEnergyLoc; i0++)
         {
-//            vNorm = std::abs(sigma * distribution(generator));
-//            vTang = sigma * distribution(generator);
-//            vPhi  = sigma * distribution(generator);
-			//double energy = std::abs( EmitterDeviceBase<PointType>::get_energy_distribution() ) * 1.602e-19;
-			double v = 0.1;//sqrt( 2 * energy/ restMass );
-            //double v    = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
+            vNorm = std::abs(sigma * distribution(generator));
+            vTang = sigma * distribution(generator);
+            vPhi  = sigma * distribution(generator);
+            double v    = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
             double beta = v / commtools::LIGHT_VELOCITY();
             double gamma = 1 / sqrt(1 - beta * beta);
             if (k < empty)

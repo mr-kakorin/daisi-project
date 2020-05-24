@@ -25,7 +25,7 @@ else ()
     endif ()
 endif ()
 
-add_subdirectory(../lib/daisi-solver "../../solver-build-${CMAKE_BUILD_TYPE}")
+add_subdirectory(../lib/daisi-solver "${CMAKE_CURRENT_BINARY_DIR}/daisi-solver")
 
 add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_SP_USE_SPINLOCK -DBOOST_SP_USE_PTHREADS)

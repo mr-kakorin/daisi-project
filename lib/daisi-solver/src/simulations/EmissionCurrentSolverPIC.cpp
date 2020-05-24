@@ -667,15 +667,15 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     return c * (pow(10, powers2[0]) * pow(E, powers2[1]));// + (powers2[1]) * log10(E)));
     //return pow(10, powers[0]) * pow(E, powers[1]);
   };
-  std::vector<double> x;
-  std::vector<double> y;
-
-  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
-    x.push_back(this->points1[flowNumber][i].x);
-    y.push_back(this->points1[flowNumber][i].y);
-  }
-  auto dx = gradient(x);
-  auto dy = gradient(y);
+//  std::vector<double> x;
+//  std::vector<double> y;
+//
+//  for (int i = 0; i < this->points1[flowNumber].size(); i++) {
+//    x.push_back(this->points1[flowNumber][i].x);
+//    y.push_back(this->points1[flowNumber][i].y);
+//  }
+//  auto dx = gradient(x);
+//  auto dy = gradient(y);
   //std::ofstream out;
   //out.open("nearCathodeVolumes_polylaw");
   for (int i = 0; i < this->points1[flowNumber].size(); i++) {
@@ -685,15 +685,15 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     //double z = this->points1[flowNumber][i].y;
     double r = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
     double z = this->nearCathodeVolumes[flowNumber][i].fieldPointsY[0];
-    gridData->interpolatePoint(this->points1[flowNumber][i].x, this->points1[flowNumber][i].y, 0, Er,
-                               Ez);
-    //gridData->interpolatePoint(r,
-    //                           z, 0, Er,
+    //gridData->interpolatePoint(this->points1[flowNumber][i].x, this->points1[flowNumber][i].y, 0, Er,
     //                           Ez);
-    //double cathField = (Er * this->nearCathodeVolumes[flowNumber][i].normalX[0] +
-    //                    Ez * this->nearCathodeVolumes[flowNumber][i].normalY[0]);
-    double cathField = (Er * (-dy[i]) +
-                        Ez * (dx[i]));
+    gridData->interpolatePoint(r,
+                               z, 0, Er,
+                               Ez);
+    double cathField = (Er * this->nearCathodeVolumes[flowNumber][i].normalX[0] +
+                        Ez * this->nearCathodeVolumes[flowNumber][i].normalY[0]);
+//    double cathField = (Er * (-dy[i]) +
+//                        Ez * (dx[i]));
     double E_napryazennost = sqrt(Er * Er + Ez * Ez);
     double K_rough = powerlaw(E_napryazennost);
 
