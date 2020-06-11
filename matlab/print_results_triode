@@ -1,0 +1,48 @@
+folders = {'modelled_velocity', 'new_nordheim_functions'};
+t = cell(2,7);%zeros(1, length(FileNames));
+I = cell(2,7);%zeros(1, length(FileNames));
+Ua = zeros(2,7);
+Ug = zeros(2,7);
+etalon = [0.05 0.33 1.49 3.25 4.88 11.63 13.1]./400./400;
+U = [3.41 4.88 6.44 7.54 9.12 11.19 18.75];
+Ivalues = zeros(2,7);
+for kk=1:length(folders)
+    %figure;
+    Files=dir(folders{kk});
+    expression = '.*Collected.*';
+    FileNames = {Files.name};
+    ismatch = ~cellfun(@isempty, regexp(FileNames, expression, 'match'));
+    FileNames = FileNames(ismatch);
+    for k=1:length(FileNames)
+       filename  = FileNames{k}; %extract string from cell
+       filename_to_parse = strsplit(filename, '_');
+       filename_to_parse = filename_to_parse{2};
+       anode = regexp(filename_to_parse,'\d?\d.\d\d?','Match');
+       Ua(kk,k) = str2double(anode);
+       T = readtable([folders{kk} '/' filename], 'HeaderLines',1);
+       t{kk,k}= table2array(T(:, 'Var1'));
+       I{kk,k} = table2array(T(:, 'Var2'));
+       Ivalue = I{kk,k};
+       Ivalue = mean(Ivalue(0.9*length(Ivalue):end));
+       Ivalues(kk,k) = Ivalue;
+       %plot(Ua{kk,k}, Ivalue, '.' ,'MarkerSize', 25); hold on;
+       %plot(t{kk,k}, I{kk,k}); hold on;
+    end
+end
+
+Ua = [ Ua(:,[3:7]) Ua(:,[1:2]) ]
+Ivalues  = [ Ivalues(:,[3:7]) Ivalues(:,[1:2]) ];
+p = zeros(1, 2);
+for kk=1:length(folders)
+    p(kk) = plot(Ua(kk,:), Ivalues(kk,:)); hold on;
+end
+xlabel('U (B)','FontSize', 32);
+ylabel('I (A)','FontSize', 32);
+lgd = legend(p,'Maxwell(0.001 eV)', 'Bimodal','FontSize', 16);
+plot(U,etalon, '.' ,'MarkerSize', 25);
+figure;
+
+for kk=1:length(folders)
+    plot(Ua(kk,:), abs(Ivalues(kk,:)-etalon)./etalon ,'MarkerSize', 25); hold on;
+end
+set(gca,'FontSize',20)
