@@ -235,7 +235,8 @@ class imat
         ar& size;
         ar& nz;
         ar& data;
-    };
+    }
+
     template <class Archive>
     void load(Archive& ar, const unsigned int)
     {
@@ -244,7 +245,7 @@ class imat
         ar& size;
         ar& nz;
         ar& data;
-    };
+    }
 
   public:
     std::vector<int> data;

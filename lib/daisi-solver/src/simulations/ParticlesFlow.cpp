@@ -36,10 +36,8 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::AddEmittanc
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 bool ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::isConfigure()
 {
-    if (DistributionStyle < 5 &&
-        !EmitterDeviceStatus->GetParticleSources()[0]->sourceSurface.size())
-        return false;
-    return true;
+    return !(DistributionStyle < 5 &&
+             !EmitterDeviceStatus->GetParticleSources()[0]->sourceSurface.size());
 }
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
@@ -475,9 +473,7 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 bool ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CheckTimeLimit(int thread)
 {
-    if (maxTime * 1e-9 * LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time)
-        return true;
-    return false;
+    return maxTime * 1e-9 * LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time;
 }
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
@@ -518,7 +514,7 @@ std::vector<unsigned int>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetNewIndexes(
     std::vector<unsigned int> EmptyPlaces)
 {
-    int particlesNumber = EmitterDeviceStatus->GetNumbersOfParticlesGeneration();
+    //int particlesNumber = EmitterDeviceStatus->GetNumbersOfParticlesGeneration();
     std::vector<unsigned int> result;
 
     for (int i = 0; i < DynamicsData->NParticles(); i++)

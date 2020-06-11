@@ -427,7 +427,6 @@ PoissonSolver<PointType>::closestVertex( const std::shared_ptr<MeshContainer2d<P
 	int i, j;
 	i = 0; // x
 	j = 0; // y
-	int flag = 0;
 
 	// y
 	while ((point.y > mesh->meshData[j][i].y) && (j + 1 < mesh->meshData.size())) {
@@ -1051,12 +1050,8 @@ void PoissonSolver<PointType>::createMatrix( const std::shared_ptr<MeshContainer
                                              coeff middle ) {
 
 	int size = mesh->serialMeshData.size();
-	int m = 0;
 	systemSize = size;
 	int step;
-
-	int tempj;
-
 	xCharge.resize( mesh->serialMeshData.size());
 	linVect.resize( mesh->serialMeshData.size());
 	x.resize( mesh->serialMeshData.size());
@@ -1090,7 +1085,7 @@ void PoissonSolver<PointType>::createMatrix( const std::shared_ptr<MeshContainer
 	nonZeroLinVect.clear();
 	NonZeroLinVect<PointType> tmp_nonZero;
 
-	double x_, y_, hx_, hy_;
+	double x_, y_;
 	DGeo::Point<PointType> norm;
 	BoundaryPoint<PointType> bp;
 	int c_i = -1; // current index
@@ -1461,11 +1456,6 @@ void PoissonSolver<PointType>::InitSolver(
 	boundaryPointsIntersectionCondition.clear();
 	boundaryPointsIntersectionDefault.clear();
 
-	double hx = mesh->h1;
-	double hy = mesh->h2;
-	// eps_p = mesh->h1*0.001;
-	// eps_h = mesh->h1*0.01;
-
 	int k = 0;
 
 	for (int i = 0; i < mesh->meshData.size(); ++i) {
@@ -1507,11 +1497,6 @@ void PoissonSolver<PointType>::InitSolver(
 
 	boundaryPointsIntersectionCondition.clear();
 	boundaryPointsIntersectionDefault.clear();
-
-	double hr = mesh->h1;
-	double hz = mesh->h2;
-	// eps_p = mesh->h1*0.001;
-	// eps_h = mesh->h1*0.01;
 
 	int k = 0;
 
@@ -1913,7 +1898,7 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 	double phi0, phi1, phi2, phi3;
 	DGeo::Point<int> tmp, tmp1, tmp2, tmp3;
 	BoundaryPoint<PointType> bp;
-	double h_, h1, h2, h3, delta, H;
+	double h1, h2, h3, delta, H;
 
 	int flagE = 0;
 	int m = -1;
@@ -1941,10 +1926,10 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 			h1 = distP2P( mesh->meshData[tmp1.y][tmp1.x], mesh->meshData[tmp.y][tmp.x], type );
 			h2 = distP2P( mesh->meshData[tmp2.y][tmp2.x], mesh->meshData[tmp.y][tmp.x], type );
 
-			if ((tmp.x == tmp1.x) && (tmp1.y == tmp.y) ||
-			    (mesh->meshData[tmp.y][tmp.x].isOut == true) &&
+			if (((tmp.x == tmp1.x) && (tmp1.y == tmp.y)) ||
+			    ((mesh->meshData[tmp.y][tmp.x].isOut == true) &&
 			    (mesh->meshData[tmp1.y][tmp1.x].isOut == true) &&
-			    (mesh->meshData[tmp2.y][tmp2.x].isOut == false)) {
+			    (mesh->meshData[tmp2.y][tmp2.x].isOut == false))) {
 				// 1
 				// tmp,tmp1 - 1, tmp2 - 2
 				bp = findBoundaryPoint( mesh->meshData[tmp.y][tmp.x].Number );
@@ -1956,10 +1941,10 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 				E[m] = -(-(2 + delta) * phi0 + (1 + delta) * (1 + delta) * phi2 / delta -
 				         phi3 / delta) /
 				       H;
-			} else if ((tmp.x == tmp2.x) && (tmp.y == tmp2.y) ||
-			           (mesh->meshData[tmp.y][tmp.x].isOut == true) &&
+			} else if (((tmp.x == tmp2.x) && (tmp.y == tmp2.y)) ||
+			           ((mesh->meshData[tmp.y][tmp.x].isOut == true) &&
 			           (mesh->meshData[tmp2.y][tmp2.x].isOut == true) &&
-			           (mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+			           (mesh->meshData[tmp1.y][tmp1.x].isOut == false))) {
 				// 5
 				// tmp,tmp2 - 5, tmp1 - 4
 				tmp3 = doStep( mesh, type, tmp1, -1 );
@@ -1991,7 +1976,7 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 	double phi0, phi1, phi2, phi3;
 	DGeo::Point<int> tmp, tmp1, tmp2, tmp3;
 	BoundaryPoint<PointType> bp;
-	double h_, h1, h2, h3, delta, H;
+	double h1, h2, h3, delta, H;
 
 	int flagE = 0;
 	int m = -1;
@@ -2023,10 +2008,10 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 				h2 = distP2P( mesh->mesh[tmp2.z].meshData[tmp2.y][tmp2.x],
 				              mesh->mesh[tmp.z].meshData[tmp.y][tmp.x], type );
 
-				if ((tmp.x == tmp1.x) && (tmp1.y == tmp.y) && (tmp1.z == tmp.z) ||
-				    (mesh->mesh[tmp.z].meshData[tmp.y][tmp.x].isOut == true) &&
+				if (((tmp.x == tmp1.x) && (tmp1.y == tmp.y) && (tmp1.z == tmp.z)) ||
+				    ((mesh->mesh[tmp.z].meshData[tmp.y][tmp.x].isOut == true) &&
 				    (mesh->mesh[tmp1.z].meshData[tmp1.y][tmp1.x].isOut == true) &&
-				    (mesh->mesh[tmp2.z].meshData[tmp2.y][tmp2.x].isOut == false)) {
+				    (mesh->mesh[tmp2.z].meshData[tmp2.y][tmp2.x].isOut == false))) {
 					// 1
 					// tmp,tmp1 - 1, tmp2 - 2
 					bp = findBoundaryPoint( mesh->mesh[tmp.z].meshData[tmp.y][tmp.x].Number );
@@ -2039,10 +2024,10 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 					E[m] = -(-(2 + delta) * phi0 + (1 + delta) * (1 + delta) * phi2 / delta -
 					         phi3 / delta) /
 					       H;
-				} else if ((tmp.x == tmp2.x) && (tmp.y == tmp2.y) && (tmp.z == tmp2.z) ||
-				           (mesh->mesh[tmp.z].meshData[tmp.y][tmp.x].isOut == true) &&
+				} else if (((tmp.x == tmp2.x) && (tmp.y == tmp2.y) && (tmp.z == tmp2.z)) ||
+				           ((mesh->mesh[tmp.z].meshData[tmp.y][tmp.x].isOut == true) &&
 				           (mesh->mesh[tmp2.z].meshData[tmp2.y][tmp2.x].isOut == true) &&
-				           (mesh->mesh[tmp1.z].meshData[tmp1.y][tmp1.x].isOut == false)) {
+				           (mesh->mesh[tmp1.z].meshData[tmp1.y][tmp1.x].isOut == false))) {
 					// 5
 					// tmp,tmp2 - 5, tmp1 - 4
 					tmp3 = doStep( mesh, type, tmp1, -1 );
@@ -2114,12 +2099,12 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
                                       const std::shared_ptr<MeshContainer2d<PointType>> &mesh,
                                       const std::shared_ptr<BoundaryConditions> &boundaryConditions,
                                       double t, double &progress ) {
-	auto meshData = mesh->meshData;
-	int k = 0;
-	auto s = meshData.size();
-	auto s2 = meshData[0].size();
-	int max = -1;
-	int idx = 0;
+//	auto meshData = mesh->meshData;
+//	int k = 0;
+//	auto s = meshData.size();
+//	auto s2 = meshData[0].size();
+//	int max = -1;
+//	int idx = 0;
 //	for(int i =0; i < meshData.size(); ++i)
 //	{
 //		int s1 = meshData[i].size();
@@ -2146,13 +2131,13 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 
 
 	//std::cout<<s<<" "<<s2<<std::endl;
-	int nx = mesh->getnVertexX();
-	int ny = mesh->getnVertexY();
-	double pi = 3.14159265358979323;
-	double tw = std::cos( pi / nx ) / std::cos( pi / ny );
+	//int nx = mesh->getnVertexX();
+	//int ny = mesh->getnVertexY();
+	//double pi = 3.14159265358979323;
+	//double tw = std::cos( pi / nx ) / std::cos( pi / ny );
 	int size = systemSize;
 	std::vector<int> strElements;
-	double tempValue;
+	//double tempValue;
 	double eps0 = VACUUM_PERMITTIVITY();
 	int flag = 0;
 	double tmp_sum = 0.;
@@ -2215,7 +2200,6 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 			    std::isinf( c_lefts[i] ) || std::isnan( c_ups[i] ) || std::isinf( c_ups[i] ) ||
 			    std::isnan( c_downs[i] ) ||
 			    std::isinf( c_downs[i] ) || std::isnan( c_middles[i] ) || std::isinf( c_middles[i] )) {
-				int tt = 0;
 				continue;
 			}
 
@@ -2274,7 +2258,6 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 				    std::isinf( c_lefts[i] ) || std::isnan( c_ups[i] ) || std::isinf( c_ups[i] ) ||
 				    std::isnan( c_downs[i] ) ||
 				    std::isinf( c_downs[i] ) || std::isnan( c_middles[i] ) || std::isinf( c_middles[i] )) {
-					int tt = 0;
 					continue;
 				}
 
@@ -2307,7 +2290,6 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 
 	if (solverFlags[0] == 0) {
 		int n = 0;
-		double sum;
 		/*while (flag == 0){
                 diff_sum = 0;
                 tmp_sum = 0;
@@ -2386,7 +2368,6 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 
 	}
 	// write solution in gridData
-	int m = 0;
 	for (int i = 0; i < size; ++i) {
 		V[i] = x[i];
 	}
@@ -2396,7 +2377,6 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 	PointType tmp_V, v, h_, v1, v2, h1, h2;
 	BoundaryPoint<PointType> bp;
 	std::vector<DGeo::Point<int>> strange_points;
-	double another_h;
 	int nm;
 
 	for (int i = 0; i < mesh->meshData.size(); ++i) {
@@ -2473,7 +2453,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 					points_edge.point1 = mesh->meshData[tmp.y][tmp.x];
 					tmp1 = mesh->doStepX( tmp, 1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeX( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PX( mesh->meshData[tmp.y][tmp.x],
@@ -2494,7 +2474,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 					}
 					tmp1 = mesh->doStepX( tmp, -1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeX( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PX( mesh->meshData[tmp.y][tmp.x],
@@ -2516,7 +2496,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 					// h = mesh->h2;
 					tmp1 = mesh->doStepY( tmp, 1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeY( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PY( mesh->meshData[tmp.y][tmp.x],
@@ -2538,7 +2518,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 
 					tmp1 = mesh->doStepY( tmp, -1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeY( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PY( mesh->meshData[tmp.y][tmp.x],
@@ -2658,10 +2638,10 @@ void PoissonSolver<PointType>::solveCharge(
 	int nx = mesh->getnVertexX();
 	int ny = mesh->getnVertexY();
 	double pi = 3.14159265358979323;
-	double tw = std::cos( pi / nx ) / std::cos( pi / ny );
+	//double tw = std::cos( pi / nx ) / std::cos( pi / ny );
 	int size = systemSize;
 	std::vector<int> strElements;
-	double tempValue;
+	//double tempValue;
 	double eps0 = VACUUM_PERMITTIVITY();
 	int flag = 0;
 	double tmp_sum = 0;
@@ -2819,8 +2799,8 @@ void PoissonSolver<PointType>::solveCharge(
 	}
 
 	if (solverFlags[0] == 0) {
-		int n = 0;
-		double sum;
+		//int n = 0;
+		//double sum;
 		while (flag == 0) {
 			diff_sum = 0;
 			tmp_sum = 0;
@@ -2877,7 +2857,7 @@ void PoissonSolver<PointType>::solveCharge(
 		}
 	}
 	// write solution in gridData
-	int m = 0;
+	//int m = 0;
 	for (int i = 0; i < size; ++i) {
 		V[i] = xCharge[i];
 	}
@@ -2886,7 +2866,7 @@ void PoissonSolver<PointType>::solveCharge(
 	PointType tmp_V, v, h_, v1, v2, h1, h2;
 	BoundaryPoint<PointType> bp;
 	std::vector<DGeo::Point<int>> strange_points;
-	double another_h;
+	//double another_h;
 	int nm;
 
 	for (int i = 0; i < mesh->meshData.size(); ++i) {
@@ -2963,7 +2943,7 @@ void PoissonSolver<PointType>::solveCharge(
 					points_edge.point1 = mesh->meshData[tmp.y][tmp.x];
 					tmp1 = mesh->doStepX( tmp, 1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeX( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PX( mesh->meshData[tmp.y][tmp.x],
@@ -2984,7 +2964,7 @@ void PoissonSolver<PointType>::solveCharge(
 					}
 					tmp1 = mesh->doStepX( tmp, -1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeX( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PX( mesh->meshData[tmp.y][tmp.x],
@@ -3006,7 +2986,7 @@ void PoissonSolver<PointType>::solveCharge(
 					// h = mesh->h2;
 					tmp1 = mesh->doStepY( tmp, 1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeY( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PY( mesh->meshData[tmp.y][tmp.x],
@@ -3028,7 +3008,7 @@ void PoissonSolver<PointType>::solveCharge(
 
 					tmp1 = mesh->doStepY( tmp, -1 );
 					points_edge.point2 = mesh->meshData[tmp1.y][tmp1.x];
-					if ((mesh->meshData[tmp1.y][tmp1.x].isOut == false)) {
+					if (mesh->meshData[tmp1.y][tmp1.x].isOut == false) {
 						if (isIntersection( bp.edge, points_edge, eps_p )) {
 							h_ = distToEdgeY( bp.edge, mesh->meshData[tmp1.y][tmp1.x] );
 							h1 = distP2PY( mesh->meshData[tmp.y][tmp.x],

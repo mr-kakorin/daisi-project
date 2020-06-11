@@ -34,9 +34,9 @@ void Solver<PointType>::TimeStepEstimate(std::vector<double>&               resu
 
     resultTmp.resize(numThreads);
     result.resize(deviceStatus->GetNumberParticlesFlows());
-    double dH = deviceStatus->GetGridData()->GetMaxSixe();
+    //double dH = deviceStatus->GetGridData()->GetMaxSixe();
 
-    int flagSaveDataLoc = 0;
+    //int flagSaveDataLoc = 0;
 
     int step = 0;
     int i1, i2;
@@ -391,9 +391,9 @@ void Solver<PointType>::ErrorEstimateEvent(const std::shared_ptr<deviceType>& de
     {
         deviceStatus->GetElectrodes()[i]->ResetPower();
     }
-    int iteration = 0;
+    //int iteration = 0;
 
-    double dH = deviceStatus->GetGridData()->GetMaxSixe();
+    //double dH = deviceStatus->GetGridData()->GetMaxSixe();
 
     std::vector<PointType> alpas(deviceStatus->GetNumberParticlesFlows());
 

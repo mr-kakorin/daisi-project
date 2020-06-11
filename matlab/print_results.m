@@ -1,5 +1,5 @@
 %'modelled_velocity', 'new_nordheim_functions'
-folders = { 'qlast', 'diode_all'};
+folders = { 'newnewnew'};
 etalon = [0.05 0.33 1.49 3.25 4.88 11.63 13.1]./400./400;
 U = [3.41 4.88 6.44 7.54 9.12 11.19 18.75];
 K = length(folders);
@@ -15,7 +15,7 @@ lgdForIU{end+1} = 'experimental';
 for kk=1:K
     %figure;
     Files=dir(folders{kk});
-    expression = '.*Collected.*';
+    expression = '.*A;.*';
     FileNames = {Files.name};
     ismatch = ~cellfun(@isempty, regexp(FileNames, expression, 'match'));
     FileNames = FileNames(ismatch);

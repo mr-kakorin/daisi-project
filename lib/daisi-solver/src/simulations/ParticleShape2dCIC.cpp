@@ -82,7 +82,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
             {
                 if (nearCathodeVolumes[s][0].flagCurrentLimited)
                     n = n - nearCathodeVolumes[s].size();
-            };
+            }
             if (nearCathodeVolumes[i][j].InCell(cartesianX1, cartesianX2) &&
                 0 == nearCathodeVolumes[i][j].flagCurrentLimited)
             {
@@ -279,10 +279,6 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
     PointType* cartesianX1, PointType* cartesianX2, int flagType, PointType* cartesianX12,
     PointType* cartesianX22)
 {
-    PointType rInt;
-    PointType zInt;
-    int       flagSearch = 1;
-
     PointType x, y;
 
     if (emType == 0)
@@ -430,7 +426,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                 {
                     if (InCell(s1, rnew1, znew1))
                         break;
-                };
+                }
 
                 if (s1 == ii2 + 1)
                 {
@@ -975,12 +971,10 @@ bool ParticleShape2dCIC<PointType>::InCellWithEps(int basePoint, PointType x1, P
     PointType epsx1 = std::abs(1e-4 * (x1Array[basePoint + 1] - x1Array[basePoint]));
     PointType epsx2 = std::abs(1e-4 * (x2Array[levelHigh[basePoint]] - x2Array[basePoint]));
 
-    if ((x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
-        (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
-        (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
-        (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2))
-        return true;
-    return false;
+    return (x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
+           (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
+           (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
+           (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2);
 }
 
 template <class PointType>
@@ -997,14 +991,12 @@ bool ParticleShape2dCIC<PointType>::InCellWithEps(int basePoint, PointType x1, P
     PointType epsx2 = std::abs(1e-4 * (x2Array[levelHigh[basePoint]] - x2Array[basePoint]));
     PointType epsx3 = std::abs(1e-4 * (x3Array[levelZ[basePoint]] - x3Array[basePoint]));
 
-    if ((x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
-        (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
-        (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
-        (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2) &&
-        (x3 >= x3Array[basePoint] || std::abs(x3 - x3Array[basePoint]) < epsx3) &&
-        (x3 <= x3Array[levelZ[basePoint]] || std::abs(x3 - x3Array[levelZ[basePoint]]) < epsx3))
-        return true;
-    return false;
+    return (x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
+           (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
+           (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
+           (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2) &&
+           (x3 >= x3Array[basePoint] || std::abs(x3 - x3Array[basePoint]) < epsx3) &&
+           (x3 <= x3Array[levelZ[basePoint]] || std::abs(x3 - x3Array[levelZ[basePoint]]) < epsx3);
 }
 
 template <class PointType>
@@ -1328,7 +1320,6 @@ void ParticleShape2dCIC<PointType>::AddCell(
                              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
         }
     }
-
     cellNumber++;
 }
 
@@ -1337,10 +1328,8 @@ bool ParticleShape2dCIC<PointType>::InCell(int basePoint, PointType x1, PointTyp
 {
     if (levelHigh[basePoint] == -1)
         return false;
-    if (x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
-        x2 <= x2Array[levelHigh[basePoint]])
-        return true;
-    return false;
+    return x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
+           x2 <= x2Array[levelHigh[basePoint]];
 }
 
 template <class PointType>
@@ -1351,11 +1340,9 @@ bool ParticleShape2dCIC<PointType>::InCell(int basePoint, PointType x1, PointTyp
     if (levelZ[basePoint] == -1)
         return false;
 
-    if (x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
-        x2 <= x2Array[levelHigh[basePoint]] && x3 >= x3Array[basePoint] &&
-        x3 <= x3Array[levelZ[basePoint]])
-        return true;
-    return false;
+    return x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
+           x2 <= x2Array[levelHigh[basePoint]] && x3 >= x3Array[basePoint] &&
+           x3 <= x3Array[levelZ[basePoint]];
 }
 
 template <class PointType>

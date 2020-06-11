@@ -32,7 +32,7 @@ template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
-};
+}
 
 template <class PointType>
 class PoissonSolver

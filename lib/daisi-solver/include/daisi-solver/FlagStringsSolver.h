@@ -25,5 +25,5 @@ extern std::vector<std::string> simulationDataNamesFlowPTI;
 
 extern std::vector<std::string> simulationDataNamesBasePTI;
 extern std::vector<std::string> simulationDataNamesBasePIC;
-};
+}
 #endif

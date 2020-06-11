@@ -5,17 +5,20 @@
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
 #include <thread>
+
 namespace DGeo
 {
 template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
-};
+}
+
 namespace Dmath
 {
 class imat;
-};
+}
+
 template <class PointType>
 class BoundaryContainer2d;
 template <class PointType>
@@ -26,6 +29,7 @@ template <class PointType>
 class MeshContainer2d;
 template <class PointType>
 class ParticleGridInterface;
+
 class MeshParams
 {
   public:
@@ -38,9 +42,10 @@ class MeshParams
     std::vector<std::vector<double>> params[3];
 
     MeshParams(std::string filename, double& eps, std::string& errorMsg);
-    double GetStep(double point, int flagX) const;
+    double GetStep(double point, int flagX) const noexcept;
     int GetNumberOfSteps(int flagX, double min, double max, double& hMin) const;
 };
+
 template <class PointType>
 class MeshGenerator
 {

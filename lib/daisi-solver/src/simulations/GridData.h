@@ -10,11 +10,13 @@ template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
-};
+}
+
 namespace Dmath
 {
 class imat;
-};
+}
+
 template <class PointType>
 class NearCathodeVolume
 {
@@ -101,16 +103,6 @@ class GridDataBase
 };
 
 template <class PointType>
-class GridData1d
-{
-    friend class boost::serialization::access;
-
-  public:
-    std::vector<PointType> x;
-    std::vector<PointType> flagOut;
-    std::vector<PointType> E[0];
-};
-template <class PointType>
 class GridData2d : public GridDataBase<PointType>
 {
     BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -119,12 +111,12 @@ class GridData2d : public GridDataBase<PointType>
     void save(Archive& ar, const unsigned int) const
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
     template <class Archive>
     void load(Archive& ar, const unsigned int)
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
 
   public:
     std::vector<PointType>& Get_Ex();
@@ -151,22 +143,23 @@ class GridData2d : public GridDataBase<PointType>
     int GetType() const
     {
         return 1;
-    };
+    }
     PointType* GetX1Pointer() const
     {
         return (PointType*)(&this->X[0][0]);
-    };
+    }
     PointType* GetX2Pointer() const
     {
         return (PointType*)(&this->X[1][0]);
-    };
+    }
+
     float GetMaxSixe() const;
 
     std::vector<PointType> GetB() const
     {
         std::vector<PointType> r;
         return r;
-    };
+    }
     void SetB(const std::vector<PointType>& BIn){};
     void GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
                  int PlotTypeFlag) const;
@@ -185,12 +178,12 @@ class GridData3d : public GridDataBase<PointType>
     void save(Archive& ar, const unsigned int) const
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
     template <class Archive>
     void load(Archive& ar, const unsigned int)
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
 
   public:
     std::vector<PointType>& Getx();
@@ -216,20 +209,22 @@ class GridData3d : public GridDataBase<PointType>
     int GetType() const
     {
         return 4;
-    };
+    }
+
     PointType* GetX1Pointer() const
     {
         return (PointType*)(&this->X[0][0]);
-    };
+    }
+
     PointType* GetX2Pointer() const
     {
         return (PointType*)(&this->X[1][0]);
-    };
+    }
 
     PointType* GetX3Pointer() const
     {
         return (PointType*)(&this->X[2][0]);
-    };
+    }
 
     float GetMaxSixe() const;
 
@@ -237,7 +232,8 @@ class GridData3d : public GridDataBase<PointType>
     {
         std::vector<PointType> r;
         return r;
-    };
+    }
+
     void SetB(const std::vector<PointType>& BIn){};
     void GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
                  int PlotTypeFlag) const;
@@ -271,7 +267,8 @@ class GridData2daxs : public GridDataBase<PointType>
     int GetType() const
     {
         return 2;
-    };
+    }
+
     std::vector<DGeo::Edge<PointType>> GetCellEdgesArray(int cellNumb) const;
     float GetMaxSixe() const;
     int InCell(double x1, double x2, double x3) const;
@@ -279,11 +276,13 @@ class GridData2daxs : public GridDataBase<PointType>
     PointType* GetX1Pointer() const
     {
         return (PointType*)(&this->X[0][0]);
-    };
+    }
+
     PointType* GetX2Pointer() const
     {
         return (PointType*)(&this->X[1][0]);
-    };
+    }
+
     void GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
                  int PlotTypeFlag) const;
     double interpolatePoint(double x1, double x2, double, std::string value, int PlotTypeFlag) const;
@@ -300,12 +299,12 @@ class GridData2dpolar : public GridDataBase<PointType>
     void save(Archive& ar, const unsigned int) const
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
     template <class Archive>
     void load(Archive& ar, const unsigned int)
     {
         ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-    };
+    }
 
     std::vector<PointType>& Get_ErCol();
     std::vector<PointType>& Get_EphiCol();
@@ -320,28 +319,29 @@ class GridData2dpolar : public GridDataBase<PointType>
     int GetType() const
     {
         return 3;
-    };
+    }
+
     PointType* GetX1Pointer() const
     {
         return (PointType*)(&this->X[0][0]);
-    };
+    }
+
     PointType* GetX2Pointer() const
     {
         return (PointType*)(&this->X[1][0]);
-    };
+    }
 
     float GetMaxSixe() const;
     int InCell(double x1, double x2, double x3) const;
     void GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
-                 int PlotTypeFlag) const {
-
-    };
+                 int PlotTypeFlag) const { }
 
     std::vector<PointType> GetB()
     {
         std::vector<PointType> tmp;
         return tmp;
-    };
+    }
+
     void SetB(const std::vector<PointType>& BIn){};
 
     float interpolatePoint(double x1, double x2, double, std::string value, int PlotTypeFlag) const;

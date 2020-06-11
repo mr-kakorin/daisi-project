@@ -27,7 +27,7 @@ template <class PointType> class Point
         ar& z;
         ar& Number;
         ar& isOut;
-    };
+    }
     template <class Archive> void load(Archive& ar, const unsigned int)
     {
         ar& x;
@@ -35,7 +35,7 @@ template <class PointType> class Point
         ar& z;
         ar& Number;
         ar& isOut;
-    };
+    }
     bool isEqual(Point<PointType> point1, PointType epsilon) const;
     PointType Radius();
     PointType Dist2Point(const Point<PointType>& point1) const;
@@ -83,7 +83,7 @@ inline PointType Pfabs(PointType val)
     if (val.z < 0)
         val.z = -val.z;
     return val;
-};
+}
 
 template <class PointType>
 inline int PointCmp(Point<PointType> p1, Point<PointType> p2, int key)
@@ -98,10 +98,10 @@ inline int PointCmp(Point<PointType> p1, Point<PointType> p2, int key)
         {
             if (p1.x < p2.x)
                 return -1;
-        };
-    };
+        }
+    }
     return 1;
-};
+}
 
 template <class PointType>
 class Edge

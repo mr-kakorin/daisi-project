@@ -6,17 +6,20 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <iostream>
 #include <vector>
+
 namespace DGeo
 {
 template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
-};
+}
+
 namespace Dmath
 {
 class imat;
-};
+}
+
 template <class PointType>
 class GridData2daxs;
 template <class PointType>

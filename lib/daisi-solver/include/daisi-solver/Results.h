@@ -83,7 +83,7 @@ device->GetFlow(i)->GetEmitterDevice()->getErAverage(); YDataFlow[i][3 * i + 3].
         }
 //		{ "N particles(t)", "I(t)", "Enorm_av(t)"};*/
 
-    };
+    }
     void addData(int step, double bs);
 };
 class DynamicsData
@@ -223,13 +223,13 @@ class SimulationDataAccel : public DynamicsData
     std::vector<std::vector<double>>                           props;
     std::vector<std::string>                                   names;
     std::vector<std::vector<std::vector<std::vector<double>>>> madXData;
-    SimulationDataAccel(){};
+    SimulationDataAccel(){}
     SimulationDataAccel(const std::vector<std::string>& dataFlagsInput, const std::string& tagIn,
                         int size, const std::vector<int>& Ysizes);
     SimulationDataAccel(const std::vector<std::string>& dataFlagsInput, const std::string& tagIn,
                         int size1, int size2);
     SimulationDataAccel(const std::vector<std::string>& dataFlagsInput, const std::string& tagIn)
-        : tag(tagIn), dataFlags(dataFlagsInput){};
+        : tag(tagIn), dataFlags(dataFlagsInput){}
     void addData(int position, float XDataIn, const std::vector<float>& YData);
     void addData(int position, float XDataIn, float YData);
     void initSynchrotron(int dataSize, int Ncircle, const std::vector<int>& ind,

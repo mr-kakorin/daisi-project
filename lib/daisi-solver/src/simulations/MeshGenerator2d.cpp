@@ -70,15 +70,18 @@ MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
   fclose(fp);
 }
 
-double MeshParams::GetStep(double point, int flagX) const
+double MeshParams::GetStep(double point, int flagX) const noexcept
 {
-  for (int i = 0; i < leftBorder[flagX].size(); i++)
-  {
-    if (point >= leftBorder[flagX][i] && point < rightBorder[flagX][i])
-      return params[flagX][i][0] + (params[flagX][i][1] - params[flagX][i][0]) *
-                                   (point - leftBorder[flagX][i]) /
-                                   (rightBorder[flagX][i] - leftBorder[flagX][i]);
-  }
+    std::size_t len = leftBorder[flagX].size();
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        if (point >= leftBorder[flagX][i] && point < rightBorder[flagX][i])
+        {
+            return params[flagX][i][0] + (params[flagX][i][1] - params[flagX][i][0]) *
+                                           (point - leftBorder[flagX][i]) /
+                                           (rightBorder[flagX][i] - leftBorder[flagX][i]);
+        }
+    }
 }
 
 int MeshParams::GetNumberOfSteps(int flagX, double min, double max, double& hMin) const
@@ -101,7 +104,7 @@ template <class PointType>
 void MeshGenerator<PointType>::MeshGenerate(
         std::string meshParamFile, double& progress,
         const std::shared_ptr<BoundaryContainer3d<PointType>> boundary,
-        const std::shared_ptr<MeshContainer3d<PointType>>& mesh, int flagVTK, std::string& errorMsg){};
+        const std::shared_ptr<MeshContainer3d<PointType>>& mesh, int flagVTK, std::string& errorMsg){}
 
 template <class PointType>
 void MeshGenerator<PointType>::MeshGenerate(
@@ -223,9 +226,6 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
       rMax = r[i];
   }
 
-  double yCurLoc = boundary->ymin;
-  double xCurLoc = boundary->xmin;
-
   double tmp;
   rMax           = rMax * 1.2;
   mesh->nVertexX = meshParams.GetNumberOfSteps(0, rMin, rMax, tmp) + 4;
@@ -265,8 +265,6 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
   flagMeshInit                = true;
   int                    yNum = 0;
   DGeo::Point<PointType> CurrentPoint;
-
-  PointType yCur   = boundary->ymin;
   int       number = 0;
 
   CurrentPoint.x = 0;
@@ -284,11 +282,6 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
   {
     progress = std::abs(phiCurrent - phiStart) / std::abs(phiEnd - phiStart);
 
-    if (yNum == 20)
-    {
-      int tt = 0;
-    };
-
     RayTracePolar(epsilon, meshParams, CurrentPoint, mesh->flagMatrix,
                   std::cos(double(2 * PI() - phiCurrent)),
                   std::sin(double(2 * PI() - phiCurrent)), yNum, boundary);
@@ -298,7 +291,6 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
   }
 
   yNum   = 0;
-  yCur   = boundary->ymin;
   number = 0;
 
   phiCurrent = phiStart;
@@ -322,17 +314,13 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
 template <class PointType>
 bool MeshGenerator<PointType>::IsInitBoundary()
 {
-  if (flagBoundaryInit)
-    return true;
-  return false;
+    return flagBoundaryInit;
 }
 
 template <class PointType>
 bool MeshGenerator<PointType>::IsMeshGen()
 {
-  if (flagMeshInit)
-    return true;
-  return false;
+    return flagMeshInit;
 }
 
 template <class PointType>
@@ -344,7 +332,7 @@ std::vector<double> MeshGenerator<PointType>::GetMeshParam()
 template <class PointType>
 void MeshGenerator<PointType>::SetMeshParam(std::vector<double> in)
 {
-  meshParam = in;
+  meshParam = std::move(in);
 }
 
 template <class PointType>
@@ -374,9 +362,6 @@ void MeshGenerator<PointType>::MeshGenerate(
   mesh->ymin = boundary->ymin;
   mesh->ymax = boundary->ymax;
 
-  double yCurLoc = boundary->ymin;
-  double xCurLoc = boundary->xmin;
-
   double tmp;
   mesh->nVertexX = meshParams.GetNumberOfSteps(0, boundary->xmin, boundary->xmax, tmp) + 4;
   mesh->h1       = tmp;
@@ -403,10 +388,7 @@ void MeshGenerator<PointType>::MeshGenerate(
   mesh->flagMatrix    = mesh->flagMatrix * (-1);
   mesh->flagTemplNumb = 1;
 
-  //	mesh = MeshContainer2d <PointType>();
-  // mesh = MeshContainer2d <PointType>();
   flagMeshInit                = true;
-  int                    yNum = 0;
   DGeo::Point<PointType> CurrentPoint;
 
   PointType yCur   = boundary->ymin;
@@ -417,12 +399,15 @@ void MeshGenerator<PointType>::MeshGenerate(
   std::vector<PointType> yC;
   yC.push_back(boundary->ymin);
 
-  while (yC.back() <= boundary->ymax + h2)
+  while (yC.back() < boundary->ymax + h2)
   {
-    h2 = meshParams.GetStep(yC.back(), 1);
-    yC.push_back(yC.back() + h2);
+      if ( yC.back() > boundary->ymax)
+      {
+          break;
+      }
+      h2 = meshParams.GetStep(yC.back(), 1);
+      yC.push_back(yC.back() + h2);
   }
-
   int              numThreads = 1;
   std::vector<int> threadIndexes(numThreads + 1);
   int              perThread = yC.size() / numThreads;
@@ -458,28 +443,9 @@ void MeshGenerator<PointType>::MeshGenerate(
 
   }
 
-  /*while (yCur <= boundary->ymax + h2)
-  {
-          progress = std::abs(yCur - boundary->ymin) / std::abs(boundary->ymax - boundary->ymin);
-
-          CurrentPoint.x = boundary->xmin;
-          CurrentPoint.y = yCur;
-          CurrentPoint.z = 0;
-
-          if (yNum == 24)
-          {
-                  int a = 0;
-          };
-          RayTrace(epsilon, meshParams, CurrentPoint, mesh->flagMatrix, h1, 0, yNum, boundary);
-          yNum++;
-          h2 = meshParams.GetStep(yCur, 1);
-          yCur = yCur + h2;
-  }*/
-
-  yNum   = 0;
+  int yNum   = 0;
   yCur   = boundary->ymin;
   number = 0;
-
   while (yCur < boundary->ymax + h2)
   {
     progress = yCur / (boundary->ymax + h2);
@@ -490,16 +456,13 @@ void MeshGenerator<PointType>::MeshGenerate(
 
     std::vector<DGeo::Point<PointType>>* tmpL1 = new std::vector<DGeo::Point<PointType>>();
 
-    if (yNum == 79)
-    {
-      int a = 0;
-    }
-
     MeshAssembly(meshParams, CurrentPoint, tmpL1, mesh->templNumb, mesh->flagMatrix, h1, 0,
                  yNum, number, boundary, mesh->linearToTemplNumb);
 
-    if (tmpL1->size() != 0)
+    if (!tmpL1->empty())
       mesh->meshData.push_back(*tmpL1);
+    if ( yCur > boundary->ymax)
+        break;
     yNum++;
     h2   = meshParams.GetStep(yCur, 1);
     yCur = yCur + h2;
@@ -515,7 +478,6 @@ void MeshGenerator<PointType>::MeshAssembly(
         std::vector<int>&                                     linearToTemplNumb)
 {
   DGeo::Point<PointType> CurrentPoint = StartPoint;
-  int                    npoints;
   for (int j = 0; j < templNumb.GetNrow() - 2; j++)
   {
     int npoints = 0;
@@ -557,6 +519,8 @@ void MeshGenerator<PointType>::MeshAssembly(
       number++;
       linearToTemplNumb.push_back(templNumb.getElemIndex(j + 1, yNum + 1));
     }
+    if (CurrentPoint.x > meshParams.rightBorder[0].back())
+       break;
     h1           = meshParams.GetStep(CurrentPoint.x, 0);
     CurrentPoint = DGeo::Point<PointType>(CurrentPoint, h1, h2, 0);
   }
@@ -571,7 +535,6 @@ void MeshGenerator<PointType>::MeshAssemblyPolar(
         std::vector<int>&                                     linearToTemplNumb)
 {
   DGeo::Point<PointType> CurrentPoint = StartPoint;
-  int                    npoints;
   for (int j = 0; j < templNumb.GetNrow() - 2; j++)
   {
     int npoints = 0;
@@ -613,7 +576,8 @@ void MeshGenerator<PointType>::MeshAssemblyPolar(
       number++;
       linearToTemplNumb.push_back(templNumb.getElemIndex(j + 1, yNum + 1));
     }
-
+    if (CurrentPoint.x > meshParams.rightBorder[0].back())
+        break;
     double r     = sqrt(CurrentPoint.x * CurrentPoint.x + CurrentPoint.y * CurrentPoint.y);
     double hr    = meshParams.GetStep(r, 0);
     CurrentPoint = DGeo::Point<PointType>(CurrentPoint, hr * h1, hr * h2, 0);
@@ -629,13 +593,8 @@ void MeshGenerator<PointType>::RayTrace(
   int j = 1;
 
   PointType xmax = StartPoint.x;
-
-  DGeo::Point<PointType> CurrentPoint = StartPoint;
-  xmax                                = CurrentPoint.x;
-
   DGeo::Point<PointType> PointTmp;
 
-  int flag2;
   int intersections = -1;
 
   int val = boundary->OnBoundary(epsilon, StartPoint);
@@ -685,22 +644,17 @@ void MeshGenerator<PointType>::RayTrace(
     GridEdge.point2.y = GridEdge.point2.y + epsilon * h2;
     // GridEdge.point1.y = GridEdge.point1.y - 0.01*h2;
 
-    if (std::abs(StartPoint.x - 0.205) < 0.00001 && std::abs(StartPoint.y - 0.5) < 0.00001)
-    {
-      int tt = 0;
-    }
-
     intersections = intersections + boundary->NumberIntersections(epsilon, GridEdge);
 
     flagMartix(j + 1, yNum + 1) = 2; // ������ �������
     if (intersections % 2)
       flagMartix(j + 1, yNum + 1) = 3; // ������� �������
-    else
-      int aa = 0;
 
     ptmp = StartPoint;
     f1   = flagMartix(j + 1, yNum + 1);
     j++;
+    if (xmax > boundary->xmax)
+        break;
   }
 }
 
@@ -712,15 +666,8 @@ void MeshGenerator<PointType>::RayTracePolar(
 {
 
   int j = 1;
-
-  PointType xmax = StartPoint.x;
-
-  DGeo::Point<PointType> CurrentPoint = StartPoint;
-  xmax                                = CurrentPoint.x;
-
   DGeo::Point<PointType> PointTmp;
 
-  int flag2;
   int intersections = -1;
 
   int val = boundary->OnBoundary(epsilon, StartPoint);
@@ -734,36 +681,16 @@ void MeshGenerator<PointType>::RayTracePolar(
   }
   double Rmax = sqrt(boundary->xmax * boundary->xmax + boundary->ymax * boundary->ymax);
   double r    = 0;
-  double rTot = 0;
   DGeo::Point<PointType> ptmp = StartPoint;
   int                    f1   = 1;
   while (r < Rmax + h1)
   {
 
-    if (j == 148)
-    {
-      int tt = 0;
-    }
     r = sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y));
-
-    if (sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y)) > 0.15)
-    {
-      int tt = 0;
-    }
 
     double hr  = meshParams.GetStep(r, 0);
     StartPoint = DGeo::Point<PointType>(StartPoint, hr * h1, hr * h2, 0);
 
-    if (sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y)) > 0.15)
-    {
-      int tt = 0;
-    }
-
-    if (std::abs(StartPoint.x - 0.053000000000000005) < 0.00001 &&
-        std::abs(StartPoint.y - 0.12500000000000006) < 0.00001)
-    {
-      int kk = 0;
-    }
     val = boundary->OnBoundary(epsilon, StartPoint);
 
     if (val != 2)
@@ -789,12 +716,12 @@ void MeshGenerator<PointType>::RayTracePolar(
     flagMartix(j + 1, yNum + 1) = 2; // ������ �������
     if (intersections % 2)
       flagMartix(j + 1, yNum + 1) = 3; // ������� �������
-    else
-      int aa = 0;
 
     ptmp = StartPoint;
     f1   = flagMartix(j + 1, yNum + 1);
     j++;
+    if (r > Rmax)
+        break;
   }
 }
 

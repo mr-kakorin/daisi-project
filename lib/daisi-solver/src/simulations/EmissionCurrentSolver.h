@@ -14,7 +14,7 @@ template <class PointType>
 class Point;
 template <class PointType>
 struct CurvePoints_t;
-};
+}
 
 template <class PointType>
 class EmitterDevice2daxs;
@@ -72,9 +72,7 @@ class EmissionCurrentSolverBase
 
     void CalculateCathodeFields(const std::shared_ptr<ParticleSource2d<PointType>>& source,
                                 const std::shared_ptr<GridData3d<PointType>>&       gridData,
-                                int                                                 flowNumber){
-
-    };
+                                int                                                 flowNumber){}
 
     void SetValueOnSource(const std::shared_ptr<ParticleSource2d<PointType>>& source,
                           std::vector<double> value, int flowNumber, int flag);
@@ -280,6 +278,6 @@ class EmissionCurrentSolverPIC : public EmissionCurrentSolverBase<PointType>
                  const std::shared_ptr<GridData2daxs<PointType>>& gridData, PointType timeStep,
                  int flowNumber, int stepNumber, double mass, double charge);
 
-    EmissionCurrentSolverPIC(){};
+    EmissionCurrentSolverPIC(){}
 };
 #endif

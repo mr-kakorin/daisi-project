@@ -129,8 +129,8 @@ void Solver<PointType>::SimulateCPUPIC(
                 //||
                 // deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time>particleMover->GetTimeLimit()))
 
-                volatile double tt = deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time;
-                if ((step > 1 && (flagAbort == false ||
+                //volatile double tt = deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time;
+                if ((step > 1 && (!flagAbort ||
                                   deviceStatus->GetFlow(0)->GetDynamicsData(0)->Time >
                                       maxtime * 1e-9 * LIGHT_VELOCITY())))
                     flagAllBreak = 1;
