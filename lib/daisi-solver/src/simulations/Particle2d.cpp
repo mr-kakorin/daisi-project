@@ -9,10 +9,6 @@
 #include <mkl.h>
 #endif
 
-template class Particles2d<double>;
-template class Particles2d<float>;
-template class ParticlesBase<double>;
-template class ParticlesBase<float>;
 
 template <class PointType>
 void ParticlesBase<PointType>::GetEmittanceData(std::vector<std::vector<float>>& data, int emFlag,
@@ -760,3 +756,8 @@ void ParticlesBase<PointType>::setNewParticles(const std::vector<unsigned int>& 
 
     removeParticle(remove);*/
 };
+
+template class Particles2d<double>;
+template class Particles2d<float>;
+template class ParticlesBase<double>;
+template class ParticlesBase<float>;

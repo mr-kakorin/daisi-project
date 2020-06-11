@@ -9,8 +9,6 @@
 #include "ParticleShape2dTSC.h"
 #include "WcalculateVector.h"
 
-template class ParticleGridInterface<float>;
-template class ParticleGridInterface<double>;
 
 bool isTemplateEqual(std::vector<int> templ1, std::vector<int> templ2)
 {
@@ -20,43 +18,7 @@ bool isTemplateEqual(std::vector<int> templ1, std::vector<int> templ2)
             return false;
     }
     return true;
-};
-
-template void ParticleGridInterface<double>::init<GridData2daxs<double>>(
-    int nflow, const std::shared_ptr<GridData2daxs<double>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
-    int blockSize);
-
-template void ParticleGridInterface<float>::init<GridData2d<float>>(
-    int nflow, const std::shared_ptr<GridData2d<float>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
-    int blockSize);
-
-template void ParticleGridInterface<float>::init<GridData2daxs<float>>(
-    int nflow, const std::shared_ptr<GridData2daxs<float>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
-    int blockSize);
-
-template void ParticleGridInterface<float>::init<GridData2dpolar<float>>(
-    int nflow, const std::shared_ptr<GridData2dpolar<float>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
-    int blockSize);
-
-template void ParticleGridInterface<double>::init<GridData2d<double>>(
-    int nflow, const std::shared_ptr<GridData2d<double>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
-    int blockSize);
-
-template void ParticleGridInterface<double>::init<GridData2dpolar<double>>(
-    int nflow, const std::shared_ptr<GridData2dpolar<double>>& gridData, Dmath::imat templNumbIn,
-    Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
-    const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
-    int blockSize);
+}
 
 template <class PointType>
 template <class gridDatatype>
@@ -181,8 +143,8 @@ void ParticleGridInterface<PointType>::init(
         {
             if ((*templNumb)(i, j) != -1)
                 flagOut.push_back(flagMatrix(i, j));
-        };
-    };
+        }
+    }
 
     switch (priorityParticleShapeType)
     {
@@ -210,10 +172,10 @@ void ParticleGridInterface<PointType>::init(
                     levelHigh = (*templNumb)(i, j + 1);
                     CICcellArray->AddCell(gridData, levelHigh, flagOut, v, domainBoundary,
                                           boundarypoints, 1);
-                };
+                }
                 n++;
-            };
-        };
+            }
+        }
         break;
     case 1:
         TSCcellArray->init(gridData->Getrho().size(), gridData->GetX1Pointer(),
@@ -277,7 +239,7 @@ void ParticleGridInterface<PointType>::init(
                             // AddCell(gridData, (*templNumb)(i, j), v[0], v[1], v[2], v[3]);
                             flag = 0;
                             break;
-                        };
+                        }
 
                         if (isTemplateEqual(v, templCICx2TSCx1Boundary[0]) ||
                             isTemplateEqual(v, templCICx2TSCx1Boundary[1]))
@@ -298,7 +260,7 @@ void ParticleGridInterface<PointType>::init(
                             // v[4], v[5]);
                             flag = 0;
                             break;
-                        };
+                        }
 
                         for (int k = 2; k < 6; k++)
                         {
@@ -336,7 +298,7 @@ void ParticleGridInterface<PointType>::init(
                                 flag      = 0;
                                 flagBreak = 1;
                                 break;
-                            };
+                            }
                         }
                         if (flagBreak)
                             break;
@@ -360,7 +322,7 @@ void ParticleGridInterface<PointType>::init(
                             // v[4], v[5]);
                             flag = 0;
                             break;
-                        };
+                        }
 
                         for (int k = 2; k < 6; k++)
                         {
@@ -398,7 +360,7 @@ void ParticleGridInterface<PointType>::init(
                                 flag      = 0;
                                 flagBreak = 1;
                                 break;
-                            };
+                            }
                         }
                         if (flagBreak)
                             break;
@@ -413,7 +375,7 @@ void ParticleGridInterface<PointType>::init(
                             // AddCell(gridData, (*templNumb)(i, j), v);
                             flag = 0;
                             break;
-                        };
+                        }
                     }
                     if (flag == 0)
                     {
@@ -430,18 +392,18 @@ void ParticleGridInterface<PointType>::init(
                             isBoundary.push_back(true);
                         else
                             isBoundary.push_back(false);
-                    };
-                };
+                    }
+                }
                 n++;
-            };
-        };
+            }
+        }
         break;
     }
     // particleGridInterface->AddCell(0, 0, 0, 0);
     // particleGridInterface->AddCell(1, 0, 0, 0);
     //	ParticleGridInterface->cellArray[0]->InCell(0, 0);
     //	ParticleGridInterface->cellArray[1]->InCell(0, 0);
-};
+}
 
 template <class PointType>
 void ParticleGridInterface<PointType>::init(
@@ -495,9 +457,9 @@ void ParticleGridInterface<PointType>::init(
 
                 if ((*templNumb)(i, j, k) != -1)
                     flagOut.push_back(flagMatrix(i, j, k));
-            };
-        };
-    };
+            }
+        }
+    }
     CICcellArray->init(gridData->Getrho().size(), gridData->GetX1Pointer(),
                        gridData->GetX2Pointer(), gridData->GetX3Pointer());
 
@@ -533,11 +495,11 @@ void ParticleGridInterface<PointType>::init(
                     CICcellArray->AddCell(gridData, levelHigh, levelZ, flagOut, v, domainBoundary,
                                           boundarypoints, 1);
                 }
-            };
+            }
             n++;
-        };
-    };
-};
+        }
+    }
+}
 
 template <class PointType>
 void ParticleGridInterface<PointType>::AddCell(unsigned short particleShapeType,
@@ -553,7 +515,8 @@ void ParticleGridInterface<PointType>::AddCell(unsigned short particleShapeType,
             newcell = new ParticleShapeTSC2d<PointType>(basePoint, levelLow, levelHigh); break;
     }
     cellArray.push_back(newcell);*/
-};
+}
+
 template <class PointType>
 void ParticleGridInterface<PointType>::AddCell(unsigned int basePoint, unsigned int p1,
                                                unsigned int p2, unsigned int p3, unsigned int p4){
@@ -580,7 +543,8 @@ p5, p6); break;
     }
 
     cellArray.push_back(newcell);*/
-};
+}
+
 template <class PointType>
 void ParticleGridInterface<PointType>::AddCell(unsigned int basePoint, const std::vector<int>& v){
     /*ParticleShapeBoundary3CellCIC2d<PointType> * newcell = new
@@ -635,4 +599,43 @@ void ParticleGridInterface<PointType>::AddCell(unsigned int basePoint, const std
     v[3], v[4], v[6], v[7]); newcell->AddCell(*newSubcell3);
     }
     cellArray.push_back((IParticleShape2d<PointType>*)(newcell));*/
-};
+}
+
+template class ParticleGridInterface<float>;
+template class ParticleGridInterface<double>;
+
+template void ParticleGridInterface<double>::init<GridData2daxs<double>>(
+        int nflow, const std::shared_ptr<GridData2daxs<double>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
+        int blockSize);
+
+template void ParticleGridInterface<float>::init<GridData2d<float>>(
+        int nflow, const std::shared_ptr<GridData2d<float>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
+        int blockSize);
+
+template void ParticleGridInterface<float>::init<GridData2daxs<float>>(
+        int nflow, const std::shared_ptr<GridData2daxs<float>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
+        int blockSize);
+
+template void ParticleGridInterface<float>::init<GridData2dpolar<float>>(
+        int nflow, const std::shared_ptr<GridData2dpolar<float>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<float>>& domainBoundary, int size, int numThreads,
+        int blockSize);
+
+template void ParticleGridInterface<double>::init<GridData2d<double>>(
+        int nflow, const std::shared_ptr<GridData2d<double>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
+        int blockSize);
+
+template void ParticleGridInterface<double>::init<GridData2dpolar<double>>(
+        int nflow, const std::shared_ptr<GridData2dpolar<double>>& gridData, Dmath::imat templNumbIn,
+        Dmath::imat flagMatrix, const std::vector<int>& boundarypoints,
+        const std::shared_ptr<BoundaryContainer2d<double>>& domainBoundary, int size, int numThreads,
+        int blockSize);

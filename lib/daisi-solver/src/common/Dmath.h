@@ -32,6 +32,7 @@ long long vectorsize(std::vector<T>& vec)
     else
         return result + sizeof(T) * vec.capacity() + sizeof(vec);
 }
+
 template <class T>
 long long vectorsize(const std::vector<T>& vec)
 {
@@ -56,7 +57,7 @@ inline int sign(PointType val)
     if (val < 0)
         return -1;
     return 1;
-};
+}
 
 template <class PointType>
 class CRSMatrix
@@ -103,7 +104,7 @@ double integral(double a, double b, _Fn&& _Fx, _Args&&... _Ax)
     };
     result = result * step;
     return result;
-};
+}
 
 template <class _Fn, class... _Args>
 double zerosSearchRFQ(double X0, double tolerance, double facSeacr, _Fn&& _Fx, _Args&&... _Ax)
@@ -150,7 +151,7 @@ double zerosSearchRFQ(double X0, double tolerance, double facSeacr, _Fn&& _Fx, _
 
         if (std::abs(x1 - x2) < tolerance)
             return x3;
-    };
+    }
 }
 
 template <class PointType>
@@ -213,7 +214,7 @@ void erase(std::vector<PointType>& data, std::vector<unsigned int>& ind)
             };
     }
     data.erase(data.begin() + data.size() - ind.size(), data.begin() + data.size());*/
-};
+}
 
 class imat
 {
@@ -277,5 +278,6 @@ class imat
     int& operator()(int i, int j);
     imat& operator=(const imat& right);
 };
+
 }
 #endif

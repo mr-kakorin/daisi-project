@@ -12,9 +12,6 @@
 static std::default_random_engine       generator;
 static std::normal_distribution<double> distribution(0, 1);
 
-template class EmitterDevice2d<float>;
-template class EmitterDevice2d<double>;
-
 std::vector<float> steps(512);
 std::vector<float> tmp(512);
 std::vector<float> tmp1(512);
@@ -36,7 +33,7 @@ double IntegrateVelocity(double a, double b, double t0, double m, double charge,
     for (int i = 1; i < s + 1; i++)
     {
         stepsT[thread][i] = stepsT[thread][i - 1] + step;
-    };
+    }
 
     for (int i = 0; i < s + 1; i++)
     {
@@ -51,11 +48,11 @@ double IntegrateVelocity(double a, double b, double t0, double m, double charge,
     for (int i = 0; i < s; i++)
     {
         result = result + tmpT[thread][i] + tmpT[thread][i + 1];
-    };
+    }
     result = result * step / 2;
 
     return result;
-};
+}
 
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateParticles(
@@ -89,7 +86,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
     if (flagClear == 0)
     {
         particlesData->clear();
-    };
+    }
 
     int empty          = int(EmptyPlaces.size());
     int totalParticles = indesexPerThread.size() * nParticlesEnergyLoc;
@@ -223,7 +220,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
 
     //	if (std::abs(cur) / totalParticles<particlesData->avCharge)
     particlesData->avCharge = std::abs(currTot * dt) / totalParticles;
-};
+}
 
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateParticles(
@@ -270,13 +267,13 @@ void EmitterDevice2d<PointType>::GenerateParticles(
     {
         nParticlesEnergyLoc = nParticlesEnergy;
         nParticlesXYLoc     = nParticlesXY;
-    };
+    }
 
     dt = EmitPeriod * dt;
     if (flagClear == 0)
     {
         particlesData->clear();
-    };
+    }
     int empty = int(EmptyPlaces.size());
 
     int totalParticles = indesexPerThread.size() * nParticlesEnergyLoc;
@@ -342,7 +339,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             exp(-(restMass * velocityRight * velocityRight) / (2 * EnergyAv * std::abs(charge)));
         if (dAvT < 0.01 * dAv)
             break;
-    };
+    }
 
     PointType velocityLeft = -velocityRight;
 
@@ -499,8 +496,8 @@ void EmitterDevice2d<PointType>::GenerateParticles(
             //	phXY0 = phXY1;
 
             k++;
-        };
-    };
+        }
+    }
 
     //	particlesData->resize(k1);
     //// 0 r 1 phi 2 x 3 y 4 phiReal 5 xReal 6 yReal,
@@ -520,7 +517,7 @@ void EmitterDevice2d<PointType>::GenerateParticles(
     particlesData->avCharge = std::abs(currTot * dt) / totalParticles;
 
     this->particleSource->sourceCurrent = currTot;
-};
+}
 
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateParticlesLinac(
@@ -618,6 +615,7 @@ void EmitterDevice2d<PointType>::GenerateParticlesLinac(
     if (-1 != index)
         particlesData->avCharge = particlesData->q[index];
 }
+
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateParticlesLinac(
     int flagTest, int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
@@ -627,34 +625,38 @@ void EmitterDevice2d<PointType>::GenerateParticlesLinac(
 {
     int temp1 = 2;
 }
+
 template <class PointType>
 double EmitterDevice2d<PointType>::GetEmissionCurrent()
 {
     return this->particleSource->GetEmissionCurrent(0);
-};
+}
 
 template <class PointType>
 EmitterDevice2d<PointType>::EmitterDevice2d(int DistributionStyleIn)
-    : EmitterDeviceBase<PointType>(DistributionStyleIn){};
+    : EmitterDeviceBase<PointType>(DistributionStyleIn){}
 
 template <class PointType>
-EmitterDevice2d<PointType>::EmitterDevice2d(){};
+EmitterDevice2d<PointType>::EmitterDevice2d(){}
+
 template <class PointType>
 std::vector<std::vector<float>> EmitterDevice2d<PointType>::GetCurrentDensityDistribution()
 {
     return this->particleSource->GetCurrentDensityDistribution();
-};
+}
 
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateSyncParticle(
     const std::shared_ptr<Particles2dpolar<PointType>>& particlesData, PointType restMass){
 
-};
+}
+
 template <class PointType>
 void EmitterDevice2d<PointType>::GenerateSyncParticle(
     const std::shared_ptr<Particles2d<PointType>>& particlesData, PointType restMass){
 
-};
+}
+
 template <class PointType>
 std::vector<double> EmitterDevice2d<PointType>::GetAdditionalSourceInf()
 {
@@ -662,7 +664,7 @@ std::vector<double> EmitterDevice2d<PointType>::GetAdditionalSourceInf()
     return res;
 }
 template <class PointType>
-void EmitterDevice2d<PointType>::SetAdditionalSourceInf(std::vector<double> inf){};
+void EmitterDevice2d<PointType>::SetAdditionalSourceInf(std::vector<double> inf){}
 
 template <class PointType>
 void EmitterDevice2d<PointType>::SetBoundariesList(
@@ -673,7 +675,8 @@ void EmitterDevice2d<PointType>::SetBoundariesList(
     this->boundaryList     = in;
     this->emitterInitParam = parametersIn;
     this->particleSource->InitEmissionBoundary(boundaryIn, grid, parametersIn, error);
-};
+}
+
 template <class PointType>
 void EmitterDevice2d<PointType>::SetBoundariesList(
     std::vector<int> in, std::vector<double> parametersIn, std::string& error,
@@ -683,12 +686,14 @@ void EmitterDevice2d<PointType>::SetBoundariesList(
     this->boundaryList     = in;
     this->emitterInitParam = parametersIn;
     this->particleSource->InitEmissionBoundary(boundaryIn, grid, parametersIn, error);
-};
+}
+
 template <class PointType>
 void EmitterDevice2d<PointType>::PreliminaryGeneration(
     const std::shared_ptr<Particles2dpolar<PointType>>& particlesDataZ0, PointType restMass){
 
-};
+}
+
 template <class PointType>
 void EmitterDevice2d<PointType>::PreliminaryGeneration(
     const std::shared_ptr<Particles2d<PointType>>& particlesDataZ0, PointType restMass)
@@ -722,22 +727,8 @@ void EmitterDevice2d<PointType>::PreliminaryGeneration(
         particlesDataZ0->Get_x()[j] = (this->Data)[0][j];
         particlesDataZ0->Get_y()[j] = (this->Data)[2][j];
         particlesDataZ0->Get_z()[j] = 0;
-    };
-};
-
-template void
-EmitterDevice2d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                              const unsigned int file_version);
-
-template void EmitterDevice2d<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void
-EmitterDevice2d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                               const unsigned int file_version);
-
-template void EmitterDevice2d<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+    }
+}
 
 template <class PointType>
 template <class Archive>
@@ -755,3 +746,20 @@ void EmitterDevice2d<PointType>::load(Archive& ar, const unsigned int)
     ar& phiXY;
     ar& boost::serialization::base_object<EmitterDeviceBase<PointType>>(*this);
 }
+
+template class EmitterDevice2d<float>;
+template class EmitterDevice2d<double>;
+
+template void
+EmitterDevice2d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                              const unsigned int file_version);
+
+template void EmitterDevice2d<double>::save<boost::archive::binary_oarchive>(
+    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void
+EmitterDevice2d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                               const unsigned int file_version);
+
+template void EmitterDevice2d<float>::save<boost::archive::binary_oarchive>(
+    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

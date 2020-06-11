@@ -12,8 +12,6 @@
 #include "ParticleShape2dTSC.h"
 #include "WcalculateVector.h"
 
-template class ParticleGridInterface<float>;
-template class ParticleGridInterface<double>;
 
 template <class PointType>
 long long ParticleGridInterface<PointType>::GetMemorySize()
@@ -735,27 +733,7 @@ void ParticleGridInterface<PointType>::Particles2GridPTI(
 
         break;
     }
-};
-
-template void ParticleGridInterface<float>::InitEmCells<Particles3dcil<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles3dcil<float>>& state1, double dH, int flag, int flagInit);
-template void ParticleGridInterface<float>::InitEmCells<Particles2d<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles2d<float>>& state1, double dH, int flag, int flagInit);
-template void ParticleGridInterface<float>::InitEmCells<Particles2dpolar<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles2dpolar<float>>& state1, double dH, int flag, int flagInit);
-
-template void ParticleGridInterface<double>::InitEmCells<Particles3dcil<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles3dcil<double>>& state1, double dH, int flag, int flagInit);
-template void ParticleGridInterface<double>::InitEmCells<Particles2d<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles2d<double>>& state1, double dH, int flag, int flagInit);
-template void ParticleGridInterface<double>::InitEmCells<Particles2dpolar<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
-    const std::shared_ptr<Particles2dpolar<double>>& state1, double dH, int flag, int flagInit);
+}
 
 template <class PointType>
 template <class particlesType>
@@ -1052,29 +1030,11 @@ void ParticleGridInterface<PointType>::Wcalculate(
         {
             for (int k                               = 0; k < 9; k++)
                 W[searchIndexesLarge1[thread][i]][k] = 0;
-        };
+        }
 
         break;
     }
-};
-
-template void ParticleGridInterface<float>::SearchStartCells<Particles3dcil<float>>(
-    int flow, const std::shared_ptr<Particles3dcil<float>>& particles);
-
-template void ParticleGridInterface<double>::SearchStartCells<Particles3dcil<double>>(
-    int flow, const std::shared_ptr<Particles3dcil<double>>& particles);
-
-template void ParticleGridInterface<float>::SearchStartCells<Particles2d<float>>(
-    int flow, const std::shared_ptr<Particles2d<float>>& particles);
-
-template void ParticleGridInterface<double>::SearchStartCells<Particles2d<double>>(
-    int flow, const std::shared_ptr<Particles2d<double>>& particles);
-
-template void ParticleGridInterface<float>::SearchStartCells<Particles2dpolar<float>>(
-    int flow, const std::shared_ptr<Particles2dpolar<float>>& particles);
-
-template void ParticleGridInterface<double>::SearchStartCells<Particles2dpolar<double>>(
-    int flow, const std::shared_ptr<Particles2dpolar<double>>& particles);
+}
 
 template <class PointType>
 template <class particlesType>
@@ -1106,7 +1066,7 @@ void ParticleGridInterface<PointType>::SearchStartCells(
                 InCellWithEps(particles->GetPointerToPosition1()[i],
                               particles->GetPointerToPosition2()[i], searchIndexesLoc);
             particles->cellsNumbers[i] = startCellNumbers[flow][i];
-        };
+        }
     }
 
     /*std::vector<int>  searchIndexesParticles (startCellNumbers[flow].size()*9);
@@ -1162,33 +1122,9 @@ void ParticleGridInterface<PointType>::SearchStartCells(
                 particles->GetPointerToPosition1()[i], particles->GetPointerToPosition2()[i],
                 particles->GetPointerToPosition3()[i], searchIndexesLoc);
             particles->cellsNumbers[i] = startCellNumbers[flow][i];
-        };
+        }
     }
-};
-
-template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles3dcil<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles3dcil<float>>>&      particles);
-
-template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles3dcil<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles3dcil<double>>>&      particles);
-
-template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles2d<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles2d<float>>>&         particles);
-
-template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles2d<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles2d<double>>>&         particles);
-
-template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles2dpolar<float>>(
-    const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles2dpolar<float>>>&    particles);
-
-template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles2dpolar<double>>(
-    const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
-    std::vector<std::shared_ptr<Particles2dpolar<double>>>&    particles);
+}
 
 template <class PointType>
 template <class particlesType>
@@ -1234,33 +1170,9 @@ void ParticleGridInterface<PointType>::SearchStartCellsEmission(
                 if (std::abs(currentFrom_dl) < 1e-17)
                     particles[indexes1[i1]]->Get_currentCoef()[indexes2[i1]] = 0;
             }
-        };
-    };
-};
-
-template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles3dcil<float>>(
-    const std::shared_ptr<Particles3dcil<float>>& particles, std::vector<unsigned int> EmptyPlaces,
-    int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles3dcil<double>>(
-    const std::shared_ptr<Particles3dcil<double>>& particles, std::vector<unsigned int> EmptyPlaces,
-    int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles2d<float>>(
-    const std::shared_ptr<Particles2d<float>>& particles, std::vector<unsigned int> EmptyPlaces,
-    int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles2d<double>>(
-    const std::shared_ptr<Particles2d<double>>& particles, std::vector<unsigned int> EmptyPlaces,
-    int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles2dpolar<float>>(
-    const std::shared_ptr<Particles2dpolar<float>>& particles,
-    std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles2dpolar<double>>(
-    const std::shared_ptr<Particles2dpolar<double>>& particles,
-    std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread, int flow);
+        }
+    }
+}
 
 template <class PointType>
 template <class particlesType>
@@ -1379,38 +1291,13 @@ ParticleGridInterface<PointType>::InCell(const std::shared_ptr<particlesType>& p
 
                     res = InCell(Xar[i], Yar[i], searchIndexesLarge[thread]);
                 }
-            };
+            }
             particles->cellsNumbers[i] = res;
-        };
-    };
+        }
+    }
     //	particles->removeParticle(remove);
     return remove;
-};
-
-template std::vector<unsigned int>
-ParticleGridInterface<float>::InCellWithEps<Particles3dcil<float>>(
-    const std::shared_ptr<Particles3dcil<float>>& particles, int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int>
-ParticleGridInterface<double>::InCellWithEps<Particles3dcil<double>>(
-    const std::shared_ptr<Particles3dcil<double>>& particles, int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int> ParticleGridInterface<float>::InCellWithEps<Particles2d<float>>(
-    const std::shared_ptr<Particles2d<float>>& particles, int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int>
-ParticleGridInterface<double>::InCellWithEps<Particles2d<double>>(
-    const std::shared_ptr<Particles2d<double>>& particles, int i1, int i2, int thread, int flow);
-
-template std::vector<unsigned int>
-ParticleGridInterface<float>::InCellWithEps<Particles2dpolar<float>>(
-    const std::shared_ptr<Particles2dpolar<float>>& particles, int i1, int i2, int thread,
-    int flow);
-
-template std::vector<unsigned int>
-ParticleGridInterface<double>::InCellWithEps<Particles2dpolar<double>>(
-    const std::shared_ptr<Particles2dpolar<double>>& particles, int i1, int i2, int thread,
-    int flow);
+}
 
 template <class PointType>
 template <class particlesType>
@@ -1430,7 +1317,7 @@ ParticleGridInterface<PointType>::InCellWithEps(const std::shared_ptr<particlesT
 
     PointType* Xar = particles->GetPointerToPosition1();
     PointType* Yar = particles->GetPointerToPosition2();
-    ;
+
     for (int i = i1; i < i2; i++)
     {
 
@@ -1459,17 +1346,17 @@ ParticleGridInterface<PointType>::InCellWithEps(const std::shared_ptr<particlesT
             searchIndexes[thread][8] = base + 1 - nrow;
 
             particles->cellsNumbers[i] = InCellWithEps(Xar[i], Yar[i], searchIndexes[thread]);
-        };
+        }
 
         if (particles->cellsNumbers[i] == -1)
         {
             double r = sqrt(Xar[i] * Xar[i] + Yar[i] * Yar[i]);
             remove.push_back(i);
             //	particles->cellsNumbers[i] = base;
-        };
-    };
+        }
+    }
     return remove;
-};
+}
 
 template <class PointType>
 std::vector<unsigned int> ParticleGridInterface<PointType>::InCellWithEps(
@@ -1489,7 +1376,6 @@ std::vector<unsigned int> ParticleGridInterface<PointType>::InCellWithEps(
     PointType* Xar = particles->GetPointerToPosition1();
     PointType* Yar = particles->GetPointerToPosition2();
     PointType* Zar = particles->GetPointerToPosition3();
-    ;
 
     for (int i = i1; i < i2; i++)
     {
@@ -1526,16 +1412,16 @@ std::vector<unsigned int> ParticleGridInterface<PointType>::InCellWithEps(
                 if (particles->cellsNumbers[i] != -1)
                     break;
             }
-        };
+        }
 
         if (particles->cellsNumbers[i] == -1)
         {
             remove.push_back(i);
             //	particles->cellsNumbers[i] = base;
-        };
-    };
+        }
+    }
     return remove;
-};
+}
 
 template <class PointType>
 std::vector<unsigned int>
@@ -1555,9 +1441,7 @@ ParticleGridInterface<PointType>::InCell(const std::shared_ptr<Particles3d<Point
 
     PointType* Xar = particles->GetPointerToPosition1();
     PointType* Yar = particles->GetPointerToPosition2();
-    ;
     PointType* Zar = particles->GetPointerToPosition3();
-    ;
 
     int base;
 
@@ -1634,7 +1518,7 @@ ParticleGridInterface<PointType>::InCell(const std::shared_ptr<Particles3d<Point
                     }
                     if (res != -1)
                         break;
-                };
+                }
 
                 if (-1 == res)
                 {
@@ -1645,9 +1529,9 @@ ParticleGridInterface<PointType>::InCell(const std::shared_ptr<Particles3d<Point
 
                     res = InCell(Xar[i], Yar[i], Zar[i], searchIndexesLarge[thread]);
                 }
-            };
+            }
             particles->cellsNumbers[i] = res;
-        };
+        }
 
         if (particles->cellsNumbers[i] == 0)
         {
@@ -1658,19 +1542,12 @@ ParticleGridInterface<PointType>::InCell(const std::shared_ptr<Particles3d<Point
         {
             remove.push_back(i);
             //	particles->cellsNumbers[i] = base;
-        };
-    };
+        }
+    }
     //	particles->removeParticle(remove);
     return remove;
-};
+}
 
-template void ParticleGridInterface<double>::axsPolar(
-    Particles3dcil<double>* particles, const std::shared_ptr<GridData2dpolar<double>>& gridData,
-    std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread);
-
-template void ParticleGridInterface<double>::axsPolar(
-    Particles3dcil<float>* particles, const std::shared_ptr<GridData2dpolar<double>>& gridData,
-    std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread);
 
 template <class PointType>
 template <class PointType1>
@@ -1821,3 +1698,127 @@ particles, std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread)
         return remove;
 
 };*/
+
+
+template class ParticleGridInterface<float>;
+template class ParticleGridInterface<double>;
+
+
+template void ParticleGridInterface<float>::InitEmCells<Particles3dcil<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles3dcil<float>>& state1, double dH, int flag, int flagInit);
+template void ParticleGridInterface<float>::InitEmCells<Particles2d<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles2d<float>>& state1, double dH, int flag, int flagInit);
+template void ParticleGridInterface<float>::InitEmCells<Particles2dpolar<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles2dpolar<float>>& state1, double dH, int flag, int flagInit);
+
+template void ParticleGridInterface<double>::InitEmCells<Particles3dcil<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles3dcil<double>>& state1, double dH, int flag, int flagInit);
+template void ParticleGridInterface<double>::InitEmCells<Particles2d<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles2d<double>>& state1, double dH, int flag, int flagInit);
+template void ParticleGridInterface<double>::InitEmCells<Particles2dpolar<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes, int emType,
+        const std::shared_ptr<Particles2dpolar<double>>& state1, double dH, int flag, int flagInit);
+
+template void ParticleGridInterface<float>::SearchStartCells<Particles3dcil<float>>(
+        int flow, const std::shared_ptr<Particles3dcil<float>>& particles);
+
+template void ParticleGridInterface<double>::SearchStartCells<Particles3dcil<double>>(
+        int flow, const std::shared_ptr<Particles3dcil<double>>& particles);
+
+template void ParticleGridInterface<float>::SearchStartCells<Particles2d<float>>(
+        int flow, const std::shared_ptr<Particles2d<float>>& particles);
+
+template void ParticleGridInterface<double>::SearchStartCells<Particles2d<double>>(
+        int flow, const std::shared_ptr<Particles2d<double>>& particles);
+
+template void ParticleGridInterface<float>::SearchStartCells<Particles2dpolar<float>>(
+        int flow, const std::shared_ptr<Particles2dpolar<float>>& particles);
+
+template void ParticleGridInterface<double>::SearchStartCells<Particles2dpolar<double>>(
+        int flow, const std::shared_ptr<Particles2dpolar<double>>& particles);
+
+
+template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles3dcil<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles3dcil<float>>>&      particles);
+
+template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles3dcil<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles3dcil<double>>>&      particles);
+
+template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles2d<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles2d<float>>>&         particles);
+
+template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles2d<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles2d<double>>>&         particles);
+
+template void ParticleGridInterface<float>::SearchStartCellsEmission<Particles2dpolar<float>>(
+        const std::vector<std::vector<NearCathodeVolume<float>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles2dpolar<float>>>&    particles);
+
+template void ParticleGridInterface<double>::SearchStartCellsEmission<Particles2dpolar<double>>(
+        const std::vector<std::vector<NearCathodeVolume<double>>>& nearCathodeVolumes,
+        std::vector<std::shared_ptr<Particles2dpolar<double>>>&    particles);
+
+template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles3dcil<float>>(
+        const std::shared_ptr<Particles3dcil<float>>& particles, std::vector<unsigned int> EmptyPlaces,
+        int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles3dcil<double>>(
+        const std::shared_ptr<Particles3dcil<double>>& particles, std::vector<unsigned int> EmptyPlaces,
+        int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles2d<float>>(
+        const std::shared_ptr<Particles2d<float>>& particles, std::vector<unsigned int> EmptyPlaces,
+        int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles2d<double>>(
+        const std::shared_ptr<Particles2d<double>>& particles, std::vector<unsigned int> EmptyPlaces,
+        int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<float>::InCell<Particles2dpolar<float>>(
+        const std::shared_ptr<Particles2dpolar<float>>& particles,
+        std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<double>::InCell<Particles2dpolar<double>>(
+        const std::shared_ptr<Particles2dpolar<double>>& particles,
+        std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread, int flow);
+template std::vector<unsigned int>
+ParticleGridInterface<float>::InCellWithEps<Particles3dcil<float>>(
+        const std::shared_ptr<Particles3dcil<float>>& particles, int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int>
+ParticleGridInterface<double>::InCellWithEps<Particles3dcil<double>>(
+        const std::shared_ptr<Particles3dcil<double>>& particles, int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int> ParticleGridInterface<float>::InCellWithEps<Particles2d<float>>(
+        const std::shared_ptr<Particles2d<float>>& particles, int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int>
+ParticleGridInterface<double>::InCellWithEps<Particles2d<double>>(
+        const std::shared_ptr<Particles2d<double>>& particles, int i1, int i2, int thread, int flow);
+
+template std::vector<unsigned int>
+ParticleGridInterface<float>::InCellWithEps<Particles2dpolar<float>>(
+        const std::shared_ptr<Particles2dpolar<float>>& particles, int i1, int i2, int thread,
+        int flow);
+
+template std::vector<unsigned int>
+ParticleGridInterface<double>::InCellWithEps<Particles2dpolar<double>>(
+        const std::shared_ptr<Particles2dpolar<double>>& particles, int i1, int i2, int thread,
+        int flow);
+
+template void ParticleGridInterface<double>::axsPolar(
+        Particles3dcil<double>* particles, const std::shared_ptr<GridData2dpolar<double>>& gridData,
+        std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread);
+
+template void ParticleGridInterface<double>::axsPolar(
+        Particles3dcil<float>* particles, const std::shared_ptr<GridData2dpolar<double>>& gridData,
+        std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread);

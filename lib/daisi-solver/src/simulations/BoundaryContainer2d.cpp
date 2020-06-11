@@ -10,14 +10,14 @@
 #include <sstream>
 #include <stdio.h>
 #include <iostream>
-DGeo::Edge<double>  EdgeTmp;
-DGeo::Point<double> PointTmp;
+
+
 void swap(float* a, float* b)
 {
     float tmp = *a;
     *a        = *b;
     *b        = tmp;
-};
+}
 void qs(float* s_arr, float* s1_arr, int first, int last)
 {
     int   i = first, j = last;
@@ -55,9 +55,6 @@ bool min(double a, double b)
     return false;
 }
 
-template class BoundaryContainer2d<float>;
-template class BoundaryContainer2d<double>;
-
 template <class PointType>
 void BoundaryContainer2d<PointType>::RemoveFineEdges(float k)
 {
@@ -80,7 +77,7 @@ void BoundaryContainer2d<PointType>::RemoveFineEdges(float k)
                         ContainerSize--;
                         j--;
                         continue;
-                    };
+                    }
                 }
 
                 if (EdgesData[i].point1.isEqual(EdgesData[j].point2, l * 1e-5))
@@ -92,7 +89,7 @@ void BoundaryContainer2d<PointType>::RemoveFineEdges(float k)
                         ContainerSize--;
                         j--;
                         continue;
-                    };
+                    }
                 }
 
                 if (EdgesData[i].point2.isEqual(EdgesData[j].point2, l * 1e-5))
@@ -104,7 +101,7 @@ void BoundaryContainer2d<PointType>::RemoveFineEdges(float k)
                         ContainerSize--;
                         j--;
                         continue;
-                    };
+                    }
                 }
 
                 if (EdgesData[i].point2.isEqual(EdgesData[j].point1, l * 1e-5))
@@ -116,14 +113,14 @@ void BoundaryContainer2d<PointType>::RemoveFineEdges(float k)
                         ContainerSize--;
                         j--;
                         continue;
-                    };
+                    }
                 }
-            };
+            }
         }
-    };
+    }
 
     ConvertBoundary2VTKUnstructuredGrid();
-};
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::Merge(
@@ -144,7 +141,7 @@ void BoundaryContainer2d<PointType>::Merge(
     ymax = std::max(ymax, obj->ymax);
 
     ConvertBoundary2VTKUnstructuredGrid();
-};
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::Reverse()
@@ -155,7 +152,7 @@ void BoundaryContainer2d<PointType>::Reverse()
     {
         EdgesData[i].point1 = tmp.EdgesData[s - 1 - i].point2;
         EdgesData[i].point2 = tmp.EdgesData[s - 1 - i].point1;
-    };
+    }
 }
 
 /*template <class PointType>
@@ -226,7 +223,7 @@ EdgesData.back().point2.isEqual(obj->EdgesData[i].point1, eps))
 
         ConvertBoundary2VTKUnstructuredGrid();
 
-};*/
+}*/
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::sort()
@@ -260,7 +257,7 @@ void BoundaryContainer2d<PointType>::sort()
         }
         if (0 == flag1 || 0 == flag2)
             break;
-    };
+    }
     if (i == EdgesData.size())
         i == 0;
 
@@ -274,7 +271,7 @@ void BoundaryContainer2d<PointType>::sort()
         DGeo::Point<PointType> t = EdgesData[0].point1;
         EdgesData[0].point1      = EdgesData[0].point2;
         EdgesData[0].point2      = t;
-    };
+    }
 
     for (i = 0; i < ContainerSize - 1; i++)
     {
@@ -301,7 +298,7 @@ void BoundaryContainer2d<PointType>::sort()
                 continue;
             }
         }
-    };
+    }
 
     tmp.ContainerSize = tmp.EdgesData.size();
 
@@ -313,8 +310,8 @@ void BoundaryContainer2d<PointType>::sort()
     {
         tmp.sort();
         Merge(std::shared_ptr<BoundaryContainer2d<PointType>>(&tmp));
-    };
-};
+    }
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::GetPlotXY(std::vector<float>& Xarr, std::vector<float>& Yarr)
@@ -329,7 +326,7 @@ void BoundaryContainer2d<PointType>::GetPlotXY(std::vector<float>& Xarr, std::ve
 
     Yarr.push_back(EdgesData[i].point1.y);
     //Yarr.push_back(EdgesData[i].point2.y);
-    };
+    }
     Xarr.push_back(EdgesData.back().point2.x);
     Yarr.push_back(EdgesData.back().point2.y);*/
 
@@ -337,12 +334,12 @@ void BoundaryContainer2d<PointType>::GetPlotXY(std::vector<float>& Xarr, std::ve
     {
         Xarr.push_back(tmp.EdgesData[i].point1.x);
         Yarr.push_back(tmp.EdgesData[i].point1.y);
-    };
+    }
     Xarr.push_back(tmp.EdgesData.back().point2.x);
     Yarr.push_back(tmp.EdgesData.back().point2.y);
 
     //	qs(&Xarr[0], &Yarr[0], 0, Xarr.size()-1);
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::GetPlotRotate(std::vector<std::vector<float>>& Xarr,
                                                    std::vector<std::vector<float>>& Yarr,
@@ -386,8 +383,8 @@ void BoundaryContainer2d<PointType>::GetPlotRotate(std::vector<std::vector<float
         }
         Xarr.push_back(xtmp);
         Yarr.push_back(ytmp);
-    };
-};
+    }
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::GetPlotRotate1(std::vector<std::vector<float>>& Xarr,
@@ -423,7 +420,7 @@ void BoundaryContainer2d<PointType>::GetPlotRotate1(std::vector<std::vector<floa
             point2 = point2.rotate(dangle * j, rotatePoint);
             xtmp.push_back(point2.x);
             ytmp.push_back(point2.y);
-        };
+        }
 
         Xarr.push_back(xtmp);
         Yarr.push_back(ytmp);
@@ -449,12 +446,12 @@ void BoundaryContainer2d<PointType>::GetPlotRotate1(std::vector<std::vector<floa
             point2 = point2.rotate(dangle * j, rotatePoint);
             xtmp.push_back(point2.x);
             ytmp.push_back(point2.y);
-        };
+        }
 
         Xarr.push_back(xtmp);
         Yarr.push_back(ytmp);
     }
-};
+}
 
 template <class PointType>
 BoundaryContainer2d<PointType>& BoundaryContainer2d<PointType>::
@@ -475,7 +472,7 @@ operator=(const BoundaryContainer2d<PointType>& right)
     if (flagInit != 0)
         ConvertBoundary2VTKUnstructuredGrid();
     return *this;
-};
+}
 template <class PointType>
 BoundaryContainer2d<PointType>::BoundaryContainer2d()
 {
@@ -486,13 +483,13 @@ BoundaryContainer2d<PointType>::BoundaryContainer2d()
     ymin          = 0;
     ymax          = 0;
     ContainerSize = 0;
-};
+}
 template <class PointType>
 vtkSmartPointer<vtkUnstructuredGrid>
 BoundaryContainer2d<PointType>::GetBoundaryVTKUnstructuredGrid()
 {
     return VTKgrid;
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::ConvertBoundary2VTKUnstructuredGrid()
 {
@@ -504,7 +501,7 @@ void BoundaryContainer2d<PointType>::ConvertBoundary2VTKUnstructuredGrid()
                                 EdgesData[i].point1.z);
         points->InsertNextPoint(EdgesData[i].point2.x, EdgesData[i].point2.y,
                                 EdgesData[i].point2.z);
-    };
+    }
 
     vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
 
@@ -514,11 +511,11 @@ void BoundaryContainer2d<PointType>::ConvertBoundary2VTKUnstructuredGrid()
         line->GetPointIds()->SetId(0, 2 * i);
         line->GetPointIds()->SetId(1, 2 * i + 1);
         cellArray->InsertNextCell(line);
-    };
+    }
 
     VTKgrid->SetPoints(points);
     VTKgrid->SetCells(VTK_LINE, cellArray);
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::WriteBoundary2VTK(std::string InputFileName)
 {
@@ -533,20 +530,20 @@ void BoundaryContainer2d<PointType>::WriteBoundary2VTK(std::string InputFileName
                 EdgesData[i].point1.z);
         fprintf(fpOut, "%lf %lf %lf\n", EdgesData[i].point2.x, EdgesData[i].point2.y,
                 EdgesData[i].point2.z);
-    };
+    }
     int nc = ContainerSize * 3;
     fprintf(fpOut, "\nCELLS %d %d\n\n", ContainerSize, nc);
     for (int i = 0; i < ContainerSize; i++)
     {
         fprintf(fpOut, "2 %d %d\n", 2 * i, 2 * i + 1);
-    };
+    }
     fprintf(fpOut, "\nCELL_TYPES %d \n\n", ContainerSize);
     for (int i = 0; i < ContainerSize; i++)
     {
         fprintf(fpOut, "3 \n");
     }
     fclose(fpOut);
-};
+}
 
 template <class PointType>
 int BoundaryContainer2d<PointType>::OnBoundary(double epsilon, DGeo::Point<PointType> Point)
@@ -560,9 +557,9 @@ int BoundaryContainer2d<PointType>::OnBoundary(double epsilon, DGeo::Point<Point
 
         if (val < 2)
             return val;
-    };
+    }
     return 2; // �� �� �������
-};
+}
 template <class PointType>
 int BoundaryContainer2d<PointType>::InBoundary(double epsilon, DGeo::Point<PointType> StartPoint,
                                                PointType h)
@@ -605,11 +602,11 @@ int BoundaryContainer2d<PointType>::InBoundary(double epsilon, DGeo::Point<Point
 
         xmaxloc    = CurrentPoint.x;
         StartPoint = CurrentPoint;
-    };
+    }
     if (numberIntersections % 2)
         return 2; //������
     return 3;     //�������
-};
+}
 
 template <class PointType>
 int BoundaryContainer2d<PointType>::NumberIntersections(double                       epsilon,
@@ -655,9 +652,9 @@ int BoundaryContainer2d<PointType>::NumberIntersections(double                  
             lastNumber = i;
             numberIntersections++;
         }
-    };
+    }
     return numberIntersections;
-};
+}
 template <class PointType>
 bool BoundaryContainer2d<PointType>::IsIntersection(double epsilon, DGeo::Edge<PointType> edge,
                                                     DGeo::Point<PointType>& intersectionPoint,
@@ -677,9 +674,9 @@ bool BoundaryContainer2d<PointType>::IsIntersection(double epsilon, DGeo::Edge<P
             intersectionPoint      = point;
             return true;
         }
-    };
+    }
     return false;
-};
+}
 template <class PointType>
 bool BoundaryContainer2d<PointType>::IsIntersectionLight(double epsilon, DGeo::Edge<PointType> edge,
                                                          DGeo::Point<PointType>& intersectionPoint,
@@ -697,9 +694,9 @@ bool BoundaryContainer2d<PointType>::IsIntersectionLight(double epsilon, DGeo::E
             intersectionPoint      = point;
             return true;
         }
-    };
+    }
     return false;
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::FindAllIntersections(
     double epsilon, DGeo::Edge<PointType> edge,
@@ -718,8 +715,8 @@ void BoundaryContainer2d<PointType>::FindAllIntersections(
             intersectionPoint.push_back(point);
             intersectionEdgesTmp.push_back(EdgesData[i]);
         }
-    };
-};
+    }
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::MaxVertex()
@@ -731,7 +728,7 @@ void BoundaryContainer2d<PointType>::MaxVertex()
         {
             number = i;
         }
-    };
+    }
 
     number = 0;
     for (int i = 1; i < ContainerSize; i++)
@@ -740,8 +737,8 @@ void BoundaryContainer2d<PointType>::MaxVertex()
         {
             number = i;
         }
-    };
-};
+    }
+}
 
 template <class PointType>
 void BoundaryContainer2d<PointType>::ttf(std::string& InputFile, std::string& errorMsg)
@@ -754,7 +751,7 @@ void BoundaryContainer2d<PointType>::ttf(std::string& InputFile, std::string& er
         errorMsg = "Invalid file path.";
         return;
         // this = NULL;
-    };
+    }
     errorMsg = "";
 
     int nNodes;
@@ -828,7 +825,7 @@ void BoundaryContainer2d<PointType>::ttf(std::string& InputFile, std::string& er
         PointTmp.z = tmpz;
 
         VertexData.push_back(PointTmp);
-    };
+    }
 
     int tmpI;
     for (int i = 0; i < nCells; i++)
@@ -849,7 +846,7 @@ void BoundaryContainer2d<PointType>::ttf(std::string& InputFile, std::string& er
         EdgeTmp.point2 = findPoint(nedge2);
 
         EdgesData.push_back(EdgeTmp);
-    };
+    }
 
     //	sort();
     MaxVertex();
@@ -863,7 +860,7 @@ template <class PointType>
 BoundaryContainer2d<PointType>::BoundaryContainer2d(std::string& InputFile, std::string& errorMsg)
 {
     ttf(InputFile, errorMsg);
-};
+}
 
 template <class PointType>
 BoundaryContainer2d<PointType>::BoundaryContainer2d(std::vector<std::vector<double>> vertex,
@@ -901,7 +898,7 @@ BoundaryContainer2d<PointType>::BoundaryContainer2d(std::vector<std::vector<doub
             ymin   = vertex[1][i];
         PointTmp.z = 0;
         VertexData.push_back(PointTmp);
-    };
+    }
     if (isTube == true)
     {
         num = 2;
@@ -976,7 +973,7 @@ BoundaryContainer2d<PointType>::BoundaryContainer2d(std::vector<std::vector<doub
                 ymin            = vertex[1][TubeCount * 4 + i];
             PointTmp.z          = 0;
             VertexData[num - 1] = PointTmp;
-        };
+        }
         if ((TubeCount == 0 && IsFirst == 1) || (TubeCount == TubeNumber - 1 && IsLast == 1))
         {
             VertexData[TubeCount * 4].Number = num1;
@@ -1070,17 +1067,17 @@ DGeo::Point<PointType> BoundaryContainer2d<PointType>::findPoint(int n)
         if (VertexData[i].Number == n)
             return VertexData[i];
     }
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::AddEdge(DGeo::Edge<PointType> edg)
 {
     EdgesData.push_back(edg);
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::AddVertex(DGeo::Point<PointType> ver)
 {
     VertexData.push_back(ver);
-};
+}
 template <class PointType>
 void BoundaryContainer2d<PointType>::AngleRounding(
     std::vector<DGeo::Point<PointType>>& vertex, double roundingRadius,
@@ -1203,16 +1200,6 @@ void BoundaryContainer2d<PointType>::AngleRounding(
     vertex = VertexRound;
 }
 
-template void BoundaryContainer2d<float>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void BoundaryContainer2d<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void BoundaryContainer2d<double>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void BoundaryContainer2d<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
 template <class PointType>
 template <class Archive>
 void BoundaryContainer2d<PointType>::save(Archive& ar, const unsigned int) const
@@ -1225,7 +1212,8 @@ void BoundaryContainer2d<PointType>::save(Archive& ar, const unsigned int) const
     ar& ContainerSize;
     ar& flagInit;
     ar& VertexData;
-};
+}
+
 template <class PointType>
 template <class Archive>
 void BoundaryContainer2d<PointType>::load(Archive& ar, const unsigned int)
@@ -1240,4 +1228,17 @@ void BoundaryContainer2d<PointType>::load(Archive& ar, const unsigned int)
     ar& VertexData;
     if (flagInit != 0)
         ConvertBoundary2VTKUnstructuredGrid();
-};
+}
+
+template class BoundaryContainer2d<float>;
+template class BoundaryContainer2d<double>;
+
+template void BoundaryContainer2d<float>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void BoundaryContainer2d<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void BoundaryContainer2d<double>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void BoundaryContainer2d<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

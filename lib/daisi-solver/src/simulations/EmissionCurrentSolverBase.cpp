@@ -8,18 +8,6 @@
 #include "ParticleGridInterface.h"
 #include "ParticleSource.h"
 
-template class EmissionCurrentSolverBase<float>;
-template class EmissionCurrentSolverBase<double>;
-
-template void EmissionCurrentSolverBase<float>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void EmissionCurrentSolverBase<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void EmissionCurrentSolverBase<double>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void EmissionCurrentSolverBase<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
 
 template <class PointType>
 template <class Archive>
@@ -30,6 +18,7 @@ void EmissionCurrentSolverBase<PointType>::save(Archive& ar, const unsigned int)
     ar& algorithm;
     ar& flowsNumbers;
 }
+
 template <class PointType>
 template <class Archive>
 void EmissionCurrentSolverBase<PointType>::load(Archive& ar, const unsigned int)
@@ -45,14 +34,15 @@ void EmissionCurrentSolverBase<PointType>::CalculateCathodeFields(
     std::vector<std::shared_ptr<ParticleSource2d<PointType>>>& source,
     const std::shared_ptr<GridData3d<PointType>>& gridData, int flowNumber){
 
-};
+}
+
 template <class PointType>
 void EmissionCurrentSolverBase<PointType>::init(
     int i, const std::shared_ptr<GridData3d<PointType>>& gridData, int flagEm,
     std::vector<std::shared_ptr<ParticleSource2d<PointType>>> source,
     const std::shared_ptr<ParticleGridInterface<PointType>>& particleGridInterface, int flag){
 
-};
+}
 
 template <class PointType>
 int EmissionCurrentSolverBase<PointType>::GetEmSize()
@@ -64,7 +54,7 @@ int EmissionCurrentSolverBase<PointType>::GetEmSize()
             s = s + nearCathodeVolumes[i].size();
     }
     return s;
-};
+}
 
 template <class PointType>
 void EmissionCurrentSolverBase<PointType>::SetParameters(std::vector<std::vector<double>> in)
@@ -77,7 +67,8 @@ void EmissionCurrentSolverBase<PointType>::SetParameters(std::vector<std::vector
         Lem[i] = in[i + 1][0];
     for (int i = 0; i < Lem.size(); i++)
         Hem[i] = in[i + 1][1];
-};
+}
+
 template <class PointType>
 std::vector<std::vector<double>> EmissionCurrentSolverBase<PointType>::GetParameters()
 {
@@ -91,19 +82,21 @@ std::vector<std::vector<double>> EmissionCurrentSolverBase<PointType>::GetParame
     result[3] = Hem;
 
     return result;
-};
+}
+
 template <class PointType>
 void EmissionCurrentSolverBase<PointType>::addFlow(int flowNumber)
 {
     Lem.push_back(0.001);
     Hem.push_back(0.001);
     flowsNumbers.push_back(flowNumber);
-};
+}
+
 template <class PointType>
 EmissionCurrentSolverBase<PointType>::EmissionCurrentSolverBase()
 {
     algorithm = 0;
-};
+}
 
 template <class PointType>
 void EmissionCurrentSolverBase<PointType>::reset()
@@ -207,27 +200,8 @@ void EmissionCurrentSolverBase<PointType>::SetValueOnSource(
                                 source->sourceSurface[kk].currentDensity = Val;
                 }
         }*/
-    };
-};
-
-template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2daxs<double>>(
-    const std::shared_ptr<ParticleSource2d<double>>& source,
-    const std::shared_ptr<GridData2daxs<double>>& gridData, int flowNumber);
-template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2daxs<float>>(
-    const std::shared_ptr<ParticleSource2d<float>>& source,
-    const std::shared_ptr<GridData2daxs<float>>& gridData, int flowNumber);
-template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2d<double>>(
-    const std::shared_ptr<ParticleSource2d<double>>& source,
-    const std::shared_ptr<GridData2d<double>>& gridData, int flowNumber);
-template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2d<float>>(
-    const std::shared_ptr<ParticleSource2d<float>>& source,
-    const std::shared_ptr<GridData2d<float>>& gridData, int flowNumber);
-template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2dpolar<double>>(
-    const std::shared_ptr<ParticleSource2d<double>>& source,
-    const std::shared_ptr<GridData2dpolar<double>>& gridData, int flowNumber);
-template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2dpolar<float>>(
-    const std::shared_ptr<ParticleSource2d<float>>& source,
-    const std::shared_ptr<GridData2dpolar<float>>& gridData, int flowNumber);
+    }
+}
 
 template <class PointType>
 template <class gridDataType>
@@ -258,32 +232,7 @@ void EmissionCurrentSolverBase<PointType>::CalculateCathodeFields(
     source->setErAverage(ErAverage);
 
     SetValueOnSource(source, CathodeFields[flowNumber], flowNumber, 0);
-};
-
-template void EmissionCurrentSolverBase<double>::init<GridData2daxs<double>>(
-    int i, const std::shared_ptr<GridData2daxs<double>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<double>>&      source,
-    const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
-template void EmissionCurrentSolverBase<float>::init<GridData2daxs<float>>(
-    int i, const std::shared_ptr<GridData2daxs<float>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<float>>&      source,
-    const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
-template void EmissionCurrentSolverBase<double>::init<GridData2d<double>>(
-    int i, const std::shared_ptr<GridData2d<double>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<double>>&      source,
-    const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
-template void EmissionCurrentSolverBase<float>::init<GridData2d<float>>(
-    int i, const std::shared_ptr<GridData2d<float>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<float>>&      source,
-    const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
-template void EmissionCurrentSolverBase<double>::init<GridData2dpolar<double>>(
-    int i, const std::shared_ptr<GridData2dpolar<double>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<double>>&      source,
-    const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
-template void EmissionCurrentSolverBase<float>::init<GridData2dpolar<float>>(
-    int i, const std::shared_ptr<GridData2dpolar<float>>& gridData, int flagEm,
-    const std::shared_ptr<ParticleSource2d<float>>&      source,
-    const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
+}
 
 template <class PointType>
 template <class gridDataType>
@@ -405,7 +354,7 @@ void EmissionCurrentSolverBase<PointType>::init(
 
             istartstmp.push_back(i + 1);
             n++;
-        };
+        }
     }
 
     CathodeFields.back().resize(points1tmp.size());
@@ -424,4 +373,59 @@ void EmissionCurrentSolverBase<PointType>::init(
 
     CalculateCathodeFields(source, gridData, flowNumber);
     E0.push_back(CathodeFields.back());
-};
+}
+
+template class EmissionCurrentSolverBase<float>;
+template class EmissionCurrentSolverBase<double>;
+
+template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2daxs<double>>(
+        const std::shared_ptr<ParticleSource2d<double>>& source,
+        const std::shared_ptr<GridData2daxs<double>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2daxs<float>>(
+        const std::shared_ptr<ParticleSource2d<float>>& source,
+        const std::shared_ptr<GridData2daxs<float>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2d<double>>(
+        const std::shared_ptr<ParticleSource2d<double>>& source,
+        const std::shared_ptr<GridData2d<double>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2d<float>>(
+        const std::shared_ptr<ParticleSource2d<float>>& source,
+        const std::shared_ptr<GridData2d<float>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<double>::CalculateCathodeFields<GridData2dpolar<double>>(
+        const std::shared_ptr<ParticleSource2d<double>>& source,
+        const std::shared_ptr<GridData2dpolar<double>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<float>::CalculateCathodeFields<GridData2dpolar<float>>(
+        const std::shared_ptr<ParticleSource2d<float>>& source,
+        const std::shared_ptr<GridData2dpolar<float>>& gridData, int flowNumber);
+template void EmissionCurrentSolverBase<double>::init<GridData2daxs<double>>(
+        int i, const std::shared_ptr<GridData2daxs<double>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<double>>&      source,
+        const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
+template void EmissionCurrentSolverBase<float>::init<GridData2daxs<float>>(
+        int i, const std::shared_ptr<GridData2daxs<float>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<float>>&      source,
+        const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
+template void EmissionCurrentSolverBase<double>::init<GridData2d<double>>(
+        int i, const std::shared_ptr<GridData2d<double>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<double>>&      source,
+        const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
+template void EmissionCurrentSolverBase<float>::init<GridData2d<float>>(
+        int i, const std::shared_ptr<GridData2d<float>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<float>>&      source,
+        const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
+template void EmissionCurrentSolverBase<double>::init<GridData2dpolar<double>>(
+        int i, const std::shared_ptr<GridData2dpolar<double>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<double>>&      source,
+        const std::shared_ptr<ParticleGridInterface<double>>& particleGridInterface, int flag);
+template void EmissionCurrentSolverBase<float>::init<GridData2dpolar<float>>(
+        int i, const std::shared_ptr<GridData2dpolar<float>>& gridData, int flagEm,
+        const std::shared_ptr<ParticleSource2d<float>>&      source,
+        const std::shared_ptr<ParticleGridInterface<float>>& particleGridInterface, int flag);
+
+template void EmissionCurrentSolverBase<float>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void EmissionCurrentSolverBase<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+template void EmissionCurrentSolverBase<double>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void EmissionCurrentSolverBase<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

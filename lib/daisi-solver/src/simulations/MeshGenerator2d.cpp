@@ -6,9 +6,6 @@
 #include "ParticleGridInterface.h"
 #include <omp.h>
 
-template class MeshGenerator<float>;
-template class MeshGenerator<double>;
-
 MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
 {
   char  ss[250];
@@ -19,7 +16,7 @@ MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
     errorMsg = "Unable to open mesh.dat file";
     return;
     // this = NULL;
-  };
+  }
 
   int i = -1;
   int j = 0;
@@ -31,7 +28,7 @@ MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
     errorMsg = "Tolerance is not defined";
     fclose(fp);
     return;
-  };
+  }
   while (fgets(ss, 250, fp))
   {
     if (ss[0] == 'x')
@@ -62,16 +59,17 @@ MeshParams::MeshParams(std::string filename, double& eps, std::string& errorMsg)
       rightBorder[i].push_back(tmp[1]);
       params[i].push_back(std::vector<double>{tmp[2], tmp[3]});
       j++;
-    };
+    }
   }
   if (i < 1)
   {
     errorMsg = "Incorrect input mesh description";
     fclose(fp);
     return;
-  };
+  }
   fclose(fp);
-};
+}
+
 double MeshParams::GetStep(double point, int flagX) const
 {
   for (int i = 0; i < leftBorder[flagX].size(); i++)
@@ -80,8 +78,8 @@ double MeshParams::GetStep(double point, int flagX) const
       return params[flagX][i][0] + (params[flagX][i][1] - params[flagX][i][0]) *
                                    (point - leftBorder[flagX][i]) /
                                    (rightBorder[flagX][i] - leftBorder[flagX][i]);
-  };
-};
+  }
+}
 
 int MeshParams::GetNumberOfSteps(int flagX, double min, double max, double& hMin) const
 {
@@ -97,7 +95,7 @@ int MeshParams::GetNumberOfSteps(int flagX, double min, double max, double& hMin
     res++;
   }
   return res;
-};
+}
 
 template <class PointType>
 void MeshGenerator<PointType>::MeshGenerate(
@@ -176,13 +174,13 @@ void MeshGenerator<PointType>::MeshGenerate(
     double hz     = meshParams.GetStep(zCur, 2);
     mesh->mesh[k].Extrude(hz);
     zCur = zCur + hz;
-  };
+  }
 
   // mesh->CreateSerialMesh();
   mesh->CreateCells();
   mesh->ConvertMesh2VTKUnstructuredGrid();
   progress = 1.0;
-};
+}
 
 template <class PointType>
 void MeshGenerator<PointType>::MeshGeneratePolar(
@@ -249,7 +247,7 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
   mesh->CreateCells();
   mesh->ConvertMesh2VTKUnstructuredGrid();
   progress = 1.0;
-};
+}
 
 template <class PointType>
 void MeshGenerator<PointType>::MeshGeneratePolar(
@@ -319,7 +317,7 @@ void MeshGenerator<PointType>::MeshGeneratePolar(
     h2         = meshParams.GetStep(phiCurrent, 1);
     phiCurrent = phiCurrent + h2;
   }
-};
+}
 
 template <class PointType>
 bool MeshGenerator<PointType>::IsInitBoundary()
@@ -327,25 +325,27 @@ bool MeshGenerator<PointType>::IsInitBoundary()
   if (flagBoundaryInit)
     return true;
   return false;
-};
+}
+
 template <class PointType>
 bool MeshGenerator<PointType>::IsMeshGen()
 {
   if (flagMeshInit)
     return true;
   return false;
-};
+}
+
 template <class PointType>
 std::vector<double> MeshGenerator<PointType>::GetMeshParam()
 {
   return meshParam;
-};
+}
 
 template <class PointType>
 void MeshGenerator<PointType>::SetMeshParam(std::vector<double> in)
 {
   meshParam = in;
-};
+}
 
 template <class PointType>
 MeshGenerator<PointType>::MeshGenerator()
@@ -356,7 +356,7 @@ MeshGenerator<PointType>::MeshGenerator()
   meshParam.push_back(0);
   t1 = 0;
   t2 = 0;
-};
+}
 
 template <class PointType>
 void MeshGenerator<PointType>::MeshGenerate(
@@ -389,7 +389,8 @@ void MeshGenerator<PointType>::MeshGenerate(
   if (flagVTK == 0)
     mesh->ConvertMesh2VTKUnstructuredGrid();
   progress = 1.0;
-};
+}
+
 template <class PointType>
 void MeshGenerator<PointType>::MeshGenerate(
         double epsilon, const MeshParams& meshParams, double& progress,
@@ -492,7 +493,7 @@ void MeshGenerator<PointType>::MeshGenerate(
     if (yNum == 79)
     {
       int a = 0;
-    };
+    }
 
     MeshAssembly(meshParams, CurrentPoint, tmpL1, mesh->templNumb, mesh->flagMatrix, h1, 0,
                  yNum, number, boundary, mesh->linearToTemplNumb);
@@ -503,7 +504,8 @@ void MeshGenerator<PointType>::MeshGenerate(
     h2   = meshParams.GetStep(yCur, 1);
     yCur = yCur + h2;
   }
-};
+}
+
 template <class PointType>
 void MeshGenerator<PointType>::MeshAssembly(
         const MeshParams& meshParams, DGeo::Point<PointType> StartPoint,
@@ -558,7 +560,8 @@ void MeshGenerator<PointType>::MeshAssembly(
     h1           = meshParams.GetStep(CurrentPoint.x, 0);
     CurrentPoint = DGeo::Point<PointType>(CurrentPoint, h1, h2, 0);
   }
-};
+}
+
 template <class PointType>
 void MeshGenerator<PointType>::MeshAssemblyPolar(
         const MeshParams& meshParams, DGeo::Point<PointType> StartPoint,
@@ -615,7 +618,8 @@ void MeshGenerator<PointType>::MeshAssemblyPolar(
     double hr    = meshParams.GetStep(r, 0);
     CurrentPoint = DGeo::Point<PointType>(CurrentPoint, hr * h1, hr * h2, 0);
   }
-};
+}
+
 template <class PointType>
 void MeshGenerator<PointType>::RayTrace(
         double epsilon, const MeshParams& meshParams, DGeo::Point<PointType> StartPoint,
@@ -697,8 +701,9 @@ void MeshGenerator<PointType>::RayTrace(
     ptmp = StartPoint;
     f1   = flagMartix(j + 1, yNum + 1);
     j++;
-  };
-};
+  }
+}
+
 template <class PointType>
 void MeshGenerator<PointType>::RayTracePolar(
         double epsilon, const MeshParams& meshParams, DGeo::Point<PointType> StartPoint,
@@ -738,13 +743,13 @@ void MeshGenerator<PointType>::RayTracePolar(
     if (j == 148)
     {
       int tt = 0;
-    };
+    }
     r = sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y));
 
     if (sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y)) > 0.15)
     {
       int tt = 0;
-    };
+    }
 
     double hr  = meshParams.GetStep(r, 0);
     StartPoint = DGeo::Point<PointType>(StartPoint, hr * h1, hr * h2, 0);
@@ -752,13 +757,13 @@ void MeshGenerator<PointType>::RayTracePolar(
     if (sqrt(double(StartPoint.x * StartPoint.x + StartPoint.y * StartPoint.y)) > 0.15)
     {
       int tt = 0;
-    };
+    }
 
     if (std::abs(StartPoint.x - 0.053000000000000005) < 0.00001 &&
         std::abs(StartPoint.y - 0.12500000000000006) < 0.00001)
     {
       int kk = 0;
-    };
+    }
     val = boundary->OnBoundary(epsilon, StartPoint);
 
     if (val != 2)
@@ -790,22 +795,8 @@ void MeshGenerator<PointType>::RayTracePolar(
     ptmp = StartPoint;
     f1   = flagMartix(j + 1, yNum + 1);
     j++;
-  };
-};
-
-template void
-MeshGenerator<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                            const unsigned int file_version);
-template void
-MeshGenerator<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                             const unsigned int file_version) const;
-
-template void
-MeshGenerator<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                             const unsigned int file_version);
-template void
-MeshGenerator<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                            const unsigned int file_version) const;
+  }
+}
 
 template <class PointType>
 template <class Archive>
@@ -827,3 +818,20 @@ void MeshGenerator<PointType>::load(Archive& ar, const unsigned int)
   ar& boundaryList;
   ar& meshParam;
 }
+
+template class MeshGenerator<float>;
+template class MeshGenerator<double>;
+
+template void
+MeshGenerator<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                            const unsigned int file_version);
+template void
+MeshGenerator<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                             const unsigned int file_version) const;
+
+template void
+MeshGenerator<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                             const unsigned int file_version);
+template void
+MeshGenerator<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                            const unsigned int file_version) const;

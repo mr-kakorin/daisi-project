@@ -11,9 +11,9 @@ else()
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -fPIC")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld -fPIC")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi -v")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
 endif()
 
 add_subdirectory(../lib/daisi-solver "${CMAKE_CURRENT_BINARY_DIR}/daisi-solver")
@@ -46,7 +46,7 @@ aux_source_directory(src SRC)
 
 add_executable(${PROJECT_NAME} 
                ${SRC} src/ITasksCreator.cpp src/DiodeTasksCreator.cpp src/DiodeTasksCreator.h src/TriodeTasksCreator.cpp src/TriodeTasksCreator.h)
-
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
 target_link_libraries(${PROJECT_NAME}
                       ${Boost_LIBRARIES}
                       ${ARMADILLO_LIBRARIES}

@@ -14,8 +14,7 @@ include_directories(common)
 
 add_library(${PROJECT_NAME} SHARED ${SRC})
 
-target_link_libraries(
-    ${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     ${Boost_LIBRARIES}
     ${ARMADILLO_LIBRARIES}
     ${VTK_LIBRARIES}

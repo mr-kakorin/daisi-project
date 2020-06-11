@@ -9,8 +9,6 @@
 #include "Tools.h"
 #include <Constants.h>
 
-template class EmitterDevice3d<float>;
-template class EmitterDevice3d<double>;
 
 template <class PointType>
 void EmitterDevice3d<PointType>::GenerateParticles(
@@ -249,7 +247,7 @@ void EmitterDevice3d<PointType>::GenerateParticles(
 
     //	if (std::abs(cur) / totalParticles<particlesData->avCharge)
     particlesData->avCharge = std::abs(currTot*dt) / totalParticles;*/
-};
+}
 
 template <class PointType>
 void EmitterDevice3d<PointType>::GenerateParticlesLinac(
@@ -366,7 +364,8 @@ void EmitterDevice3d<PointType>::GenerateParticlesLinac(
 
             particlesData->avCharge = std::abs(currTot*dt) / totalParticles;*/
 
-};
+}
+
 template <class PointType>
 void EmitterDevice3d<PointType>::PreliminaryGeneration(
     const std::shared_ptr<Particles3d<PointType>>& particlesDataZ0, PointType restMass){
@@ -442,7 +441,7 @@ void EmitterDevice3d<PointType>::PreliminaryGeneration(
             k++;
     }*/
 
-};
+}
 
 template <class PointType>
 EmitterDevice3d<PointType>::EmitterDevice3d(int DistributionStyleIn)
@@ -454,12 +453,13 @@ EmitterDevice3d<PointType>::EmitterDevice3d(int DistributionStyleIn)
     Z2           = 0;
     nParticlesZ  = 1;
     ndZ          = 1;
-};
+}
+
 template <class PointType>
 std::vector<std::vector<float>> EmitterDevice3d<PointType>::GetCurrentDensityDistribution()
 {
     return this->particleSource->GetCurrentDensityDistribution();
-};
+}
 
 template <class PointType>
 double EmitterDevice3d<PointType>::getErAverage()
@@ -473,7 +473,7 @@ double EmitterDevice3d<PointType>::getErAverage()
         res = res + this->particleSources[i]->getErAverage();
 
     return res / double(this->particleSources.size());
-};
+}
 
 template <class PointType>
 double EmitterDevice3d<PointType>::GetEmissionCurrent()
@@ -487,7 +487,7 @@ double EmitterDevice3d<PointType>::GetEmissionCurrent()
         res = res + this->particleSources[i]->GetEmissionCurrent(0);
 
     return res;
-};
+}
 
 template <class PointType>
 double EmitterDevice3d<PointType>::GetSourceSize()
@@ -502,14 +502,14 @@ std::vector<std::shared_ptr<ParticleSource2d<PointType>>>&
 EmitterDevice3d<PointType>::GetParticleSource()
 {
     return this->particleSources;
-};
+}
 
 template <class PointType>
 std::vector<std::shared_ptr<ParticleSource2d<PointType>>>&
 EmitterDevice3d<PointType>::GetParticleSources()
 {
     return this->particleSources;
-};
+}
 
 template <class PointType>
 std::vector<double> EmitterDevice3d<PointType>::GetAdditionalSourceInf()
@@ -528,7 +528,7 @@ void EmitterDevice3d<PointType>::SetAdditionalSourceInf(std::vector<double> inf)
     Z1  = inf[0];
     Z2  = inf[1];
     ndZ = inf[2];
-};
+}
 
 template <class PointType>
 void EmitterDevice3d<PointType>::SetBoundariesList(
@@ -538,7 +538,7 @@ void EmitterDevice3d<PointType>::SetBoundariesList(
 {
     this->boundaryList = in;
     this->particleSource->InitEmissionBoundary(boundaryIn, grid, parametersIn, error);
-};
+}
 
 template <class PointType>
 void EmitterDevice3d<PointType>::SetBoundariesList(
@@ -548,7 +548,7 @@ void EmitterDevice3d<PointType>::SetBoundariesList(
 {
     this->boundaryList = in;
     this->particleSource->InitEmissionBoundary(boundaryIn, grid, parametersIn, error);
-};
+}
 
 template <class PointType>
 void EmitterDevice3d<PointType>::SetBoundariesList(
@@ -587,33 +587,21 @@ template <class PointType>
 void EmitterDevice3d<PointType>::GenerateSyncParticle(
     const std::shared_ptr<Particles3d<PointType>>& particlesData, PointType restMass){
 
-};
+}
+
 template <class PointType>
 void EmitterDevice3d<PointType>::SetFlowCurrent(double res)
 {
     this->particleSources[0]->SetFlowCurrent(res);
-};
+}
+
 template <class PointType>
 void EmitterDevice3d<PointType>::SetBoundariesList(
     std::vector<int> in, std::vector<double> parametersIn, std::string& error,
     std::vector<std::shared_ptr<BoundaryContainer3d<PointType>>> boundaryIn,
     const std::shared_ptr<GridData3d<PointType>>&                grid){
 
-};
-
-template void
-EmitterDevice3d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                              const unsigned int file_version);
-
-template void EmitterDevice3d<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void
-EmitterDevice3d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                               const unsigned int file_version);
-
-template void EmitterDevice3d<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+}
 
 template <class PointType>
 template <class Archive>
@@ -643,3 +631,20 @@ void EmitterDevice3d<PointType>::load(Archive& ar, const unsigned int)
     ar & this->particleSources;
     ar& zArray;
 }
+
+template class EmitterDevice3d<float>;
+template class EmitterDevice3d<double>;
+
+template void
+EmitterDevice3d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                              const unsigned int file_version);
+
+template void EmitterDevice3d<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void
+EmitterDevice3d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                               const unsigned int file_version);
+
+template void EmitterDevice3d<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

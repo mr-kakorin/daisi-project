@@ -17,71 +17,6 @@
 #include <iostream>
 #include <omp.h>
 
-template class Solver<float>;
-template class Solver<double>;
-
-template void Solver<double>::SimulateCPUPIC<device2daxsdouble>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2daxsdouble>&                             deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<float>::SimulateCPUPIC<device2daxsfloat>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2daxsfloat>&                              deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<double>::SimulateCPUPIC<device2ddouble>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2ddouble>&                                deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<float>::SimulateCPUPIC<device2dfloat>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2dfloat>&                                 deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<double>::SimulateCPUPIC<device2dpolardouble>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2dpolardouble>&                           deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<float>::SimulateCPUPIC<device2dpolarfloat>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device2dpolarfloat>&                            deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<double>::SimulateCPUPIC<device3dExtrdouble>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device3dExtrdouble>&                            deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<float>::SimulateCPUPIC<device3dExtrfloat>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device3dExtrfloat>&                             deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
-
-template void Solver<double>::SimulateCPUPIC<device3ddouble>(
-    double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
-    const std::shared_ptr<device3ddouble>&                                deviceStatus,
-    std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
-    std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
-    std::string& errorMsg);
 
 template <class PointType>
 template <class deviceType>
@@ -345,7 +280,7 @@ void Solver<PointType>::SimulateCPUPIC(
     {
         deviceStatus->GetFlow(i)->MergeEmittancesData();
         deviceStatus->GetFlow(i)->GetDynamicsData()->Reset();
-    };
+    }
 
     for (int i = 0; i < numThreads; i++)
         delete[] W[i];
@@ -354,4 +289,71 @@ void Solver<PointType>::SimulateCPUPIC(
     status.push_back("Done");
 
     flagAbort = false;
-};
+}
+
+
+template class Solver<float>;
+template class Solver<double>;
+
+template void Solver<double>::SimulateCPUPIC<device2daxsdouble>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2daxsdouble>&                             deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<float>::SimulateCPUPIC<device2daxsfloat>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2daxsfloat>&                              deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<double>::SimulateCPUPIC<device2ddouble>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2ddouble>&                                deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<float>::SimulateCPUPIC<device2dfloat>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2dfloat>&                                 deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<double>::SimulateCPUPIC<device2dpolardouble>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2dpolardouble>&                           deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<float>::SimulateCPUPIC<device2dpolarfloat>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device2dpolarfloat>&                            deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<double>::SimulateCPUPIC<device3dExtrdouble>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device3dExtrdouble>&                            deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<float>::SimulateCPUPIC<device3dExtrfloat>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device3dExtrfloat>&                             deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);
+
+template void Solver<double>::SimulateCPUPIC<device3ddouble>(
+        double& progress, double& progressLoc, std::vector<std::string>& status, bool& flagAbort,
+        const std::shared_ptr<device3ddouble>&                                deviceStatus,
+        std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>& outputData,
+        std::mutex& plotMutex, const std::shared_ptr<SimulationData>& simulationData, int flagRestart,
+        std::string& errorMsg);

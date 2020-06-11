@@ -13,45 +13,6 @@
 #include "PoissonSolver.h"
 #include "Results.h"
 
-template class Solver<float>;
-template class Solver<double>;
-
-template void Solver<double>::TimeStepEstimate<device2daxsdouble>(
-    std::vector<double>& result, const std::shared_ptr<device2daxsdouble>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<float>::TimeStepEstimate<device2daxsfloat>(
-    std::vector<double>& result, const std::shared_ptr<device2daxsfloat>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<double>::TimeStepEstimate<device2ddouble>(
-    std::vector<double>& result, const std::shared_ptr<device2ddouble>& deviceStatus,
-    int numThreads, double& progress);
-
-template void
-Solver<float>::TimeStepEstimate<device2dfloat>(std::vector<double>&                  result,
-                                               const std::shared_ptr<device2dfloat>& deviceStatus,
-                                               int numThreads, double& progress);
-
-template void Solver<double>::TimeStepEstimate<device2dpolardouble>(
-    std::vector<double>& result, const std::shared_ptr<device2dpolardouble>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<float>::TimeStepEstimate<device2dpolarfloat>(
-    std::vector<double>& result, const std::shared_ptr<device2dpolarfloat>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<double>::TimeStepEstimate<device3dExtrdouble>(
-    std::vector<double>& result, const std::shared_ptr<device3dExtrdouble>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<float>::TimeStepEstimate<device3dExtrfloat>(
-    std::vector<double>& result, const std::shared_ptr<device3dExtrfloat>& deviceStatus,
-    int numThreads, double& progress);
-
-template void Solver<double>::TimeStepEstimate<device3ddouble>(
-    std::vector<double>& result, const std::shared_ptr<device3ddouble>& deviceStatus,
-    int numThreads, double& progress);
 
 template <class PointType>
 template <class deviceType>
@@ -229,37 +190,7 @@ void Solver<PointType>::TimeStepEstimate(std::vector<double>&               resu
     }
 
     return;
-};
-
-template std::vector<float> Solver<double>::estimateError<device2daxsdouble>(
-    const std::shared_ptr<device2daxsdouble>& deviceStatus, float& maxEr);
-
-template std::vector<float> Solver<float>::estimateError<device2daxsfloat>(
-    const std::shared_ptr<device2daxsfloat>& deviceStatus, float& maxEr);
-
-template std::vector<float>
-Solver<double>::estimateError<device2ddouble>(const std::shared_ptr<device2ddouble>& deviceStatus,
-                                              float&                                 maxEr);
-
-template std::vector<float>
-Solver<float>::estimateError<device2dfloat>(const std::shared_ptr<device2dfloat>& deviceStatus,
-                                            float&                                maxEr);
-
-template std::vector<float> Solver<double>::estimateError<device2dpolardouble>(
-    const std::shared_ptr<device2dpolardouble>& deviceStatus, float& maxEr);
-
-template std::vector<float> Solver<float>::estimateError<device2dpolarfloat>(
-    const std::shared_ptr<device2dpolarfloat>& deviceStatus, float& maxEr);
-
-template std::vector<float> Solver<double>::estimateError<device3dExtrdouble>(
-    const std::shared_ptr<device3dExtrdouble>& deviceStatus, float& maxEr);
-
-template std::vector<float> Solver<float>::estimateError<device3dExtrfloat>(
-    const std::shared_ptr<device3dExtrfloat>& deviceStatus, float& maxEr);
-
-template std::vector<float>
-Solver<double>::estimateError<device3ddouble>(const std::shared_ptr<device3ddouble>& deviceStatus,
-                                              float&                                 maxEr);
+}
 
 template <class PointType>
 template <class deviceType>
@@ -414,33 +345,6 @@ std::vector<float> Solver<PointType>::estimateError(const std::shared_ptr<device
     return errors[0];
 }
 
-template void Solver<double>::ErrorEstimateEvent<device2daxsdouble>(
-    const std::shared_ptr<device2daxsdouble>& deviceStatus);
-
-template void Solver<float>::ErrorEstimateEvent<device2daxsfloat>(
-    const std::shared_ptr<device2daxsfloat>& deviceStatus);
-
-template void Solver<double>::ErrorEstimateEvent<device2ddouble>(
-    const std::shared_ptr<device2ddouble>& deviceStatus);
-
-template void Solver<float>::ErrorEstimateEvent<device2dfloat>(
-    const std::shared_ptr<device2dfloat>& deviceStatus);
-
-template void Solver<double>::ErrorEstimateEvent<device2dpolardouble>(
-    const std::shared_ptr<device2dpolardouble>& deviceStatus);
-
-template void Solver<float>::ErrorEstimateEvent<device2dpolarfloat>(
-    const std::shared_ptr<device2dpolarfloat>& deviceStatus);
-
-template void Solver<double>::ErrorEstimateEvent<device3dExtrdouble>(
-    const std::shared_ptr<device3dExtrdouble>& deviceStatus);
-
-template void Solver<float>::ErrorEstimateEvent<device3dExtrfloat>(
-    const std::shared_ptr<device3dExtrfloat>& deviceStatus);
-
-template void Solver<double>::ErrorEstimateEvent<device3ddouble>(
-    const std::shared_ptr<device3ddouble>& deviceStatus);
-
 template <class PointType>
 template <class deviceType>
 void Solver<PointType>::ErrorEstimateEvent(const std::shared_ptr<deviceType>& deviceStatus)
@@ -517,4 +421,102 @@ void Solver<PointType>::ErrorEstimateEvent(const std::shared_ptr<deviceType>& de
 
     float maxEr;
     errors = estimateError(deviceStatus, maxEr);
-};
+}
+
+
+template class Solver<float>;
+template class Solver<double>;
+
+template void Solver<double>::TimeStepEstimate<device2daxsdouble>(
+        std::vector<double>& result, const std::shared_ptr<device2daxsdouble>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<float>::TimeStepEstimate<device2daxsfloat>(
+        std::vector<double>& result, const std::shared_ptr<device2daxsfloat>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<double>::TimeStepEstimate<device2ddouble>(
+        std::vector<double>& result, const std::shared_ptr<device2ddouble>& deviceStatus,
+        int numThreads, double& progress);
+
+template void
+Solver<float>::TimeStepEstimate<device2dfloat>(std::vector<double>&                  result,
+                                               const std::shared_ptr<device2dfloat>& deviceStatus,
+                                               int numThreads, double& progress);
+
+template void Solver<double>::TimeStepEstimate<device2dpolardouble>(
+        std::vector<double>& result, const std::shared_ptr<device2dpolardouble>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<float>::TimeStepEstimate<device2dpolarfloat>(
+        std::vector<double>& result, const std::shared_ptr<device2dpolarfloat>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<double>::TimeStepEstimate<device3dExtrdouble>(
+        std::vector<double>& result, const std::shared_ptr<device3dExtrdouble>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<float>::TimeStepEstimate<device3dExtrfloat>(
+        std::vector<double>& result, const std::shared_ptr<device3dExtrfloat>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<double>::TimeStepEstimate<device3ddouble>(
+        std::vector<double>& result, const std::shared_ptr<device3ddouble>& deviceStatus,
+        int numThreads, double& progress);
+
+template void Solver<double>::ErrorEstimateEvent<device2daxsdouble>(
+        const std::shared_ptr<device2daxsdouble>& deviceStatus);
+
+template void Solver<float>::ErrorEstimateEvent<device2daxsfloat>(
+        const std::shared_ptr<device2daxsfloat>& deviceStatus);
+
+template void Solver<double>::ErrorEstimateEvent<device2ddouble>(
+        const std::shared_ptr<device2ddouble>& deviceStatus);
+
+template void Solver<float>::ErrorEstimateEvent<device2dfloat>(
+        const std::shared_ptr<device2dfloat>& deviceStatus);
+
+template void Solver<double>::ErrorEstimateEvent<device2dpolardouble>(
+        const std::shared_ptr<device2dpolardouble>& deviceStatus);
+
+template void Solver<float>::ErrorEstimateEvent<device2dpolarfloat>(
+        const std::shared_ptr<device2dpolarfloat>& deviceStatus);
+
+template void Solver<double>::ErrorEstimateEvent<device3dExtrdouble>(
+        const std::shared_ptr<device3dExtrdouble>& deviceStatus);
+
+template void Solver<float>::ErrorEstimateEvent<device3dExtrfloat>(
+        const std::shared_ptr<device3dExtrfloat>& deviceStatus);
+
+template void Solver<double>::ErrorEstimateEvent<device3ddouble>(
+        const std::shared_ptr<device3ddouble>& deviceStatus);
+
+template std::vector<float> Solver<double>::estimateError<device2daxsdouble>(
+        const std::shared_ptr<device2daxsdouble>& deviceStatus, float& maxEr);
+
+template std::vector<float> Solver<float>::estimateError<device2daxsfloat>(
+        const std::shared_ptr<device2daxsfloat>& deviceStatus, float& maxEr);
+
+template std::vector<float>
+Solver<double>::estimateError<device2ddouble>(const std::shared_ptr<device2ddouble>& deviceStatus,
+                                              float&                                 maxEr);
+
+template std::vector<float>
+Solver<float>::estimateError<device2dfloat>(const std::shared_ptr<device2dfloat>& deviceStatus,
+                                            float&                                maxEr);
+
+template std::vector<float> Solver<double>::estimateError<device2dpolardouble>(
+        const std::shared_ptr<device2dpolardouble>& deviceStatus, float& maxEr);
+
+template std::vector<float> Solver<float>::estimateError<device2dpolarfloat>(
+        const std::shared_ptr<device2dpolarfloat>& deviceStatus, float& maxEr);
+
+template std::vector<float> Solver<double>::estimateError<device3dExtrdouble>(
+        const std::shared_ptr<device3dExtrdouble>& deviceStatus, float& maxEr);
+
+template std::vector<float> Solver<float>::estimateError<device3dExtrfloat>(
+        const std::shared_ptr<device3dExtrfloat>& deviceStatus, float& maxEr);
+
+template std::vector<float>
+Solver<double>::estimateError<device3ddouble>(const std::shared_ptr<device3ddouble>& deviceStatus,
+                                              float&                                 maxEr);

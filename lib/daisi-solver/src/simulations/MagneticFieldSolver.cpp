@@ -4,8 +4,6 @@
 #include "Geom.h"
 #include "GridData.h"
 
-template class MagneticFieldSolver<float>;
-template class MagneticFieldSolver<double>;
 
 template <class PointType>
 void MagneticFieldSolver<PointType>::FieldSimulate(
@@ -82,7 +80,7 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
                 }
             }
         }
-    };
+    }
 
     /*	for (int i = 0; i < electrodes.size(); i++)
             {
@@ -139,14 +137,12 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
             {
                     gridData->GetBphi()[k] = gridData->GetBphi()[k] * K;
             };*/
-};
+}
 
 template <class PointType>
 void MagneticFieldSolver<PointType>::FieldSimulate(
     std::vector<std::shared_ptr<ElectrodeCurrent<PointType>>>& electrodes,
-    const std::shared_ptr<GridData2d<PointType>>& gridData, PointType dt){
-
-};
+    const std::shared_ptr<GridData2d<PointType>>& gridData, PointType dt) {}
 
 template <class PointType>
 void MagneticFieldSolver<PointType>::FieldSimulate(
@@ -162,4 +158,7 @@ void MagneticFieldSolver<PointType>::FieldSimulate(
 
             electrodes[i]->SetCurrent(std::abs(tmp.back()));
     }*/
-};
+}
+
+template class MagneticFieldSolver<float>;
+template class MagneticFieldSolver<double>;

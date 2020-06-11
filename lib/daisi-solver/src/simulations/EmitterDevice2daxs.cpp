@@ -22,9 +22,7 @@ static std::normal_distribution<double> distribution(0, 1);
 double andgleDistribution(double t, double t0)
 {
     return exp(-(std::sin(t) * std::sin(t)) / (std::sin(t0) * std::sin(t0)));
-};
-template class EmitterDevice2daxs<float>;
-template class EmitterDevice2daxs<double>;
+}
 
 template <class PointType>
 void EmitterDevice2daxs<PointType>::PreliminaryGeneration(
@@ -58,7 +56,8 @@ void EmitterDevice2daxs<PointType>::PreliminaryGeneration(
             particlesDataZ0->Get_z()[j] = 0;
     };*/
 
-};
+}
+
 template <class PointType>
 void EmitterDevice2daxs<PointType>::GenerateParticles(
     std::vector<int> indesexPerThread, int thread, int numThreads,
@@ -91,7 +90,7 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
     if (flagClear == 0)
     {
         particlesData->clear();
-    };
+    }
 
     int empty          = int(EmptyPlaces.size());
     int totalParticles = indesexPerThread.size() * nParticlesEnergyLoc;
@@ -193,7 +192,7 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
             {
                 particlesData->Get_pz()[index]   = 0;
                 particlesData->Get_pphi()[index] = 0;
-            };
+            }
             // particlesData->gamma[index] = sqrt(1 + particlesData->Get_pr()[index] *
             // particlesData->Get_pr()[index] + particlesData->Get_pz()[index] *
             // particlesData->Get_pz()[index] + (particlesData->Get_pphi()[index] /
@@ -232,23 +231,24 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
 
     //	if (std::abs(cur) / totalParticles<particlesData->avCharge)
     particlesData->avCharge = std::abs(currTot * dt) / totalParticles;
-};
+}
 
 template <class PointType>
 double EmitterDevice2daxs<PointType>::GetEmissionCurrent()
 {
     return this->particleSource->GetEmissionCurrent(1);
-};
+}
+
 template <class PointType>
 std::vector<std::vector<float>> EmitterDevice2daxs<PointType>::GetCurrentDensityDistribution()
 {
     return this->particleSource->GetCurrentDensityDistribution();
-};
+}
+
 template <class PointType>
 EmitterDevice2daxs<PointType>::EmitterDevice2daxs(int DistributionStyleIn)
-    : EmitterDeviceBase<PointType>(DistributionStyleIn){
+    : EmitterDeviceBase<PointType>(DistributionStyleIn){}
 
-      };
 template <class PointType>
 void EmitterDevice2daxs<PointType>::GenerateParticlesLinac(
     int flagTest, int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
@@ -438,7 +438,7 @@ void EmitterDevice2daxs<PointType>::GenerateSyncParticle(
     particlesData->Get_pr()[0]   = 0;
     particlesData->Get_phi()[0]  = 0;
     particlesData->Get_pphi()[0] = 0;
-};
+}
 
 template <class PointType>
 std::vector<double> EmitterDevice2daxs<PointType>::GetAdditionalSourceInf()
@@ -446,6 +446,7 @@ std::vector<double> EmitterDevice2daxs<PointType>::GetAdditionalSourceInf()
     std::vector<double> res;
     return res;
 }
+
 template <class PointType>
 void EmitterDevice2daxs<PointType>::SetAdditionalSourceInf(std::vector<double> inf){};
 template <class PointType>
@@ -457,4 +458,7 @@ void EmitterDevice2daxs<PointType>::SetBoundariesList(
     this->boundaryList     = in;
     this->emitterInitParam = parametersIn;
     this->particleSource->InitEmissionBoundary(boundaryIn, grid, parametersIn, error);
-};
+}
+
+template class EmitterDevice2daxs<float>;
+template class EmitterDevice2daxs<double>;

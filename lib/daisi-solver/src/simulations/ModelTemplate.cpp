@@ -21,16 +21,7 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
-#include <stdio.h>
 
-template class ModelTemplate<device2daxsfloat, float>;
-template class ModelTemplate<device2daxsdouble, double>;
-template class ModelTemplate<device2dfloat, float>;
-template class ModelTemplate<device2ddouble, double>;
-template class ModelTemplate<device2dpolarfloat, float>;
-template class ModelTemplate<device2dpolardouble, double>;
-template class ModelTemplate<device3dExtrfloat, float>;
-template class ModelTemplate<device3dExtrdouble, double>;
 
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetNumberParticlesFlowsTypes()
@@ -47,55 +38,59 @@ template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetElectrodeParametersList(int number)
 {
     return deviceStatus->GetElectrodes()[number]->GetParameteres();
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::setElectrodeParametersList(int number,
                                                                       std::vector<double>& input)
 {
     deviceStatus->GetElectrodes()[number]->SetParameteres(input);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetglobalFieldConditions(const std::vector<double>& in)
 {
     deviceStatus->SetglobalFieldConditions(in);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetglobalFieldConditions()
 {
     return deviceStatus->GetglobalFieldConditions();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetSolverParametersPTI(
     const std::vector<std::vector<double>>& par)
 {
     solver->SetParametersPTI(par);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetSolverParametersPIC(
     const std::vector<std::vector<double>>& par)
 {
     solver->SetParametersPIC(par);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetSolverGeneralParameters(
     const std::vector<std::vector<double>>& par)
 {
     solver->SetSolverGeneralParameters(par);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::GetSolverParametersPTI()
 {
     return solver->GetParametersPTI();
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::GetSolverParametersPIC()
 {
     return solver->GetParametersPIC();
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::GetSolverGeneralParameters()
@@ -112,7 +107,7 @@ std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::GetSolver
     result.push_back(solver->parameters);
 
     return result;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GenerateMesh(std::string meshParam, double& progress,
@@ -134,7 +129,7 @@ void ModelTemplate<DeviceType, PointType>::GenerateMesh(std::string meshParam, d
         deviceStatus->isFieldSimulated  = 0;
         deviceStatus->isFieldSolverInit = 0;
     }
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddFlow(int ParticleType, int DistributionStyle)
@@ -151,7 +146,8 @@ void ModelTemplate<DeviceType, PointType>::AddFlow(int ParticleType, int Distrib
         solver->emissionCurrentSolverPIC->addFlow(n);
         solver->emissionCurrentSolverPTI->addFlow(n);
     }
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddFlow(int ParticleType, int DistributionStyle,
                                                    double massNumber, double chargeNumber)
@@ -168,37 +164,40 @@ void ModelTemplate<DeviceType, PointType>::AddFlow(int ParticleType, int Distrib
         solver->emissionCurrentSolverPIC->addFlow(n);
         solver->emissionCurrentSolverPTI->addFlow(n);
     }
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetEmitterInitParameters(int currentFlow)
 {
     return deviceStatus->GetFlow(currentFlow)->GetEmitterDevice()->GetEmitterInitParameters();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::ChangeGeom(double p1, double p2)
 {
     deviceStatus->ChangeGeom(p1, p2);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<DynamicsData*> ModelTemplate<DeviceType, PointType>::GetDynamicsDataLinac()
 {
     std::vector<DynamicsData*> t;
     return t;
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>>
 ModelTemplate<DeviceType, PointType>::GetLinacApproximationParameters()
 {
     std::vector<std::vector<double>> t;
     return t;
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetLinacApproximationParameters(
     std::vector<std::vector<double>> in){
 
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetLinacDynSimParameters()
@@ -213,35 +212,40 @@ void ModelTemplate<DeviceType, PointType>::GetEmittanceData(std::vector<std::vec
                                                             int emFlag)
 {
     deviceStatus->GetFlow(flowNumber)->GetEmittanceData(data, flagNumber, emFlag);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetEmittancesList(int flow)
 {
     return deviceStatus->GetFlow(flow)->GetEmittancesList();
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddEmittance(int flow, double param)
 {
     deviceStatus->GetFlow(flow)->AddEmittance(param);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetAdditionalSourceInf(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetAdditionalSourceInf();
 }
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetAdditionalSourceInf(int flowNumber,
                                                                   std::vector<double> inf)
 {
     deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->SetAdditionalSourceInf(inf);
 }
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetConditionPropertiesFromFile(std::string file,
                                                                           int number)
 {
     deviceStatus->GetboundaryConditions()->SetConditionPropertiesFromFile(number, file);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetPlotXYBoundarySpecial(
     std::vector<std::vector<float>>& Xarr, std::vector<std::vector<float>>& Yarr)
@@ -258,21 +262,22 @@ void ModelTemplate<DeviceType, PointType>::GetPlotXYBoundarySpecial(
             deviceStatus->GetboundariesForFlows()[k]->GetPlotRotate1(Xarr, Yarr, 108);
         }
     }
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>>
 ModelTemplate<DeviceType, PointType>::GetEmitterField(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetEmitterField();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::ErrorEstimate(double& progress)
 {
     solver->ErrorEstimateEvent(deviceStatus);
     progress = 1;
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetElectrodesCurrents()
 {
@@ -282,11 +287,13 @@ std::vector<double> ModelTemplate<DeviceType, PointType>::GetElectrodesCurrents(
 
     return result;
 }
+
 template <class DeviceType, class PointType>
 std::vector<float> ModelTemplate<DeviceType, PointType>::Get_Errors()
 {
     return solver->errors;
 }
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetFlowMCNumbers(int flow)
 {
@@ -303,7 +310,7 @@ std::vector<std::vector<float>>
 ModelTemplate<DeviceType, PointType>::GetElectrodeValue(int conductor, int flag)
 {
     return deviceStatus->GetElectrodes()[conductor]->GetElectrodeValueF(flag);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::DeleteFlow(int number)
@@ -315,20 +322,20 @@ template <class DeviceType, class PointType>
 std::vector<std::vector<int>> ModelTemplate<DeviceType, PointType>::GetConductorsList()
 {
     return deviceStatus->GetConductorsList();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetConductorsList(std::vector<int> list, int number,
                                                              double l, std::string& errorMsg)
 {
     deviceStatus->SetConductorsList(list, number, l, errorMsg);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddConductor()
 {
     deviceStatus->AddConductor();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::InitFieldSolver()
@@ -336,13 +343,13 @@ void ModelTemplate<DeviceType, PointType>::InitFieldSolver()
     double progressLoc;
     solver->InitFieldSolver(deviceStatus, progressLoc);
     deviceStatus->isFieldSolverInit = 1;
-};
+}
 
 template <class DeviceType, class PointType>
 vtkSmartPointer<vtkPolyData> ModelTemplate<DeviceType, PointType>::GetVTKBoundaryPoints()
 {
     return deviceStatus->Getmesh()->GetVTKBoundaryPoints();
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::string> ModelTemplate<DeviceType, PointType>::GetVisNames(int i)
@@ -373,41 +380,44 @@ std::vector<std::string> ModelTemplate<DeviceType, PointType>::GetVisNames(int i
         for (int j = 0; j < nElectrodes; j++)
             result.push_back(flagStringsSolver::simulationDataNamesElectrode[i] + " of electrode " +
                              std::to_string(j));
-    };
+    }
 
     return result;
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::shared_ptr<SimulationData>>
 ModelTemplate<DeviceType, PointType>::GetSimulationData()
 {
     return simulationData;
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<std::string> ModelTemplate<DeviceType, PointType>::GetPlotNames()
 {
     return PlotNames;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetPlotNames(std::vector<std::string> vector)
 {
     PlotNames = vector;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetGridData(void* Array[1], int& size, int& sizeElement,
                                                        std::string flag, int PlotTypeFlag)
 {
     deviceStatus->GetGridData()->GetData(Array, size, sizeElement, flag, PlotTypeFlag);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetGridData(void* Array[1], int& size, int& sizeElement,
                                                        int flag, int PlotTypeFlag)
 {
     deviceStatus->GetGridData()->GetDataIntFlag(Array, size, sizeElement, flag, PlotTypeFlag);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetPlot(int plotNumber, std::vector<float>& Xdata,
                                                    std::vector<std::vector<float>>& Ydata)
@@ -420,7 +430,7 @@ void ModelTemplate<DeviceType, PointType>::GetPlot(int plotNumber, std::vector<f
     {
         Xdata.push_back(length);
         length = length + resArr[i].length();
-    };
+    }
     Xdata.push_back(length);
 
     plotMutex.lock();
@@ -432,7 +442,7 @@ void ModelTemplate<DeviceType, PointType>::GetPlot(int plotNumber, std::vector<f
             Ydatatmp.push_back(deviceStatus->GetGridData()->interpolatePoint(
                 resArr[i].point1.x, resArr[i].point1.y, resArr[i].point1.z,
                 lineplots[plotNumber]->flag[j], lineplots[plotNumber]->PlotTypeFlag));
-        };
+        }
         Ydatatmp.push_back(deviceStatus->GetGridData()->interpolatePoint(
             resArr[npoints - 1].point2.x, resArr[npoints - 1].point2.y,
             resArr[npoints - 1].point2.z, lineplots[plotNumber]->flag[j],
@@ -440,13 +450,13 @@ void ModelTemplate<DeviceType, PointType>::GetPlot(int plotNumber, std::vector<f
         Ydata.push_back(Ydatatmp);
     }
     plotMutex.unlock();
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::shared_ptr<lineplot>> ModelTemplate<DeviceType, PointType>::GetPlotsVector()
 {
     return lineplots;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::addPlot(std::vector<std::string> flag, double x1,
@@ -455,7 +465,7 @@ void ModelTemplate<DeviceType, PointType>::addPlot(std::vector<std::string> flag
 {
     lineplots.push_back(
         std::shared_ptr<lineplot>(new lineplot(flag, x1, y1, x2, y2, PlotTypeFlag)));
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::addPlot(std::vector<std::string> flag, double x1,
@@ -464,7 +474,7 @@ void ModelTemplate<DeviceType, PointType>::addPlot(std::vector<std::string> flag
 {
     lineplots.push_back(
         std::shared_ptr<lineplot>(new lineplot(flag, x1, y1, z1, x2, y2, z2, PlotTypeFlag)));
-};
+}
 
 template <class DeviceType, class PointType>
 float ModelTemplate<DeviceType, PointType>::GetDeviceCurrentTime()
@@ -472,7 +482,7 @@ float ModelTemplate<DeviceType, PointType>::GetDeviceCurrentTime()
     if (deviceStatus->GetNumberParticlesFlows() != 0)
         return deviceStatus->GetFlow(0)->GetDynamicsData()->Time / (LIGHT_VELOCITY());
     return 0;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SaveData(std::string fileName)
@@ -481,7 +491,8 @@ void ModelTemplate<DeviceType, PointType>::SaveData(std::string fileName)
     boost::archive::binary_oarchive oa(ofs);
     oa << outputData;
     oa << simulationData;
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::LoadData(std::string fileName)
 {
@@ -489,27 +500,28 @@ void ModelTemplate<DeviceType, PointType>::LoadData(std::string fileName)
     boost::archive::binary_iarchive ia(ifs);
     ia >> outputData;
     ia >> simulationData;
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetPlotXYBoundary(int boundary, std::vector<float>& Xarr,
                                                              std::vector<float>& Yarr)
 {
     deviceStatus->Getboundaries()[boundary]->GetPlotXY(Xarr, Yarr);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GetPlotBoundaryRotate(
     int boundary, std::vector<std::vector<float>>& Xarr, std::vector<std::vector<float>>& Yarr)
 {
     deviceStatus->Getboundaries()[boundary]->GetPlotRotate(Xarr, Yarr, 100);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>&
 ModelTemplate<DeviceType, PointType>::GetDynamicsData()
 {
     return outputData;
-};
+}
 
 template <class DeviceType, class PointType>
 std::shared_ptr<BoundaryConditions>
@@ -520,7 +532,7 @@ ModelTemplate<DeviceType, PointType>::ParseBoundaryArgument(std::string flag1, i
     if (flag1 == flagStringsSolver::flowBoundaryList)
         return deviceStatus->GetFlow(flag2)->GetboundaryConditions();
     return deviceStatus->GetboundaryConditions();
-};
+}
 
 // void InCell(ParticleGridInterfaceType ParticleGridInterface, )
 template <class DeviceType, class PointType>
@@ -528,7 +540,7 @@ void ModelTemplate<DeviceType, PointType>::SimulateGPU(double& progress, bool& f
     // DeviceTypeGPU* deviceStatusHost = new DeviceTypeGPU(deviceStatus);
     // DeviceTypeGPU* deviceStatusDevice = deviceStatusHost->AllocateOnGPU();
     //	solver.SimulateGPU(progress, timeDilatation, deviceStatusDevice, outputData);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SimulateCPUPIC(double& progress, double& progressLoc,
@@ -548,14 +560,14 @@ void ModelTemplate<DeviceType, PointType>::SimulateCPUPIC(double& progress, doub
 
     solver->SimulateCPUPIC(progress, progressLoc, status, flagAbort, deviceStatus, outputData,
                            plotMutex, simulationData.back(), flagRestart, errorMsg);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SimulateCPUPTI(double& progress, bool& flagAbort){
     // simulationData.push_back(std::shared_ptr<SimulationData>(new SimulationData()));
     // solver->SimulateCPUPTI(progress, flagAbort, deviceStatus, outputData, plotMutex,
     //                        simulationData.back());
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>>
@@ -576,12 +588,13 @@ template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetFieldSolverParameters(std::vector<double> in)
 {
     solver->fieldSolver->SetParameters(in);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetFieldSolverParameters()
 {
     return solver->fieldSolver->GetParameters();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::FieldSimulate(double t, double& progress,
@@ -613,13 +626,15 @@ void ModelTemplate<DeviceType, PointType>::FieldSimulate(double t, double& progr
     progress                        = 1.0;
     status.push_back("Done");
     status.push_back(".......................................");
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetAccParams(std::vector<double> in,
                                                         std::string filename)
 {
     //	deviceStatus->SetAcceleratorParams(in, filename);
 }
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GenerateGeometry(std::vector<double> in,
                                                             double& progress, bool& flagAbort,
@@ -629,7 +644,8 @@ void ModelTemplate<DeviceType, PointType>::GenerateGeometry(std::vector<double> 
     //	solver->GenerateGeometry(progress, flagAbort, deviceStatus, outputData, plotMutex,
     // simulationData,
     // meshParamFile, projectFolder);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetAcceleratorParams()
 {
@@ -659,14 +675,14 @@ void ModelTemplate<DeviceType, PointType>::GetParticlesCloud(
         deviceStatus->GetFlow(flowNumber)
             ->GetDynamicsData(i)
             ->GetParticlesCloud(flag, pointArray[i], sizeArray[i], sizeElement);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<std::vector<float>>
 ModelTemplate<DeviceType, PointType>::GetCurrentDensityDistribution(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetCurrentDensityDistribution();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::GenerateParticles(int flowNumber, int flagClear)
@@ -675,37 +691,38 @@ void ModelTemplate<DeviceType, PointType>::GenerateParticles(int flowNumber, int
     //	deviceStatus->GetGridData()->densityReset();
     deviceStatus->GetFlow(flowNumber)
         ->GenerateParticles(t, flagClear, 0, 0, deviceStatus->GetGridData(), 0, 0);
-};
+}
 
 template <class DeviceType, class PointType>
 double ModelTemplate<DeviceType, PointType>::GetEmissionCurrent(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetEmissionCurrent();
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetEmissionCurrent(int flowNumber, double current)
 {
     solver->emissionCurrentSolverPIC->SetEmissionCurrent(
         deviceStatus->GetFlow(flowNumber)->GetEmitterDevice(), current);
-};
+}
 
 template <class DeviceType, class PointType>
 int ModelTemplate<DeviceType, PointType>::GetNumberParticlesFlows()
 {
     return deviceStatus->GetNumberParticlesFlows();
-};
+}
 
 template <class DeviceType, class PointType>
 vtkSmartPointer<vtkUnstructuredGrid> ModelTemplate<DeviceType, PointType>::GetMeshBoundaryVTKGrid()
 {
     return deviceStatus->GetDomainBoundaryVTKUnstructuredGrid();
-};
+}
 
 template <class DeviceType, class PointType>
 vtkUnstructuredGrid* ModelTemplate<DeviceType, PointType>::GetVTKGrid()
 {
     return deviceStatus->Getmesh()->GetVTKGrid();
-};
+}
 
 template <class DeviceType, class PointType>
 vtkUnstructuredGrid* ModelTemplate<DeviceType, PointType>::GetVTKGrid(
@@ -713,23 +730,25 @@ vtkUnstructuredGrid* ModelTemplate<DeviceType, PointType>::GetVTKGrid(
 {
     return deviceStatus->Getmesh()->GetVTKGrid(flag, param, vtkData, deviceStatus->GetGridData(),
                                                name);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetMeshParam()
 {
     return solver->meshGenerator->GetMeshParam();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetMeshParam(std::vector<double> in){
     //		solver.meshGenerator->SetMeshParam(in);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetMeshBoundariesList()
 {
     return deviceStatus->GetDomainBoundaryList();
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetMeshBoundariesList(std::vector<int> in)
 {
@@ -741,17 +760,20 @@ void ModelTemplate<DeviceType, PointType>::SetMeshBoundariesList(std::vector<int
     bound.push_back(deviceStatus->Getboundaries()[in[i]]);
     };
     solver.meshGenerator->SetBoundaryList(in, bound);*/
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetBoundariesList()
 {
     return deviceStatus->GetBoundariesList();
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetEmitterBoundariesList(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetBoundariesList();
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetEmitterBoundariesList(int flowNumber,
                                                                     std::vector<int>    in,
@@ -761,7 +783,7 @@ void ModelTemplate<DeviceType, PointType>::SetEmitterBoundariesList(int flowNumb
     deviceStatus->SetEmitterBoundariesList(flowNumber, in, params, errorMsg);
     solver->emissionCurrentSolverPIC->SetEmissionCurrent(
         deviceStatus->GetFlow(flowNumber)->GetEmitterDevice(), 1.0);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetConditionProperties(
@@ -779,7 +801,7 @@ void ModelTemplate<DeviceType, PointType>::SetConditionProperties(
                 deviceStatus->isFieldSimulated  = 0;
                 deviceStatus->isFieldSolverInit = 0;
             }
-        };
+        }
         ParseBoundaryArgument(flag1, flag2)->SetConditionProperties(i, cond[0]);
     }
     else
@@ -787,27 +809,29 @@ void ModelTemplate<DeviceType, PointType>::SetConditionProperties(
         ParseBoundaryArgument(flag1, flag2)->SetPropertyConditionManualRestictions(i, cond[0]);
         ParseBoundaryArgument(flag1, flag2)->SetConditionProperties(i, cond[1]);
     }
-};
+}
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetConditionProperties(std::string flag1,
                                                                                  int flag2, int i)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetConditionPropertiesSimple(i);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<std::string>
 ModelTemplate<DeviceType, PointType>::GetConditionPropertiesNames(std::string flag1, int flag2,
                                                                   int i)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetConditionPropertiesSimpleNames(i);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetDefaultConditionsList(std::string flag1, int flag2,
                                                                     const std::vector<int>& in)
 {
     ParseBoundaryArgument(flag1, flag2)->SetDefaultConditionsList(in);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetPropertyConditionsBoundariesList(
     std::string flag1, int flag2, int i, const std::vector<int>& in)
@@ -819,23 +843,24 @@ void ModelTemplate<DeviceType, PointType>::SetPropertyConditionsBoundariesList(
             deviceStatus->isFieldSimulated  = 0;
             deviceStatus->isFieldSolverInit = 0;
         }
-    };
+    }
     ParseBoundaryArgument(flag1, flag2)->SetPropertyConditionsBoundariesList(i, in);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<int>
 ModelTemplate<DeviceType, PointType>::GetPropertyConditionsBoundariesList(std::string flag1,
                                                                           int flag2, int i)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetPropertyConditionsBoundariesList(i);
-};
+}
 
 template <class DeviceType, class PointType>
 int ModelTemplate<DeviceType, PointType>::GetPropertyConditionTypeFlag(std::string flag1, int flag2,
                                                                        int i)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetPropertyConditionTypeFlag(i);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double>
@@ -843,13 +868,14 @@ ModelTemplate<DeviceType, PointType>::GetPropertyConditionManualRestictions(std:
                                                                             int flag2, int i)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetPropertyConditionManualRestictions(i);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetPropertyConditionManualRestictions(
     std::string flag1, int flag2, int i, std::vector<double> params)
 {
     ParseBoundaryArgument(flag1, flag2)->SetPropertyConditionManualRestictions(i, params);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddPropertyCondition(std::string flag1, int flag2,
@@ -857,19 +883,21 @@ void ModelTemplate<DeviceType, PointType>::AddPropertyCondition(std::string flag
                                                                 int         boundaryTypeFlag)
 {
     ParseBoundaryArgument(flag1, flag2)->AddPropertyCondition(type, boundaryTypeFlag);
-};
+}
+
 template <class DeviceType, class PointType>
 int ModelTemplate<DeviceType, PointType>::GetNumberPropertyConditions(std::string flag1, int flag2)
 {
     int k = ParseBoundaryArgument(flag1, flag2)->GetNumberProperties();
     return k;
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetDefaultConditionsList(std::string flag1,
                                                                                 int flag2)
 {
     return ParseBoundaryArgument(flag1, flag2)->GetDefaultConditionsList();
-};
+}
 
 template <class DeviceType, class PointType>
 std::string ModelTemplate<DeviceType, PointType>::GetConditionPropertyType(std::string flag1,
@@ -884,12 +912,13 @@ void ModelTemplate<DeviceType, PointType>::AddBoundary(std::string filename, std
     deviceStatus->AddBoundary(filename, errorMsg);
     deviceStatus->GetboundaryConditions()->AddDefaultConditionsList(
         int(deviceStatus->Getboundaries().size()) - 1);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddSetOfPotentials(std::string filename)
 {
     deviceStatus->AddSetOfPotentials(filename);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::AddBoundaries(std::string filename,
@@ -903,20 +932,20 @@ void ModelTemplate<DeviceType, PointType>::AddBoundaries(std::string filename,
 
     for (int i = i1; i < i2; i++)
         deviceStatus->GetboundaryConditions()->AddDefaultConditionsList(i);
-};
+}
 
 template <class DeviceType, class PointType>
 int ModelTemplate<DeviceType, PointType>::GetNumberBoundaries()
 {
     return int(deviceStatus->Getboundaries().size());
-};
+}
 
 template <class DeviceType, class PointType>
 vtkSmartPointer<vtkUnstructuredGrid>
 ModelTemplate<DeviceType, PointType>::GetBoundaryVTKUnstructuredGrid(int number)
 {
     return deviceStatus->Getboundaries()[number]->GetBoundaryVTKUnstructuredGrid();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetAllEmitterParameters(
@@ -932,13 +961,14 @@ void ModelTemplate<DeviceType, PointType>::SetAllEmitterParameters(
 
     SetEmissionCurrent(flow, params[1][0]);
     SetDistributionParameters(flow, params[3]);*/
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>>
 ModelTemplate<DeviceType, PointType>::GetAllEmitterParameters(int currentFlow)
 {
     return deviceStatus->GetFlow(currentFlow)->GetEmitterDevice()->GetAllParameters();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetDirectionPoints(int flowNumber,
@@ -946,19 +976,20 @@ void ModelTemplate<DeviceType, PointType>::SetDirectionPoints(int flowNumber,
                                                               std::vector<double> eP) /////////////
 {
     deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->SetDirectionPoints(sP, eP);
-};
+}
+
 template <class DeviceType, class PointType>
 std::vector<std::vector<double>>
 ModelTemplate<DeviceType, PointType>::GetDirectionPoints(int flowNumber) ////////////////////
 {
     return deviceStatus->GetFlow(flowNumber)->GetEmitterDevice()->GetDirectionPoints();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SerTest()
 {
     i++;
-};
+}
 
 template <class DeviceType, class PointType>
 ModelTemplate<DeviceType, PointType>::ModelTemplate()
@@ -985,34 +1016,57 @@ ModelTemplate<DeviceType, PointType>::ModelTemplate()
     // PointType>(); 		solver.meshGenerator = MeshGeneratorType();
     //		particleGridInterface = ParticleGridInterfaceType();
     // devicestatus = &DeviceStatus(1);
-};
+}
 
 template <class DeviceType, class PointType>
 std::vector<double> ModelTemplate<DeviceType, PointType>::GetFlowProperties(int flowNumber)
 {
     return deviceStatus->GetFlow(flowNumber)->GetFlowProperties();
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetBoundary(std::string InputFileName){
     //	solver->meshGenerator = MeshGeneratorType(InputFileName);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::WriteMesh2VTK(std::string InputFileName)
 {
     solver->meshGenerator->WriteMesh2VTK(InputFileName);
-};
+}
+
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::WriteBoundary2VTK(std::string InputFileName)
 {
     solver->meshGenerator->WriteBoundary2VTK(InputFileName);
-};
+}
 
 template <class DeviceType, class PointType>
 void ModelTemplate<DeviceType, PointType>::SetFlowData(int FlowNumber){
 
-};
+}
+
+template <class DeviceType, class PointType>
+template <class Archive>
+void ModelTemplate<DeviceType, PointType>::save(Archive& ar, const unsigned int) const
+{
+    ar& solver;
+    ar& deviceStatus;
+    ar& lineplots;
+    ar& PlotNames;
+    // ar & simulationData;
+}
+template <class DeviceType, class PointType>
+template <class Archive>
+void ModelTemplate<DeviceType, PointType>::load(Archive& ar, const unsigned int)
+{
+    ar& solver;
+    ar& deviceStatus;
+    ar& lineplots;
+    ar& PlotNames;
+    // ar & simulationData;
+    // deviceStatus->Getmesh()->Convert2GridData(deviceStatus->GetGridData());
+}
 
 template void ModelTemplate<device2daxsfloat, float>::load<boost::archive::binary_iarchive>(
     boost::archive::binary_iarchive& ar, const unsigned int file_version);
@@ -1050,24 +1104,11 @@ template void ModelTemplate<device3dExtrfloat, float>::save<boost::archive::bina
 template void ModelTemplate<device3dExtrdouble, double>::load<boost::archive::binary_iarchive>(
     boost::archive::binary_iarchive& ar, const unsigned int file_version);
 
-template <class DeviceType, class PointType>
-template <class Archive>
-void ModelTemplate<DeviceType, PointType>::save(Archive& ar, const unsigned int) const
-{
-    ar& solver;
-    ar& deviceStatus;
-    ar& lineplots;
-    ar& PlotNames;
-    // ar & simulationData;
-}
-template <class DeviceType, class PointType>
-template <class Archive>
-void ModelTemplate<DeviceType, PointType>::load(Archive& ar, const unsigned int)
-{
-    ar& solver;
-    ar& deviceStatus;
-    ar& lineplots;
-    ar& PlotNames;
-    // ar & simulationData;
-    // deviceStatus->Getmesh()->Convert2GridData(deviceStatus->GetGridData());
-}
+template class ModelTemplate<device2daxsfloat, float>;
+template class ModelTemplate<device2daxsdouble, double>;
+template class ModelTemplate<device2dfloat, float>;
+template class ModelTemplate<device2ddouble, double>;
+template class ModelTemplate<device2dpolarfloat, float>;
+template class ModelTemplate<device2dpolardouble, double>;
+template class ModelTemplate<device3dExtrfloat, float>;
+template class ModelTemplate<device3dExtrdouble, double>;

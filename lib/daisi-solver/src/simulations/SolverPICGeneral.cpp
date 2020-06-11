@@ -18,22 +18,6 @@
 #include <iostream>
 // #include <windows.h>
 
-template class Solver<float>;
-template class Solver<double>;
-
-template void
-Solver<float>::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                          const unsigned int file_version);
-template void
-Solver<double>::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                           const unsigned int file_version);
-
-template void
-Solver<double>::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                           const unsigned int file_version);
-template void
-Solver<float>::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                          const unsigned int file_version);
 
 template <class PointType>
 template <class Archive>
@@ -48,7 +32,8 @@ void Solver<PointType>::save(Archive& ar, const unsigned int) const
     ar& particleMover;
     ar& fieldSolver;
     ar& meshGenerator;
-};
+}
+
 template <class PointType>
 template <class Archive>
 void Solver<PointType>::load(Archive& ar, const unsigned int)
@@ -63,7 +48,7 @@ void Solver<PointType>::load(Archive& ar, const unsigned int)
     ar& fieldSolver;
     ar& meshGenerator;
     restartPossible = 0;
-};
+}
 
 template <class PointType>
 std::vector<std::vector<double>> Solver<PointType>::GetParametersPIC()
@@ -71,12 +56,13 @@ std::vector<std::vector<double>> Solver<PointType>::GetParametersPIC()
     std::vector<std::vector<double>> result;
     result.push_back(outTimes);
     return result;
-};
+}
+
 template <class PointType>
 void Solver<PointType>::SetParametersPIC(const std::vector<std::vector<double>>& par)
 {
     outTimes = par[0];
-};
+}
 
 template <class PointType>
 std::vector<std::string> Solver<PointType>::GetVisNames(int solver)
@@ -87,20 +73,21 @@ std::vector<std::string> Solver<PointType>::GetVisNames(int solver)
         return flagStringsSolver::simulationDataNamesBasePTI;
 
     //	return  flagStringsSolver::simulationDataNames;
-};
+}
 
 template <class PointType>
 void Solver<PointType>::SetParametersPTI(const std::vector<std::vector<double>>& par)
 {
     relaxations = par[0];
-};
+}
+
 template <class PointType>
 std::vector<std::vector<double>> Solver<PointType>::GetParametersPTI()
 {
     std::vector<std::vector<double>> result;
     result.push_back(relaxations);
     return result;
-};
+}
 
 template <class PointType>
 void Solver<PointType>::SetSolverGeneralParameters(const std::vector<std::vector<double>>& par)
@@ -108,7 +95,8 @@ void Solver<PointType>::SetSolverGeneralParameters(const std::vector<std::vector
     particleGridInterface->SetParameters(par[0]);
     particleMover->SetParameters(par[1]);
     parameters = par[2];
-};
+}
+
 template <class PointType>
 Solver<PointType>::Solver()
 {
@@ -139,4 +127,21 @@ Solver<PointType>::Solver()
     meshGenerator = std::shared_ptr<MeshGenerator<PointType>>(new MeshGenerator<PointType>());
     magneticFieldSolver =
         std::shared_ptr<MagneticFieldSolver<PointType>>(new MagneticFieldSolver<PointType>());
-};
+}
+
+template class Solver<float>;
+template class Solver<double>;
+
+template void
+Solver<float>::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                          const unsigned int file_version);
+template void
+Solver<double>::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                           const unsigned int file_version);
+
+template void
+Solver<double>::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                           const unsigned int file_version);
+template void
+Solver<float>::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                          const unsigned int file_version);

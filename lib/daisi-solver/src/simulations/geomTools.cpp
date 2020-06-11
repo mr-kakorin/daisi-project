@@ -2,16 +2,6 @@
 #include "BoundaryContainer2d.h"
 #include "Geom.h"
 
-template void
-mergeSortResize<float>(int nElements, std::vector<int> list,
-                       std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-                       std::vector<DGeo::Edge<float>>& result, std::string& errorMsg);
-
-template void
-mergeSortResize<double>(int nElements, std::vector<int> list,
-                        std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-                        std::vector<DGeo::Edge<double>>& result, std::string& errorMsg);
-
 template <class PointType>
 void mergeSortResize(int nElements, std::vector<int> list,
                      std::vector<std::shared_ptr<BoundaryContainer2d<PointType>>>& boundaries,
@@ -142,5 +132,15 @@ void mergeSortResize(int nElements, std::vector<int> list,
     {
         if (result[i].IsEqual(result[i + 1], 1e-12))
             result.erase(result.begin() + i);
-    };
-};
+    }
+}
+
+template void
+mergeSortResize<float>(int nElements, std::vector<int> list,
+                       std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+                       std::vector<DGeo::Edge<float>>& result, std::string& errorMsg);
+
+template void
+mergeSortResize<double>(int nElements, std::vector<int> list,
+                        std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+                        std::vector<DGeo::Edge<double>>& result, std::string& errorMsg);

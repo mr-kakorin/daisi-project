@@ -1,13 +1,12 @@
 #include "ParticleShape2d.h"
 
-template class ParticleShapeCIC2dStatic<float>;
-template class ParticleShapeCIC2dStatic<double>;
 
 template <class PointType>
 PointType ParticleShapeCIC2dStatic<PointType>::CellArea()
 {
     return gridSteps<PointType>::H1 * gridSteps<PointType>::H2;
-};
+}
+
 template <class PointType>
 bool ParticleShapeCIC2dStatic<PointType>::InCell(PointType x1, PointType x2,
                                                  const std::vector<PointType>& x1Array,
@@ -20,7 +19,7 @@ bool ParticleShapeCIC2dStatic<PointType>::InCell(PointType x1, PointType x2,
         x2 <= x2Array[levelHigh])
         return true;
     return false;
-};
+}
 
 template <class PointType>
 bool ParticleShapeCIC2dStatic<PointType>::InCell(
@@ -38,7 +37,7 @@ bool ParticleShapeCIC2dStatic<PointType>::InCell(
         x3 <= x3Array[levelZ[basePoint]])
         return true;
     return false;
-};
+}
 
 template <class PointType>
 bool ParticleShapeCIC2dStatic<PointType>::InCellWithEps(PointType x1, PointType x2,
@@ -61,7 +60,8 @@ bool ParticleShapeCIC2dStatic<PointType>::InCellWithEps(PointType x1, PointType 
         (x2 <= x2Array[levelHigh] || std::abs(x2 - x2Array[levelHigh]) < epsx2))
         return true;
     return false;
-};
+}
+
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::Wcalculate(PointType x1, PointType x2,
                                                      const std::vector<PointType>& x1Array,
@@ -80,7 +80,7 @@ void ParticleShapeCIC2dStatic<PointType>::Wcalculate(PointType x1, PointType x2,
     W[1]           = wx12 * wx21;
     W[2]           = wx11 * wx22;
     W[3]           = wx12 * wx22;
-};
+}
 
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::Wcalculate3d(
@@ -111,7 +111,7 @@ void ParticleShapeCIC2dStatic<PointType>::Wcalculate3d(
     W[5] = wx12 * wx21 * wx32;
     W[6] = wx11 * wx22 * wx32;
     W[7] = wx12 * wx22 * wx32;
-};
+}
 
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::WcalculatePolar(PointType x1, PointType x2,
@@ -140,7 +140,7 @@ void ParticleShapeCIC2dStatic<PointType>::WcalculatePolar(PointType x1, PointTyp
     W[1] = vol2 / V;
     W[2] = vol3 / V;
     W[3] = vol1 / V;
-};
+}
 
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::ValueInterpolate(const std::vector<PointType>& W,
@@ -151,7 +151,7 @@ void ParticleShapeCIC2dStatic<PointType>::ValueInterpolate(const std::vector<Poi
 {
     result = W[0] * ValueArray[basePoint] + W[1] * ValueArray[basePoint + 1] +
              W[2] * ValueArray[levelHigh] + W[3] * ValueArray[levelHigh + 1];
-};
+}
 
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::ValueInterpolate3d(
@@ -163,7 +163,7 @@ void ParticleShapeCIC2dStatic<PointType>::ValueInterpolate3d(
              W[4] * ValueArray[levelZ[basePoint]] + W[5] * ValueArray[levelZ[basePoint] + 1] +
              W[6] * ValueArray[levelZ[levelHigh[basePoint]]] +
              W[7] * ValueArray[levelZ[levelHigh[basePoint]] + 1];
-};
+}
 
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::ChargeCalculate(const std::vector<PointType>& W,
@@ -176,7 +176,8 @@ void ParticleShapeCIC2dStatic<PointType>::ChargeCalculate(const std::vector<Poin
     rho[basePoint + 1] = rho[basePoint + 1] + W[1] * particleCharge;
     rho[levelHigh]     = rho[levelHigh] + W[2] * particleCharge;
     rho[levelHigh + 1] = rho[levelHigh + 1] + W[3] * particleCharge;
-};
+}
+
 template <class PointType>
 void ParticleShapeCIC2dStatic<PointType>::ChargeZeroing(){};
 template <class PointType>
@@ -191,4 +192,7 @@ void ParticleShapeCIC2dStatic<PointType>::CellVolume(const std::vector<PointType
     vol          = PointType(PI() * gridSteps<PointType>::H2 *
                     ((rArray[basePoint] + H1 / 2) * (rArray[basePoint] + H1 / 2) -
                      (rArray[basePoint] - H1 / 2) * (rArray[basePoint] - H1 / 2)));
-};
+}
+
+template class ParticleShapeCIC2dStatic<float>;
+template class ParticleShapeCIC2dStatic<double>;

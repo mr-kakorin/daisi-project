@@ -10,27 +10,6 @@
 
 //#include "mkl_vml.h"
 
-template
-class PoissonSolver<float>;
-
-template
-class PoissonSolver<double>;
-
-template void
-PoissonSolver<float>::load<boost::archive::binary_iarchive>( boost::archive::binary_iarchive &ar,
-                                                             const unsigned int file_version );
-
-template void
-PoissonSolver<double>::save<boost::archive::binary_oarchive>( boost::archive::binary_oarchive &ar,
-                                                              const unsigned int file_version ) const;
-
-template void
-PoissonSolver<double>::load<boost::archive::binary_iarchive>( boost::archive::binary_iarchive &ar,
-                                                              const unsigned int file_version );
-
-template void
-PoissonSolver<float>::save<boost::archive::binary_oarchive>( boost::archive::binary_oarchive &ar,
-                                                             const unsigned int file_version ) const;
 
 template<class PointType>
 template<class Archive>
@@ -63,7 +42,7 @@ PoissonSolver<PointType>::PoissonSolver() {
 	param[11] = 1.0; // fast initialization
 	solverFlags.resize( 4 );
 	SetParameters( param );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::SetParameters( const std::vector<double> &paramIn ) {
@@ -81,7 +60,7 @@ void PoissonSolver<PointType>::SetParameters( const std::vector<double> &paramIn
 
 	// for (int i = 0; i < solverFlags.size(); i++)
 	//	solverFlags[i] = param[8 + i];
-};
+}
 
 template<class PointType>
 std::vector<double> PoissonSolver<PointType>::GetParameters() {
@@ -108,7 +87,7 @@ std::vector<double> PoissonSolver<PointType>::GetParameters() {
 template<class PointType>
 bool compNum( BoundaryPoint<PointType> a, BoundaryPoint<PointType> b ) {
 	return (a.pnum < b.pnum);
-};
+}
 
 int sign( double val ) {
 	if (val == 0)
@@ -144,11 +123,6 @@ double up2d( double hx1, double hx2, double hy1, double hy2, double x, double y 
 }
 
 double down2d( double hx1, double hx2, double hy1, double hy2, double x, double y ) {
-	double res = (hy1 * (hy2 + hy1));
-
-	if (std::isnan( res ) || std::isinf( res )) {
-		int tt = 0;
-	}
 	return 2 / (hy1 * (hy2 + hy1)); // poisson
 }
 
@@ -169,12 +143,6 @@ double up2daxs( double hx1, double hx2, double hy1, double hy2, double x, double
 }
 
 double down2daxs( double hx1, double hx2, double hy1, double hy2, double x, double y ) {
-	double res = (hy1 * (hy2 + hy1));
-
-	if (std::isnan( res ) || std::isinf( res )) {
-		int tt = 0;
-	}
-
 	return 2 / (hy1 * (hy1 + hy2)); // poisson
 }
 
@@ -270,9 +238,9 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersection(
 					pointTmp.value = boundaryConditions->GetPotentialOffset( j );
 					pointTmp.bcnum = j;
 					boundaryPointsIntersectionCondition.push_back( pointTmp );
-				};
+				}
 			}
-		};
+		}
 
 		boundariesList = boundaryConditions->GetDefaultConditionsList();
 		for (int k = 0; k < boundariesList.size(); k++) {
@@ -286,7 +254,7 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersection(
 				pointTmp.value = 0;
 				pointTmp.bcnum = -1;
 				boundaryPointsIntersectionDefault.push_back( pointTmp );
-			};
+			}
 		}
 	}
 
@@ -323,9 +291,9 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersection(
 								pointTmp.value = boundaryConditions->GetPotentialOffset( j );
 								pointTmp.bcnum = j;
 								boundaryPointsIntersectionCondition.push_back( pointTmp );
-							};
+							}
 						}
-					};
+					}
 
 					boundariesList = boundaryConditions->GetDefaultConditionsList();
 					for (int k = 0; k < boundariesList.size(); k++) {
@@ -339,13 +307,13 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersection(
 							pointTmp.value = 0;
 							pointTmp.bcnum = -1;
 							boundaryPointsIntersectionDefault.push_back( pointTmp );
-						};
+						}
 					}
 				}
 			}
 		}
 	}
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::searchBoundaryPointsIntersectionPolar(
@@ -384,9 +352,9 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersectionPolar(
 					pointTmp.value = boundaryConditions->GetPotentialOffset( j );
 					pointTmp.bcnum = j;
 					boundaryPointsIntersectionCondition.push_back( pointTmp );
-				};
+				}
 			}
-		};
+		}
 
 		boundariesList = boundaryConditions->GetDefaultConditionsList();
 		for (int k = 0; k < boundariesList.size(); k++) {
@@ -427,9 +395,9 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersectionPolar(
 								pointTmp.value = boundaryConditions->GetPotentialOffset( j );
 								pointTmp.bcnum = j;
 								boundaryPointsIntersectionCondition.push_back( pointTmp );
-							};
+							}
 						}
-					};
+					}
 
 					boundariesList = boundaryConditions->GetDefaultConditionsList();
 					for (int k = 0; k < boundariesList.size(); k++) {
@@ -443,13 +411,13 @@ void PoissonSolver<PointType>::searchBoundaryPointsIntersectionPolar(
 							pointTmp.value = 0;
 							pointTmp.bcnum = -1;
 							boundaryPointsIntersectionDefault.push_back( pointTmp );
-						};
+						}
 					}
 				}
 			}
 		}
 	}
-};
+}
 
 template<class PointType>
 DGeo::Point<int>
@@ -510,7 +478,7 @@ PoissonSolver<PointType>::closestVertex( const std::shared_ptr<MeshContainer2d<P
 	}
 
 	return result;
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::dist( DGeo::Point<PointType> vert1, DGeo::Point<PointType> vert2 ) {
@@ -521,7 +489,7 @@ double PoissonSolver<PointType>::dist( DGeo::Point<PointType> vert1, DGeo::Point
 
 	double result = sqrt( dx * dx + dy * dy );
 	return result;
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distToEdgeX( DGeo::Edge<PointType> edge,
@@ -579,7 +547,7 @@ double PoissonSolver<PointType>::distToEdgeX( DGeo::Edge<PointType> edge,
 		return std::abs( sqrt( dx * dx + dy * dy ));
 	}
 	return 0;
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distToEdgeY( DGeo::Edge<PointType> edge,
@@ -665,25 +633,25 @@ double PoissonSolver<PointType>::distToEdgeY( DGeo::Edge<PointType> edge,
 		}
 	}
 	return 0;
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distP2PX( DGeo::Point<PointType> vert1,
                                            DGeo::Point<PointType> vert2 ) {
 	return std::abs( vert2.x - vert1.x );
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distP2PY( DGeo::Point<PointType> vert1,
                                            DGeo::Point<PointType> vert2 ) {
 	return std::abs( vert2.y - vert1.y );
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distP2PZ( DGeo::Point<PointType> vert1,
                                            DGeo::Point<PointType> vert2 ) {
 	return std::abs( vert2.z - vert1.z );
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distP2P( DGeo::Point<PointType> vert1, DGeo::Point<PointType> vert2,
@@ -695,7 +663,7 @@ double PoissonSolver<PointType>::distP2P( DGeo::Point<PointType> vert1, DGeo::Po
 	} else {
 		return std::abs( vert2.z - vert1.z );
 	}
-};
+}
 
 template<class PointType>
 DGeo::Point<PointType> normalVectToEdge( DGeo::Edge<PointType> edge ) {
@@ -713,7 +681,7 @@ DGeo::Point<PointType> normalVectToEdge( DGeo::Edge<PointType> edge ) {
 	result.x = x * normk;
 	result.y = y * normk;
 	return result;
-};
+}
 
 template<class PointType>
 BoundaryPoint<PointType> PoissonSolver<PointType>::findBoundaryPoint( int pnumber ) {
@@ -727,7 +695,7 @@ BoundaryPoint<PointType> PoissonSolver<PointType>::findBoundaryPoint( int pnumbe
 	bp.pnum = -1;
 	bp.bcnum = -2;
 	return bp;
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::addNearBoundaryPoint_n( int n ) {
@@ -744,7 +712,7 @@ void PoissonSolver<PointType>::addNearBoundaryPoint_n( int n ) {
 	if (nearBoundaryPoints_n[i] != n) {
 		nearBoundaryPoints_n.insert( nearBoundaryPoints_n.begin() + i, n );
 	}
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::addNearBoundaryPoint_all( int n ) {
@@ -761,17 +729,17 @@ void PoissonSolver<PointType>::addNearBoundaryPoint_all( int n ) {
 	if (nearBoundaryPoints_all[i] != n) {
 		nearBoundaryPoints_all.insert( nearBoundaryPoints_all.begin() + i, n );
 	}
-};
+}
 
 template<class PointType>
 std::vector<int> PoissonSolver<PointType>::getNearBoundarypoints_n() {
 	return nearBoundaryPoints_n;
-};
+}
 
 template<class PointType>
 std::vector<int> PoissonSolver<PointType>::getNearBoundarypoints_all() {
 	return nearBoundaryPoints_all;
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::addBoundaryPoint( BoundaryPoint<PointType> bpoint ) {
@@ -801,7 +769,7 @@ void PoissonSolver<PointType>::addBoundaryPoint( BoundaryPoint<PointType> bpoint
 		boundaryPoints.insert( boundaryPoints.begin() + i, bpoint );
 		ibPoints.insert( ibPoints.begin() + i, intersec_p );
 	}
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::addBoundaryPoint( BoundaryPoint<PointType> bpoint,
@@ -850,10 +818,10 @@ void PoissonSolver<PointType>::addBoundaryPoint( BoundaryPoint<PointType> bpoint
 			} else {
 				boundaryPoints[i].edge.point1 = ipoint;
 				boundaryPoints[i].edge.point2 = ibPoints[i].ipoint;
-			};
+			}
 		}
 	}
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::noteBoundaryOnMesh(
@@ -1075,7 +1043,7 @@ void PoissonSolver<PointType>::noteBoundaryOnMesh(
 
 	// i need to sort boundary points
 	std::sort( boundaryPoints.begin(), boundaryPoints.end(), compNum<PointType> );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::createMatrix( const std::shared_ptr<MeshContainer2d<PointType>> &mesh,
@@ -1459,15 +1427,15 @@ void PoissonSolver<PointType>::createMatrix( const std::shared_ptr<MeshContainer
 		//		kZeros[k] = -1;
 		//	else
 		//		kZeros[k] = 0;
-	};
-};
+	}
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::createMatrix3d(
 		const std::shared_ptr<MeshContainer3d<PointType>> &mesh, coeff3d left, coeff3d right,
 		coeff3d up, coeff3d down, coeff3d outward, coeff3d deep, coeff3d middle ) {
 
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::InitSolver(
@@ -1509,7 +1477,7 @@ void PoissonSolver<PointType>::InitSolver(
 	polar = false;
 	noteBoundaryOnMesh( mesh, boundaries, boundaryConditions, progress );
 	createMatrix( mesh, left2d, right2d, up2d, down2d, middle2d );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::InitSolver(
@@ -1556,7 +1524,7 @@ void PoissonSolver<PointType>::InitSolver(
 	polar = false;
 	noteBoundaryOnMesh( mesh, boundaries, boundaryConditions, progress );
 	createMatrix( mesh, left2daxs, right2daxs, up2daxs, down2daxs, middle2daxs );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::InitSolver(
@@ -1640,7 +1608,7 @@ void PoissonSolver<PointType>::InitSolver(
 	polar = true;
 	noteBoundaryOnMesh( mesh_copy, boundaries, boundaryConditions, progress );
 	createMatrix( mesh_copy, left2dpolar, right2dpolar, up2dpolar, down2dpolar, middle2dpolar );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::InitSolver(
@@ -1731,7 +1699,7 @@ void PoissonSolver<PointType>::InitSolver(
 	}
 
 	createMatrix3d( mesh, left3d, right3d, up3d, down3d, outward3d, deep3d, middle3d );
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulate(
@@ -1745,7 +1713,7 @@ void PoissonSolver<PointType>::FieldSimulate(
 	                             gridData->Get_ExA());
 	fieldCalculation_Simple_FDE( gridData->GetVA(), gridData->GetVA(), mesh, 'y',
 	                             gridData->Get_EyA());
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulate(
@@ -1759,7 +1727,7 @@ void PoissonSolver<PointType>::FieldSimulate(
 	                             gridData->Get_ErA());
 	fieldCalculation_Simple_FDE( gridData->GetVA(), gridData->GetVA(), mesh, 'y',
 	                             gridData->Get_EzA());
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::CreateSolutionSpace(
@@ -1798,7 +1766,7 @@ void PoissonSolver<PointType>::CreateSolutionSpace(
 			} else
 				break;
 		}
-	};
+	}
 
 	for (int i = 0; i < indexes.size(); i++) {
 		for (int j = -s; j < 0; j++) {
@@ -1822,13 +1790,13 @@ void PoissonSolver<PointType>::CreateSolutionSpace(
 			} else
 				break;
 		}
-	};
+	}
 
 	Vtmp = xCharge;
 	memset( &xCharge[0], 0, xCharge.size() * sizeof( xCharge[0] ));
 	for (int i = 0; i < nonZerosV.size(); i++)
 		xCharge[nonZerosV[i]] = Vtmp[nonZerosV[i]];
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulateCharge(
@@ -1869,7 +1837,7 @@ void PoissonSolver<PointType>::FieldSimulateCharge(
 
 	for (int i = 0; i < nonZerosV.size(); i++)
 		templ[nonZerosV[i]] = 0;
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulateCharge(
@@ -1910,7 +1878,7 @@ void PoissonSolver<PointType>::FieldSimulateCharge(
 
 	for (int i = 0; i < nonZerosV.size(); i++)
 		templ[nonZerosV[i]] = 0;
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulate(
@@ -1924,7 +1892,7 @@ void PoissonSolver<PointType>::FieldSimulate(
 	                             gridData->Get_Er());
 	fieldCalculation_Simple_FDE( gridData->GetVA(), gridData->GetV(), mesh_copy, 'y',
 	                             gridData->Get_Ephi());
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::FieldSimulate(
@@ -1935,7 +1903,7 @@ void PoissonSolver<PointType>::FieldSimulate(
 	fieldCalculation_Simple_FDE( gridData->GetV(), gridData->GetV(), mesh, 'x', gridData->Get_Ex());
 	fieldCalculation_Simple_FDE( gridData->GetV(), gridData->GetV(), mesh, 'y', gridData->Get_Ey());
 	fieldCalculation_Simple_FDE( gridData->GetV(), gridData->GetV(), mesh, 'z', gridData->Get_Ez());
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
@@ -2013,7 +1981,7 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 				E[m] = 0;
 		}
 	}
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
@@ -2096,7 +2064,7 @@ void PoissonSolver<PointType>::fieldCalculation_Simple_FDE(
 			}
 		}
 	}
-};
+}
 
 template<class PointType>
 double PoissonSolver<PointType>::distToEdge( DGeo::Edge<PointType> edge,
@@ -2106,7 +2074,7 @@ double PoissonSolver<PointType>::distToEdge( DGeo::Edge<PointType> edge,
 	} else {
 		return distToEdgeY( edge, point );
 	}
-};
+}
 
 template<class PointType>
 DGeo::Point<int>
@@ -2117,7 +2085,7 @@ PoissonSolver<PointType>::doStep( const std::shared_ptr<MeshContainer2d<PointTyp
 	} else {
 		return mesh->doStepY( point, step );
 	}
-};
+}
 
 template<class PointType>
 DGeo::Point<int>
@@ -2130,7 +2098,7 @@ PoissonSolver<PointType>::doStep( const std::shared_ptr<MeshContainer3d<PointTyp
 	} else {
 		return mesh->doStepZ( point, step );
 	}
-};
+}
 
 template<typename T>
 void write_out( const std::vector<T> &to_out, const std::string &out_name ) {
@@ -2140,7 +2108,6 @@ void write_out( const std::vector<T> &to_out, const std::string &out_name ) {
 		out_stream << std::setprecision(16) << to_out[i] << std::endl;
 	out_stream.close();
 }
-
 
 template<class PointType>
 void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<PointType> &V,
@@ -2679,7 +2646,7 @@ void PoissonSolver<PointType>::solve( std::vector<PointType> &rho, std::vector<P
 
 	strange_points.clear();
 	progress = 1;
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::solveCharge(
@@ -2718,18 +2685,18 @@ void PoissonSolver<PointType>::solveCharge(
 	for (s1 = 0; s1 < rho.size(); s1++) {
 		if (rho[s1] != 0)
 			break;
-	};
+	}
 
 	int s2;
 	for (s2 = rho.size() - 1; s2 >= 0; s2--) {
 		if (rho[s2] != 0)
 			break;
-	};
+	}
 
 	if (s1 == rho.size() || s2 == -1) {
 		memset( &xCharge[0], 0, xCharge.size() * sizeof( xCharge[0] ));
 		return;
-	};
+	}
 
 	if (solverFlags[0] == 1) {
 		std::vector<double> r, r_, v_, p, s, t_;
@@ -2874,7 +2841,7 @@ void PoissonSolver<PointType>::solveCharge(
 				if (kZeros[k] == -1) {
 					xCharge[n] = 0;
 					continue;
-				};
+				}
 
 				tmp_sum = -(xCharge[rights[k]] * c_rights[k] + xCharge[lefts[k]] * c_lefts[k] +
 				            xCharge[ups[k]] * c_ups[k] + xCharge[downs[k]] * c_downs[k]) *
@@ -3165,7 +3132,7 @@ void PoissonSolver<PointType>::solveCharge(
     {
             V[mesh->meshData[0][i].Number] = V[mesh->meshData[1][i].Number];
     };*/
-};
+}
 
 template<class PointType>
 void PoissonSolver<PointType>::solve_3d(
@@ -3173,7 +3140,7 @@ void PoissonSolver<PointType>::solve_3d(
 		const std::shared_ptr<MeshContainer3d<PointType>> &mesh,
 		const std::shared_ptr<BoundaryConditions> &boundaryConditions, double t ) {
 
-};
+}
 
 template<class PointType>
 bool PoissonSolver<PointType>::isIntersection( DGeo::Edge<PointType> boundary_edge,
@@ -3188,4 +3155,23 @@ bool PoissonSolver<PointType>::isIntersection( DGeo::Edge<PointType> boundary_ed
 		                        edge.point2.y );
 		return boundary_edge.IsIntersectionEdge( edge, eps );
 	}
-};
+}
+
+template class PoissonSolver<float>;
+template class PoissonSolver<double>;
+
+template void
+PoissonSolver<float>::load<boost::archive::binary_iarchive>( boost::archive::binary_iarchive &ar,
+                                                             const unsigned int file_version );
+
+template void
+PoissonSolver<double>::save<boost::archive::binary_oarchive>( boost::archive::binary_oarchive &ar,
+                                                              const unsigned int file_version ) const;
+
+template void
+PoissonSolver<double>::load<boost::archive::binary_iarchive>( boost::archive::binary_iarchive &ar,
+                                                              const unsigned int file_version );
+
+template void
+PoissonSolver<float>::save<boost::archive::binary_oarchive>( boost::archive::binary_oarchive &ar,
+                                                             const unsigned int file_version ) const;

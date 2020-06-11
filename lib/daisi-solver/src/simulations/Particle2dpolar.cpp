@@ -2,22 +2,6 @@
 #include "Dmath.h"
 #include <Constants.h>
 
-//// 0 r 1 phi 2 x 3 y 4 phiReal 5 xReal 6 yReal,
-////
-template class Particles2dpolar<double>;
-template class Particles2dpolar<float>;
-
-template void
-Particles2dpolar<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                               const unsigned int file_version);
-template void Particles2dpolar<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void Particles2dpolar<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-template void
-Particles2dpolar<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                                const unsigned int file_version);
 
 template <class PointType>
 template <class Archive>
@@ -210,3 +194,20 @@ void Particles2dpolar<PointType>::GetBeamMeasuriments(std::vector<std::vector<Po
 template <class PointType>
 void Particles2dpolar<PointType>::GetEmittanceData(std::vector<std::vector<float>>& data,
                                                    int emFlag, double mass, double lambda){};
+
+//// 0 r 1 phi 2 x 3 y 4 phiReal 5 xReal 6 yReal,
+////
+template class Particles2dpolar<double>;
+template class Particles2dpolar<float>;
+
+template void
+Particles2dpolar<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                               const unsigned int file_version);
+template void Particles2dpolar<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void Particles2dpolar<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+template void
+Particles2dpolar<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                                const unsigned int file_version);

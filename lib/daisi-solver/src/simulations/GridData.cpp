@@ -3,25 +3,6 @@
 #include "FlagStringsSolver.h"
 #include "Geom.h"
 
-template class GridDataBase<double>;
-template class GridDataBase<float>;
-template class NearCathodeVolume<double>;
-template class NearCathodeVolume<float>;
-
-template void
-GridDataBase<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                           const unsigned int file_version);
-template void
-GridDataBase<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                            const unsigned int file_version) const;
-
-template void
-GridDataBase<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                            const unsigned int file_version);
-
-template void
-GridDataBase<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                           const unsigned int file_version) const;
 
 template <class PointType>
 template <class Archive>
@@ -34,7 +15,8 @@ void GridDataBase<PointType>::save(Archive& ar, const unsigned int) const
     ar& B;
     ar& flagOut;
     ar& CICArray;
-};
+}
+
 template <class PointType>
 template <class Archive>
 void GridDataBase<PointType>::load(Archive& ar, const unsigned int)
@@ -48,7 +30,8 @@ void GridDataBase<PointType>::load(Archive& ar, const unsigned int)
     ar& flagOut;
     ar& CICArray;
     Init();
-};
+}
+
 template <class PointType>
 void GridDataBase<PointType>::Init()
 {
@@ -58,7 +41,7 @@ void GridDataBase<PointType>::Init()
     ECol.resize(EA.size());
     for (int i = 0; i < ECol.size(); i++)
         ECol[i].resize(EA[i].size());
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::GetDataIntFlag(void* Array[1], int& size, int& sizeElement, int flag,
@@ -93,7 +76,7 @@ void GridDataBase<PointType>::GetDataIntFlag(void* Array[1], int& size, int& siz
 		if (flag == 1)
 			Array[0] = (void*)(&X[1][0]);
 	}
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::ZeroingFieldsBase()
@@ -110,19 +93,20 @@ template <class PointType>
 GridDataBase<PointType>::GridDataBase()
 {
     rho.resize(1);
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::ZeroingFields(){
 
-};
+}
+
 template <class PointType>
 void GridDataBase<PointType>::ApplyTimeDepending(PointType frequency, PointType phase,
                                                  PointType time, std::vector<int>& nonZeros)
 {
 
     PointType k = std::cos(2 * PI() * frequency * time + phase);
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::ApplyTimeDepending(const std::vector<double>& globalPar, double time)
@@ -143,7 +127,7 @@ void GridDataBase<PointType>::ApplyTimeDepending(const std::vector<double>& glob
         V[i]   = VA[i] * k;
 
     //+ VCharge[i];
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::ApplyTimeDepending(PointType frequency, PointType phase,
@@ -159,7 +143,7 @@ void GridDataBase<PointType>::ApplyTimeDepending(PointType frequency, PointType 
     //V[i] = VA[i] + VCharge[i];
     };*/
 
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::Clear()
@@ -177,7 +161,7 @@ void GridDataBase<PointType>::Clear()
     VCharge.clear();
     flagOut.clear();
     CICArray.clear();
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::SetCells(Dmath::imat& flagMatrix, Dmath::imat& templNumb,
@@ -201,10 +185,10 @@ void GridDataBase<PointType>::SetCells(Dmath::imat& flagMatrix, Dmath::imat& tem
                 }
                 else
                     CICArray.push_back(-1);
-            };
-        };
-    };
-};
+            }
+        }
+    }
+}
 
 template <class PointType>
 void GridDataBase<PointType>::Init(std::vector<DGeo::Point<PointType>> serialMeshData,
@@ -233,7 +217,7 @@ void GridDataBase<PointType>::Init(std::vector<DGeo::Point<PointType>> serialMes
         EA.resize(2);
         ECol.resize(2);
         break;
-    };
+    }
     int n = serialMeshData.size();
     for (int i = 0; i < X.size(); i++)
     {
@@ -241,7 +225,7 @@ void GridDataBase<PointType>::Init(std::vector<DGeo::Point<PointType>> serialMes
         E[i].resize(n);
         EA[i].resize(n);
         ECol[i].resize(n);
-    };
+    }
     for (int i = 0; i < B.size(); i++)
         B[i].resize(n);
 
@@ -257,14 +241,14 @@ void GridDataBase<PointType>::Init(std::vector<DGeo::Point<PointType>> serialMes
         {
             X[0][i] = serialMeshData[i].x;
             X[1][i] = serialMeshData[i].y;
-        };
-    };
+        }
+    }
     if (problemType == 3)
     {
         for (int i = 0; i < serialMeshData.size(); i++)
             Dmath::Cartesian2Polar(serialMeshData[i].x, serialMeshData[i].y, X[0][i], X[1][i]);
-    };
-};
+    }
+}
 
 template <class PointType>
 void GridDataBase<PointType>::Summrho()
@@ -279,7 +263,7 @@ void GridDataBase<PointType>::Summrho()
                 vdAdd(rho[0].size(), (double*)&rho[0][0], (double*)&rho[i][0],
         (double*)&rho[0][0]);*/
     }
-};
+}
 
 template <class PointType>
 void GridDataBase<PointType>::densityReset()
@@ -288,19 +272,19 @@ void GridDataBase<PointType>::densityReset()
     {
         memset(&rho[i][0], 0, rho[i].size() * sizeof(rho[0][0]));
     }
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridDataBase<PointType>::Getrho()
 {
     return rho[0];
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridDataBase<PointType>::GetV()
 {
     return V;
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridDataBase<PointType>::GetVCharge()
@@ -320,7 +304,7 @@ void GridDataBase<PointType>::InitParallel(int numThreads)
     rho.resize(numThreads);
     for (int i = 1; i < numThreads; i++)
         rho[i].resize(rho[0].size());
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridDataBase<PointType>::Getrho(int thread)
@@ -413,7 +397,7 @@ NearCathodeVolume<PointType>::NearCathodeVolume(DGeo::Edge<PointType> Edge1In,
 
     normalX[3] = ptmp.x - Edge[3].Middle().x;
     normalY[3] = ptmp.y - Edge[3].Middle().y;
-};
+}
 
 template <class PointType>
 bool NearCathodeVolume<PointType>::InCell(PointType x1, PointType x2) const
@@ -453,7 +437,7 @@ bool NearCathodeVolume<PointType>::InCell(PointType x1, PointType x2) const
         return true;
 
     return false;
-};
+}
 
 template <class PointType>
 bool GridDataBase<PointType>::SearchIntersectionWithEdge(int                     cellNumb,
@@ -472,3 +456,24 @@ bool GridDataBase<PointType>::SearchIntersectionWithEdge(int                    
 
     return false;
 }
+
+
+template class GridDataBase<double>;
+template class GridDataBase<float>;
+template class NearCathodeVolume<double>;
+template class NearCathodeVolume<float>;
+
+template void
+GridDataBase<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                           const unsigned int file_version);
+template void
+GridDataBase<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                            const unsigned int file_version) const;
+
+template void
+GridDataBase<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                            const unsigned int file_version);
+
+template void
+GridDataBase<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                           const unsigned int file_version) const;

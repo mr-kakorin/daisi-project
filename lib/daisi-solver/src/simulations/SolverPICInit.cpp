@@ -11,11 +11,6 @@
 #include <Constants.h>
 #include "BoundaryConditions.h"
 
-template
-class Solver<float>;
-
-template
-class Solver<double>;
 
 template<class PointType>
 void Solver<PointType>::InitLocalVariables(int nflows, int fieldSize) {
@@ -60,7 +55,7 @@ void Solver<PointType>::InitLocalVariables(int nflows, int fieldSize) {
 
   for (int thread = 0; thread < numThreads; thread++)
     blockIndexes[thread].resize(2 * blockSize);
-};
+}
 
 template<class PointType>
 void Solver<PointType>::InitOutputData(
@@ -76,47 +71,7 @@ void Solver<PointType>::InitOutputData(
       outputData.back()[j][i]->Init(SpaceSize, masses[i], charges[i], size, numThreads, 0);
     }
   }
-};
-
-template void Solver<double>::InitSolvers<device2daxsdouble>(
-    const std::shared_ptr<device2daxsdouble> &deviceStatus, int flagRestart, double &progressLoc,
-    std::vector<std::string> &status);
-
-template void
-Solver<float>::InitSolvers<device2daxsfloat>(const std::shared_ptr<device2daxsfloat> &deviceStatus,
-                                             int flagRestart, double &progressLoc,
-                                             std::vector<std::string> &status);
-
-template void
-Solver<double>::InitSolvers<device2ddouble>(const std::shared_ptr<device2ddouble> &deviceStatus,
-                                            int flagRestart, double &progressLoc,
-                                            std::vector<std::string> &status);
-
-template void
-Solver<float>::InitSolvers<device2dfloat>(const std::shared_ptr<device2dfloat> &deviceStatus,
-                                          int flagRestart, double &progressLoc,
-                                          std::vector<std::string> &status);
-
-template void Solver<double>::InitSolvers<device2dpolardouble>(
-    const std::shared_ptr<device2dpolardouble> &deviceStatus, int flagRestart, double &progressLoc,
-    std::vector<std::string> &status);
-
-template void Solver<float>::InitSolvers<device2dpolarfloat>(
-    const std::shared_ptr<device2dpolarfloat> &deviceStatus, int flagRestart, double &progressLoc,
-    std::vector<std::string> &status);
-
-template void
-Solver<double>::InitSolvers<device3ddouble>(const std::shared_ptr<device3ddouble> &deviceStatus,
-                                            int flagRestart, double &progressLoc,
-                                            std::vector<std::string> &status);
-
-template void Solver<float>::InitSolvers<device3dExtrfloat>(
-    const std::shared_ptr<device3dExtrfloat> &deviceStatus, int flagRestart, double &progressLoc,
-    std::vector<std::string> &status);
-
-template void Solver<double>::InitSolvers<device3dExtrdouble>(
-    const std::shared_ptr<device3dExtrdouble> &deviceStatus, int flagRestart, double &progressLoc,
-    std::vector<std::string> &status);
+}
 
 template<class PointType>
 template<class deviceType>
@@ -225,38 +180,7 @@ void Solver<PointType>::InitSolvers(const std::shared_ptr<deviceType> &deviceSta
   progressLoc = 1;
 
   particleMover->flagInit = 1;
-};
-
-template void Solver<double>::CheckConfiguration<device2daxsdouble>(
-    const std::shared_ptr<device2daxsdouble> &deviceStatus, int flagRestart, std::string &errorMsg);
-
-template void Solver<float>::CheckConfiguration<device2daxsfloat>(
-    const std::shared_ptr<device2daxsfloat> &deviceStatus, int flagRestart, std::string &errorMsg);
-
-template void Solver<double>::CheckConfiguration<device2ddouble>(
-    const std::shared_ptr<device2ddouble> &deviceStatus, int flagRestart, std::string &errorMsg);
-
-template void
-Solver<float>::CheckConfiguration<device2dfloat>(const std::shared_ptr<device2dfloat> &deviceStatus,
-                                                 int flagRestart, std::string &errorMsg);
-
-template void Solver<double>::CheckConfiguration<device2dpolardouble>(
-    const std::shared_ptr<device2dpolardouble> &deviceStatus, int flagRestart,
-    std::string &errorMsg);
-
-template void Solver<float>::CheckConfiguration<device2dpolarfloat>(
-    const std::shared_ptr<device2dpolarfloat> &deviceStatus, int flagRestart,
-    std::string &errorMsg);
-
-template void Solver<double>::CheckConfiguration<device3ddouble>(
-    const std::shared_ptr<device3ddouble> &deviceStatus, int flagRestart, std::string &errorMsg);
-
-template void Solver<float>::CheckConfiguration<device3dExtrfloat>(
-    const std::shared_ptr<device3dExtrfloat> &deviceStatus, int flagRestart, std::string &errorMsg);
-
-template void Solver<double>::CheckConfiguration<device3dExtrdouble>(
-    const std::shared_ptr<device3dExtrdouble> &deviceStatus, int flagRestart,
-    std::string &errorMsg);
+}
 
 template<class PointType>
 template<class deviceType>
@@ -272,7 +196,7 @@ void Solver<PointType>::CheckConfiguration(const std::shared_ptr<deviceType> &de
     if (parameters[i] <= 0) {
       errorMsg = errorMsg + "Some input parameter is <=0\n";
       break;
-    };
+    }
   }
   if (!flagRestart && !deviceStatus->isFieldSolverInit)
     errorMsg =
@@ -288,10 +212,84 @@ void Solver<PointType>::CheckConfiguration(const std::shared_ptr<deviceType> &de
   for (int i = 0; i < deviceStatus->GetNumberParticlesFlows(); i++) {
     if (!deviceStatus->GetFlow(i)->isConfigure())
       errorMsg = errorMsg + "flow " + std::to_string(i) + " is not completely configured\n";
-  };
+  }
 
   if (particleMover->params[1] == 2 && std::abs(deviceStatus->GetglobalFieldConditions()[0]) < 1e-9)
     errorMsg =
         errorMsg +
         "Unable to use this timestep estimation method. Global frequency is very small\n";
-};
+}
+
+template class Solver<float>;
+template class Solver<double>;
+
+template void Solver<double>::CheckConfiguration<device2daxsdouble>(
+        const std::shared_ptr<device2daxsdouble> &deviceStatus, int flagRestart, std::string &errorMsg);
+
+template void Solver<float>::CheckConfiguration<device2daxsfloat>(
+        const std::shared_ptr<device2daxsfloat> &deviceStatus, int flagRestart, std::string &errorMsg);
+
+template void Solver<double>::CheckConfiguration<device2ddouble>(
+        const std::shared_ptr<device2ddouble> &deviceStatus, int flagRestart, std::string &errorMsg);
+
+template void
+Solver<float>::CheckConfiguration<device2dfloat>(const std::shared_ptr<device2dfloat> &deviceStatus,
+                                                 int flagRestart, std::string &errorMsg);
+
+template void Solver<double>::CheckConfiguration<device2dpolardouble>(
+        const std::shared_ptr<device2dpolardouble> &deviceStatus, int flagRestart,
+        std::string &errorMsg);
+
+template void Solver<float>::CheckConfiguration<device2dpolarfloat>(
+        const std::shared_ptr<device2dpolarfloat> &deviceStatus, int flagRestart,
+        std::string &errorMsg);
+
+template void Solver<double>::CheckConfiguration<device3ddouble>(
+        const std::shared_ptr<device3ddouble> &deviceStatus, int flagRestart, std::string &errorMsg);
+
+template void Solver<float>::CheckConfiguration<device3dExtrfloat>(
+        const std::shared_ptr<device3dExtrfloat> &deviceStatus, int flagRestart, std::string &errorMsg);
+
+template void Solver<double>::CheckConfiguration<device3dExtrdouble>(
+        const std::shared_ptr<device3dExtrdouble> &deviceStatus, int flagRestart,
+        std::string &errorMsg);
+
+template void Solver<double>::InitSolvers<device2daxsdouble>(
+        const std::shared_ptr<device2daxsdouble> &deviceStatus, int flagRestart, double &progressLoc,
+        std::vector<std::string> &status);
+
+template void
+Solver<float>::InitSolvers<device2daxsfloat>(const std::shared_ptr<device2daxsfloat> &deviceStatus,
+                                             int flagRestart, double &progressLoc,
+                                             std::vector<std::string> &status);
+
+template void
+Solver<double>::InitSolvers<device2ddouble>(const std::shared_ptr<device2ddouble> &deviceStatus,
+                                            int flagRestart, double &progressLoc,
+                                            std::vector<std::string> &status);
+
+template void
+Solver<float>::InitSolvers<device2dfloat>(const std::shared_ptr<device2dfloat> &deviceStatus,
+                                          int flagRestart, double &progressLoc,
+                                          std::vector<std::string> &status);
+
+template void Solver<double>::InitSolvers<device2dpolardouble>(
+        const std::shared_ptr<device2dpolardouble> &deviceStatus, int flagRestart, double &progressLoc,
+        std::vector<std::string> &status);
+
+template void Solver<float>::InitSolvers<device2dpolarfloat>(
+        const std::shared_ptr<device2dpolarfloat> &deviceStatus, int flagRestart, double &progressLoc,
+        std::vector<std::string> &status);
+
+template void
+Solver<double>::InitSolvers<device3ddouble>(const std::shared_ptr<device3ddouble> &deviceStatus,
+                                            int flagRestart, double &progressLoc,
+                                            std::vector<std::string> &status);
+
+template void Solver<float>::InitSolvers<device3dExtrfloat>(
+        const std::shared_ptr<device3dExtrfloat> &deviceStatus, int flagRestart, double &progressLoc,
+        std::vector<std::string> &status);
+
+template void Solver<double>::InitSolvers<device3dExtrdouble>(
+        const std::shared_ptr<device3dExtrdouble> &deviceStatus, int flagRestart, double &progressLoc,
+        std::vector<std::string> &status);
