@@ -89,7 +89,7 @@ namespace Dproject {
 
         fscanf(fp, "%d", &tmp);
 
-        fscanf(fp, "%s", tmps, 256);
+        fscanf(fp, "%s", tmps);
 
         fclose(fp);
     }
@@ -123,7 +123,7 @@ namespace Dproject {
         fscanf(fp, "%d", &tmp);
         solverType = tmp;
 
-        fscanf(fp, "%s", tmps, 256);
+        fscanf(fp, "%s", tmps);
 
         fclose(fp);
 
@@ -350,7 +350,6 @@ namespace Dproject {
         catch (std::exception &er) {
             std::string err = er.what();
             std::cout << er.what();
-            int tt = 0;
         }
     }
 

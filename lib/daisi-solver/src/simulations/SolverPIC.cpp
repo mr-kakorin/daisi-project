@@ -44,7 +44,6 @@ void Solver<PointType>::SimulateCPUPIC(
                    deviceStatus->GetMasses(), deviceStatus->GetCharges(), sizeof(PointType));
 
     deviceStatus->initParallel(numThreads, flagRestart, memorySize, 1, blockSize);
-
     status.push_back("Solvers initialization");
     InitSolvers(deviceStatus, flagRestart, progressLoc, status);
 
@@ -56,7 +55,6 @@ void Solver<PointType>::SimulateCPUPIC(
 
 #pragma omp parallel num_threads(numThreads)
     {
-
         while (1)
         {
 

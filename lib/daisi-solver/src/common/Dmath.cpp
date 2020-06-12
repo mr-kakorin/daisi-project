@@ -65,8 +65,8 @@ double Dmath::Interpolate(const std::vector<double>& X, const std::vector<double
             {
                 I = i;
                 break;
-            };
-        };
+            }
+        }
     }
 
     double w1 = (X[I + 1] - x) / (X[I + 1] - X[I]);

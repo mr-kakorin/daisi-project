@@ -19,6 +19,7 @@ using EnergyDistribution = double(*)();
 class ModelInterface
 {
   public:
+    virtual ~ModelInterface() = default;
     virtual std::vector<double> GetElectrodeParametersList(int number) = 0;
     virtual void setElectrodeParametersList(int number, std::vector<double>& input) = 0;
 	virtual void setEnergyDistribution( EnergyDistribution get_energy_distribution ) {};
@@ -94,7 +95,7 @@ class ModelInterface
 		std::vector<std::vector<float>> resultfloat;
 		std::vector<std::vector<double>>resultdouble = GetEmitterField( flowNumber );
 		resultfloat.resize( resultdouble.size() );
-		for (int i=0; i< resultdouble.size(); ++i)
+		for (int i=0; i < resultdouble.size(); ++i)
 		{
 			resultfloat[i].resize( resultdouble[i].size() );
 			for (int j=0; j<resultdouble[i].size(); ++j)

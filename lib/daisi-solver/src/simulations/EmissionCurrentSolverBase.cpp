@@ -139,11 +139,9 @@ void EmissionCurrentSolverBase<PointType>::SetValueOnSource(
     for (int i = 0; i < points1[flowNumber].size() - 1; i++)
     {
 
-        //	double Val = std::abs(value[i]);
-
-        int dk = istarts[flowNumber][i + 1] - istarts[flowNumber][i];
-
-        double Valold;
+//	      double Val = std::abs(value[i]);
+//        int dk = istarts[flowNumber][i + 1] - istarts[flowNumber][i];
+//        double Valold;
         double k0;
         double k1;
         int    kend;
@@ -211,8 +209,8 @@ void EmissionCurrentSolverBase<PointType>::CalculateCathodeFields(
 {
     double              Ex;
     double              Ey;
-    double              ExCol;
-    double              EyCol;
+//    double              ExCol;
+//    double              EyCol;
     double              ErAverage = 0;
     std::vector<double> test;
     for (int i = 0; i < points1[flowNumber].size(); i++)
@@ -251,6 +249,18 @@ void EmissionCurrentSolverBase<PointType>::init(
     indexesTmp[i] = particleGridInterface->InCell(r,z);
     }
     cellNumbers.push_back(indexesTmp);*/
+    std::ifstream Efile, Bfile;
+    Efile.open("./resources/Evalues.csv");
+    double num;
+    while (Efile >> num) {
+        E_vec.emplace_back(num);
+    }
+    Bfile.close();
+    Bfile.open("./resources/Bettavalues.csv");
+    while (Bfile >> num) {
+        Betta_vec.emplace_back(num);
+    }
+    Bfile.close();
 
     int flowNumber = -1;
 
@@ -263,17 +273,9 @@ void EmissionCurrentSolverBase<PointType>::init(
     if (flowNumber == -1)
         return;
 
-    // int flowNumber = nearCathodeVolumes.size();
-
     nearCathodeVolumes.resize(flowNumber + 1);
     emittingCutEdge.resize(flowNumber + 1);
     CathodeFields.resize(flowNumber + 1);
-
-    PointType r;
-    PointType z;
-
-    PointType dr;
-    PointType dz;
 
     std::vector<DGeo::Point<PointType>> points1tmp;
     std::vector<DGeo::Point<PointType>> points2tmp;
@@ -291,7 +293,6 @@ void EmissionCurrentSolverBase<PointType>::init(
 
     for (int i = 0; i < source->sourceSurface.size(); i++)
     {
-
         LCurrent = source->sourceSurface[i].curveLength;
 
         int flagLast = 1;
@@ -304,8 +305,7 @@ void EmissionCurrentSolverBase<PointType>::init(
 
         if ((LCurrent >= dL * n && flagLast) || i == source->sourceSurface.size() - 1)
         {
-
-            DGeo::Point<PointType> p1, p2;
+            //DGeo::Point<PointType> p1, p2;
 
             DGeo::Edge<PointType> edgeIntersect;
             edgeIntersect.point1 = source->sourceSurface[istartstmp.back()].extractingEdge->point1;
@@ -313,45 +313,19 @@ void EmissionCurrentSolverBase<PointType>::init(
 
             emittingCutEdge[flowNumber].push_back(edgeIntersect);
 
-            int iaverage = ceil((i + istartstmp.back()) / 2);
+            int const iaverage = ceil((i + istartstmp.back()) / 2);
 
-            DGeo::Point<PointType> tmp = source->sourceSurface[iaverage].extractingEdge->Middle();
-
-            //	if (flag == 3)
-            //		Dmath::Cartesian2Polar(tmp.x, tmp.y, tmp.x, tmp.y);
-
-            points1tmp.push_back(tmp);
-
-            //		DGeo::Point<PointType> ptest = edgeIntersect.GetNormalPoint1(2 *
-            // Hem[flowNumber]);
-
-            //	if (flag == 3)
-            //			Dmath::Cartesian2Polar(ptest.x, ptest.y, ptest.x, ptest.y);
-
+            points1tmp.emplace_back( source->sourceSurface[iaverage].extractingEdge->Middle() );
             if (source->sourceSurface[iaverage].flagNormal == 1)
             {
-                DGeo::Point<PointType> tmp = edgeIntersect.GetNormalPoint1(Hem[flowNumber]);
-                nearCathodeVolumes[flowNumber].push_back(NearCathodeVolume<PointType>(
-                    edgeIntersect, edgeIntersect.TranslateByNormal1(Hem[flowNumber]),
-                    gridData->GetType(), flagEm));
-
-                //		if (flag == 3)
-                //			Dmath::Cartesian2Polar(tmp.x, tmp.y, tmp.x, tmp.y);
-                points2tmp.push_back(tmp);
+                nearCathodeVolumes[flowNumber].emplace_back( edgeIntersect,edgeIntersect.TranslateByNormal1(Hem[flowNumber]), gridData->GetType(), flagEm);
+                points2tmp.emplace_back( edgeIntersect.GetNormalPoint1(Hem[flowNumber]) );
             }
             else
             {
-                DGeo::Point<PointType> tmp = edgeIntersect.GetNormalPoint2(Hem[flowNumber]);
-
-                nearCathodeVolumes[flowNumber].push_back(NearCathodeVolume<PointType>(
-                    edgeIntersect, edgeIntersect.TranslateByNormal2(Hem[flowNumber]),
-                    gridData->GetType(), flagEm));
-
-                //	if (flag == 3)
-                //		Dmath::Cartesian2Polar(tmp.x, tmp.y, tmp.x, tmp.y);
-                points2tmp.push_back(tmp);
+                nearCathodeVolumes[flowNumber].emplace_back( edgeIntersect,edgeIntersect.TranslateByNormal2(Hem[flowNumber]), gridData->GetType(), flagEm);
+                points2tmp.emplace_back( edgeIntersect.GetNormalPoint2(Hem[flowNumber]) );
             }
-
             istartstmp.push_back(i + 1);
             n++;
         }
@@ -361,8 +335,8 @@ void EmissionCurrentSolverBase<PointType>::init(
 
     K.resize(flowNumber + 1);
     K.back().resize(points1tmp.size());
-    for (int i      = 0; i < points1tmp.size(); i++)
-        K.back()[i] = 0.1;
+    for (int j = 0; j < points1tmp.size(); ++j)
+        K.back()[j] = 0.1;
 
     istartstmp.back();
     gradients.emplace_back( DGeo::calc_grad2d( points1tmp ) );

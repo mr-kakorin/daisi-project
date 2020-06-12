@@ -51,6 +51,8 @@ class EmissionCurrentSolverBase
 
   public:
     int                                                    algorithm;
+    std::vector<double>                                    E_vec;
+    std::vector<double>                                    Betta_vec;
     std::vector<double>                                    Lem;
     std::vector<double>                                    Hem;
     std::vector<int>                                       flowsNumbers;

@@ -2729,7 +2729,6 @@ void PoissonSolver<PointType>::solveCharge(
 				    std::isinf( c_lefts[i] ) || std::isnan( c_ups[i] ) || std::isinf( c_ups[i] ) ||
 				    std::isnan( c_downs[i] ) ||
 				    std::isinf( c_downs[i] ) || std::isnan( c_middles[i] ) || std::isinf( c_middles[i] )) {
-					int tt = 0;
 					continue;
 				}
 
@@ -2755,7 +2754,6 @@ void PoissonSolver<PointType>::solveCharge(
 				    std::isinf( c_lefts[i] ) || std::isnan( c_ups[i] ) || std::isinf( c_ups[i] ) ||
 				    std::isnan( c_downs[i] ) ||
 				    std::isinf( c_downs[i] ) || std::isnan( c_middles[i] ) || std::isinf( c_middles[i] )) {
-					int tt = 0;
 					continue;
 				}
 

@@ -389,7 +389,6 @@ void MeshGenerator<PointType>::MeshGenerate(
   mesh->flagTemplNumb = 1;
 
   flagMeshInit                = true;
-  DGeo::Point<PointType> CurrentPoint;
 
   PointType yCur   = boundary->ymin;
   int       number = 0;
@@ -418,16 +417,15 @@ void MeshGenerator<PointType>::MeshGenerate(
 
   threadIndexes[numThreads] = yC.size();
 
-#pragma omp parallel num_threads(numThreads)
+  #pragma omp parallel default(shared) num_threads(numThreads)
   {
     volatile int thread = omp_get_thread_num();
-
     for (int yNum = threadIndexes[thread]; yNum < threadIndexes[thread + 1]; yNum++)
     {
       if (thread == numThreads - 1)
         progress = double(std::abs(yNum - threadIndexes[thread])) /
                    double(std::abs(threadIndexes[thread + 1] - threadIndexes[thread]));
-
+      DGeo::Point<PointType> CurrentPoint;
       CurrentPoint.x = boundary->xmin;
       CurrentPoint.y = yC[yNum];
       CurrentPoint.z = 0;
@@ -438,9 +436,7 @@ void MeshGenerator<PointType>::MeshGenerate(
         h2 = yC[yNum + 1] - yC[yNum];
 
       RayTrace(epsilon, meshParams, CurrentPoint, mesh->flagMatrix, h1, h2, yNum, boundary);
-
     }
-
   }
 
   int yNum   = 0;
@@ -449,7 +445,7 @@ void MeshGenerator<PointType>::MeshGenerate(
   while (yCur < boundary->ymax + h2)
   {
     progress = yCur / (boundary->ymax + h2);
-
+    DGeo::Point<PointType> CurrentPoint;
     CurrentPoint.x = boundary->xmin;
     CurrentPoint.y = yCur;
     CurrentPoint.z = 0;

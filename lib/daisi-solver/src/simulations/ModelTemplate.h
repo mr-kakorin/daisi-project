@@ -20,6 +20,7 @@ class ModelTemplate : public ModelInterface
     friend class boost::serialization::access;
 
   public:
+    virtual ~ModelTemplate() override = default;
     int  i;
 	virtual void setEnergyDistribution( EnergyDistribution get_energy_distribution ) override {
 		auto dev_em_statuses = deviceStatus->GetEmittersVector();

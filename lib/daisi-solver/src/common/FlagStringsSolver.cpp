@@ -34,5 +34,5 @@ std::vector<std::string> simulationDataNamesFlowPTI   = {"I(iter)", "Er_av(iter)
 
 std::vector<std::string> simulationDataNamesBasePTI = {"Error(iter)"};
 std::vector<std::string> simulationDataNamesBasePIC = {"Error(t)"};
-};
+}
 #endif

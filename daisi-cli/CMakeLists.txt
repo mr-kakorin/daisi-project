@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wno-long-long -pedantic")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -flto -march=native -Os")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -flto -march=native -O3")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

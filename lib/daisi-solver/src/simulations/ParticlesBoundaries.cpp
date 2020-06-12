@@ -548,8 +548,8 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                 DGeo::Point<PointType> velocityPoint1 = traceEdge.Middle();
                 DGeo::Point<PointType> velocityPoint2;
 
-                PointType px = state2->GetCartesianPX(particlesNumbers[k]);
-                PointType py = state2->GetCartesianPY(particlesNumbers[k]);
+//                PointType px = state2->GetCartesianPX(particlesNumbers[k]);
+//                PointType py = state2->GetCartesianPY(particlesNumbers[k]);
 
                 velocityPoint2.x = velocityPoint1.x + state2->GetCartesianPX(particlesNumbers[k]);
                 velocityPoint2.y = velocityPoint1.y + state2->GetCartesianPY(particlesNumbers[k]);

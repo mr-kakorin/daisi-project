@@ -569,10 +569,27 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     return c * (pow(10, powers2[0]) * pow(E, powers2[1]));
   };
 
+    auto find_betta = [this](double E) {
+        double eps = 1e2;
+        int idx = -1;
+        while (idx == -1)
+        {
+            eps*=10;
+            for (int i = 0; i < this->E_vec.size(); ++i)
+            {
+                if ( std::abs( this->E_vec[i] - E ) < eps )
+                    idx = i;
+            }
+        }
+        return this->Betta_vec[idx];
+    };
+
   auto const& grad = this->gradients[flowNumber];
   auto const& source_points = this->points1[flowNumber];
-  for (int i = 0; i < source_points.size(); ++i) {
-    double jnew = 0;
+  std::size_t const source_length = source_points.size();
+  jv.resize( source_length );
+  for (int i = 0; i < source_length; ++i)
+  {
     double Er, Ez;
     double r = source_points[i].x,
            z = source_points[i].y;
@@ -584,26 +601,24 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
 //    double norm_z = this->nearCathodeVolumes[flowNumber][i].normalY[0];
     gridData->interpolatePoint(r, z, 0, Er,Ez);
     double cathField = (Er * norm_r + Ez * norm_z);
-    if (cathField * charge > 0) {
+    if (cathField * charge > 0)
+    {
       ErAverage = ErAverage + std::abs(cathField);
-      jv.push_back(jnew);
+      jv[i] = 0;
       continue;
     }
 
     double E = std::sqrt(Er * Er + Ez * Ez);
-    double betta_eff = powerlaw(E);
+    double betta_eff = find_betta( E );
     double E_eff = betta_eff * E;
     double y_coeff = yc * std::sqrt(E_eff) / wf;
     double y_coeff2 = y_coeff* y_coeff;
     double log_y_coeff = std::log(y_coeff);
 	double v  = 1 - y_coeff2 / 3 * (3 - log_y_coeff);
 	double t2 = 1 + y_coeff2 / 9 * (1 - log_y_coeff);
-
-    jnew = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
+    jv[i] = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
 
     ErAverage = ErAverage + std::abs(cathField);
-
-    jv.push_back(jnew);
   }
   this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
 }

@@ -101,7 +101,7 @@ double integral(double a, double b, _Fn&& _Fx, _Args&&... _Ax)
         f2     = function(currentP);
         result = result + (f2 + f1 + 4 * function(currentP - step / 2)) / 6;
         f1     = f2;
-    };
+    }
     result = result * step;
     return result;
 }
@@ -178,7 +178,7 @@ void erase(std::vector<PointType>& data, std::vector<unsigned int>& ind)
     for (int i = 0; i < ind.size(); i++)
     {
         data[ind[i]] = -1;
-    };
+    }
 
     /*int j;
     for (int i = 0; i < data.size() - 1; i++)

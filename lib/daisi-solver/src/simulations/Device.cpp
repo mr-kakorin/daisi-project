@@ -390,7 +390,7 @@ void DeviceStatus<ParticlesDataType, EmitterDeviceType, GridDataType, PointType,
             errorMsg = errorMsgLoc + " Error string in config is " + std::to_string(i);
             break;
         }
-        int i = 0;
+        //int i = 0;
     }
 
     fclose(fp);
