@@ -40,3 +40,6 @@ solver-build-*
 Makefile
 .cbp
 CMakeFiles
+
+*.csv
+*.txt
