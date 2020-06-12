@@ -229,7 +229,7 @@ class SimulationDataAccel : public DynamicsData
     SimulationDataAccel(const std::vector<std::string>& dataFlagsInput, const std::string& tagIn,
                         int size1, int size2);
     SimulationDataAccel(const std::vector<std::string>& dataFlagsInput, const std::string& tagIn)
-        : tag(tagIn), dataFlags(dataFlagsInput){}
+        : dataFlags(dataFlagsInput), tag(tagIn) {}
     void addData(int position, float XDataIn, const std::vector<float>& YData);
     void addData(int position, float XDataIn, float YData);
     void initSynchrotron(int dataSize, int Ncircle, const std::vector<int>& ind,

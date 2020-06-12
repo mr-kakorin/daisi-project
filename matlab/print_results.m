@@ -42,7 +42,8 @@ Ua = Ua(:,I);
 Ivalues  = Ivalues(:, I);
 p = zeros(1, K+1);
 for kk=1:K
-    p(kk) = plot(Ua(kk,:), Ivalues(kk,:), markers{kk},'LineWidth', 2,'MarkerSize', 10); hold on;
+    p(kk) = plot(Ua(kk,:), Ivalues(kk,:), markers{kk},'LineWidth', 2,'MarkerSize', 10); 
+    hold on;
 end
 p(end) = plot(U, etalon, markers{kk+1} ,'MarkerSize', 10, 'LineWidth', 2);
 xlabel('U (B)','FontSize', 32);
@@ -53,7 +54,8 @@ set(gca,'FontSize',20)
 figure(2);
 pp = zeros(1,K);
 for kk=1:K
-    pp(kk) = plot(Ua(kk,:), (Ivalues(kk,:)-etalon)./etalon * 100 , markers{kk} ,'MarkerSize', 10,'LineWidth', 2); hold on;
+    pp(kk) = plot(Ua(kk,:), (Ivalues(kk,:)-etalon)./etalon * 100 , markers{kk} ,'MarkerSize', 10,'LineWidth', 2); 
+    hold on;
 end
 legend(pp, folders,'FontSize', 16);
 xlabel('U (B)','FontSize', 32);

@@ -93,7 +93,7 @@ void DynamicsData::SetEmptyPlaces(const std::vector<unsigned int>& EmptyPlaces, 
 void DynamicsData::SetRemove(std::vector<unsigned int> EmptyPlaces, int threadNumber)
 {
     int n  = int(saveIndexes[threadNumber].size());
-    int km = EmptyPlaces.size();
+    //int km = EmptyPlaces.size();
 
     n = int(saveIndexes[threadNumber].size());
 
@@ -199,7 +199,7 @@ void DynamicsData::SetData(std::vector<void*> dataIn, float Time, int threadNumb
 {
     if (sizeElement == 0)
         return;
-    int n = int(saveIndexes[threadNumber].size());
+    //int n = int(saveIndexes[threadNumber].size());
 
     float tmp;
     for (int j = 0; j < dataIn.size(); j++)

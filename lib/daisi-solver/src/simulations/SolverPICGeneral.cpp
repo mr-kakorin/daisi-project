@@ -5,7 +5,6 @@
 #include "EmitterDevice3d.h"
 #include "FlagStringsSolver.h"
 #include "GridData.h"
-// #include "LinacModels.h"
 #include "MagneticFieldSolver.h"
 #include "MeshGenerator.h"
 #include "Particle.h"
@@ -16,7 +15,6 @@
 #include "Results.h"
 #include "Solver.h"
 #include <iostream>
-// #include <windows.h>
 
 
 template <class PointType>
@@ -69,7 +67,7 @@ std::vector<std::string> Solver<PointType>::GetVisNames(int solver)
 {
     if (solver == 0)
         return flagStringsSolver::simulationDataNamesBasePIC;
-    if (solver == 1)
+    else
         return flagStringsSolver::simulationDataNamesBasePTI;
 
     //	return  flagStringsSolver::simulationDataNames;
