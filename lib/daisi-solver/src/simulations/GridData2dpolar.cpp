@@ -4,50 +4,54 @@
 #include "Geom.h"
 #include "ParticleShape2d.h"
 
-template class GridData2dpolar<double>;
-template class GridData2dpolar<float>;
 
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_ErCol()
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_EphiCol()
 {
     return this->ECol[1];
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_Er()
 {
     return this->E[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_Ephi()
 {
     return this->E[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_ErA()
 {
     return this->EA[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Get_EphiA()
 {
     return this->EA[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Getr()
 {
     return this->X[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2dpolar<PointType>::Getphi()
 {
     return this->X[1];
-};
+}
 
 template <class PointType>
 float GridData2dpolar<PointType>::GetMaxSixe() const
@@ -62,7 +66,7 @@ float GridData2dpolar<PointType>::GetMaxSixe() const
             Hmax = h;
     }
     return Hmax;
-};
+}
 
 /*template void GridData2dpolar<double>::setF(GridData2daxs<double>& gr);
 template void GridData2dpolar<double>::setF(GridData2daxs<float>& gr);
@@ -102,7 +106,7 @@ int GridData2dpolar<PointType>::InCell(double x1, double x2, double x3) const
     if (i == this->CICArray.size() - 1)
         return -1;
     return i;
-};
+}
 
 template <class PointType>
 float GridData2dpolar<PointType>::interpolatePoint(double x1, double x2, double, std::string value,
@@ -156,7 +160,7 @@ float GridData2dpolar<PointType>::interpolatePoint(double x1, double x2, double,
                                                               this->CICArray[i]);
 
     return result;
-};
+}
 
 template <class PointType>
 int GridData2dpolar<PointType>::InCellWithEps(double x1, double x2, double x3) const
@@ -171,7 +175,7 @@ int GridData2dpolar<PointType>::InCellWithEps(double x1, double x2, double x3) c
     if (i == this->CICArray.size() - 1)
         return -1;
     return i;
-};
+}
 
 template <class PointType>
 std::vector<DGeo::Edge<PointType>> GridData2dpolar<PointType>::GetCellEdgesArray(int cellNumb) const
@@ -220,7 +224,7 @@ std::vector<DGeo::Edge<PointType>> GridData2dpolar<PointType>::GetCellEdgesArray
     edge[3].point2 = p[0];
 
     return edge;
-};
+}
 
 template <class PointType>
 void GridData2dpolar<PointType>::interpolatePoint(double x1, double x2, double x3, double& Exin,
@@ -261,3 +265,6 @@ void GridData2dpolar<PointType>::interpolatePoint(double x1, double x2, double x
 
     Eyin = ErTmp * std::sin(2 * PI() - x2) + EphiTmp * std::cos(2 * PI() - x2);
 }
+
+template class GridData2dpolar<double>;
+template class GridData2dpolar<float>;

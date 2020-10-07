@@ -3,8 +3,6 @@
 #include "GridData.h"
 #include <Constants.h>
 
-template class ParticleShape2dTSC<float>;
-template class ParticleShape2dTSC<double>;
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ChargeCalculate(PointType r1, PointType z1, int index1,
@@ -89,7 +87,7 @@ void ParticleShape2dTSC<PointType>::init(int size, const PointType* x1ArrayIn,
     isBoundary.resize(size);
     cellVolume.resize(size);
     cellNumber = 0;
-};
+}
 
 template <class PointType>
 PointType ParticleShape2dTSC<PointType>::GetH1(int index)
@@ -101,7 +99,7 @@ PointType ParticleShape2dTSC<PointType>::GetH1(int index)
         return x1Array[points[index][5]] - x1Array[index];
 
     return x1Array[points[index][1]] - x1Array[points[index][0]];
-};
+}
 
 template <class PointType>
 PointType ParticleShape2dTSC<PointType>::GetH2(int index)
@@ -116,7 +114,7 @@ PointType ParticleShape2dTSC<PointType>::GetH2(int index)
         return x2Array[points[index][3]] - x2Array[points[index][0]];
 
     return x2Array[points[index][2]] - x2Array[points[index][0]];
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::AddCell(
@@ -159,7 +157,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
             if (levelHighIn == boundarypoints[k] || levelHighIn - 1 == boundarypoints[k] ||
                 levelHighIn + 1 == boundarypoints[k])
                 isBoundary[cellNumber] = 1;
-        };
+        }
         switch (problemType)
         {
 
@@ -172,7 +170,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
                 ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                  (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
             break;
-        };
+        }
     }
     else
     {
@@ -199,7 +197,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
                         ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                          x1Array[cellNumber] * x1Array[cellNumber]);
                 break;
-            };
+            }
             break;
         case 2:
             hx1 = x1Array[pointsIn[1]] - x1Array[pointsIn[0]];
@@ -215,7 +213,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
                     ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                      (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 break;
-            };
+            }
             break;
         case 3:
             hx1 = x1Array[pointsIn[1]] - x1Array[pointsIn[0]];
@@ -237,7 +235,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
                         ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                          x1Array[cellNumber] * x1Array[cellNumber]);
                 break;
-            };
+            }
             break;
         case 4:
             hx1 = x1Array[cellNumber] - x1Array[pointsIn[3]];
@@ -265,10 +263,10 @@ void ParticleShape2dTSC<PointType>::AddCell(
                             (x1Array[cellNumber] * x1Array[cellNumber] -
                              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
                 break;
-            };
+            }
             break;
-        };
-    };
+        }
+    }
 
     /*if (flagBoundaryCell)
     {
@@ -352,7 +350,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
     };*/
 
     cellNumber++;
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::AddCell(
@@ -360,9 +358,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
     unsigned int levelHighIn, char cellTypeIn, std::vector<int> pointsIn,
     const std::vector<int>&                               flagOut,
     const std::shared_ptr<BoundaryContainer2d<PointType>> domainBoundary,
-    const std::vector<int>& boundarypoints, int problemType){
-
-};
+    const std::vector<int>& boundarypoints, int problemType){}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::AddCell(
@@ -370,9 +366,7 @@ void ParticleShape2dTSC<PointType>::AddCell(
     unsigned int levelHighIn, char cellTypeIn, std::vector<int> pointsIn,
     const std::vector<int>&                               flagOut,
     const std::shared_ptr<BoundaryContainer2d<PointType>> domainBoundary,
-    const std::vector<int>& boundarypoints, int problemType){
-
-};
+    const std::vector<int>& boundarypoints, int problemType){}
 
 template <class PointType>
 int ParticleShape2dTSC<PointType>::InCell(PointType x1, PointType x2)
@@ -381,7 +375,7 @@ int ParticleShape2dTSC<PointType>::InCell(PointType x1, PointType x2)
     {
         if (InCell(i, x1, x2))
             return i;
-    };
+    }
     return -1;
 }
 
@@ -400,9 +394,9 @@ bool ParticleShape2dTSC<PointType>::InCell(int index, PointType x1, PointType x2
         return InCell3(index, x1, x2);
     case 4:
         return InCell4(index, x1, x2);
-    };
+    }
     return false;
-};
+}
 
 template <class PointType>
 bool ParticleShape2dTSC<PointType>::InCell0(int index, PointType x1, PointType x2)
@@ -412,7 +406,7 @@ bool ParticleShape2dTSC<PointType>::InCell0(int index, PointType x1, PointType x
     if (std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
         return true;
     return false;
-};
+}
 
 template <class PointType>
 bool ParticleShape2dTSC<PointType>::InCell1(int index, PointType x1, PointType x2)
@@ -420,12 +414,10 @@ bool ParticleShape2dTSC<PointType>::InCell1(int index, PointType x1, PointType x
     PointType H2 = x2Array[points[index][2]] - x2Array[points[index][0]];
     PointType H1 = x1Array[points[index][1]] - x1Array[points[index][0]];
 
-    if (x1 >= x1Array[points[index][0]] && x1 <= x1Array[points[index][1]] &&
+    return x1 >= x1Array[points[index][0]] && x1 <= x1Array[points[index][1]] &&
         x2 >= x2Array[points[index][0]] && x2 <= x2Array[points[index][2]] &&
-        std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
-        return true;
-    return false;
-};
+        std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2;
+}
 
 template <class PointType>
 bool ParticleShape2dTSC<PointType>::InCell2(int index, PointType x1, PointType x2)
@@ -433,11 +425,9 @@ bool ParticleShape2dTSC<PointType>::InCell2(int index, PointType x1, PointType x
     PointType H2 = x2Array[points[index][3]] - x2Array[points[index][0]];
     PointType H1 = x1Array[points[index][1]] - x1Array[points[index][0]];
 
-    if (std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2 &&
-        x2 <= x2Array[points[index][3]] && x2 >= x2Array[points[index][0]])
-        return true;
-    return false;
-};
+    return std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2 &&
+        x2 <= x2Array[points[index][3]] && x2 >= x2Array[points[index][0]];
+}
 
 template <class PointType>
 bool ParticleShape2dTSC<PointType>::InCell3(int index, PointType x1, PointType x2)
@@ -445,11 +435,9 @@ bool ParticleShape2dTSC<PointType>::InCell3(int index, PointType x1, PointType x
     PointType H2 = x2Array[points[index][2]] - x2Array[points[index][0]];
     PointType H1 = x1Array[points[index][1]] - x1Array[points[index][0]];
 
-    if (std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2 &&
-        x1 <= x1Array[points[index][1]] && x1 >= x1Array[points[index][0]])
-        return true;
-    return false;
-};
+    return std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2 &&
+        x1 <= x1Array[points[index][1]] && x1 >= x1Array[points[index][0]];
+}
 
 template <class PointType>
 bool ParticleShape2dTSC<PointType>::InCell4(int index, PointType x1, PointType x2)
@@ -463,7 +451,7 @@ bool ParticleShape2dTSC<PointType>::InCell4(int index, PointType x1, PointType x
             x2 >= x2Array[points[index][0]] && x2 <= x2Array[points[index][3]] &&
             std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
             return true;
-    };
+    }
 
     if (points[index][2] != -2)
     {
@@ -471,7 +459,7 @@ bool ParticleShape2dTSC<PointType>::InCell4(int index, PointType x1, PointType x
             x2 >= x2Array[points[index][0]] && x2 <= x2Array[points[index][4]] &&
             std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
             return true;
-    };
+    }
 
     if (points[index][6] != -1)
     {
@@ -479,7 +467,7 @@ bool ParticleShape2dTSC<PointType>::InCell4(int index, PointType x1, PointType x
             x2 >= x2Array[points[index][3]] && x2 <= x2Array[points[index][6]] &&
             std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
             return true;
-    };
+    }
 
     if (points[index][8] != -1)
     {
@@ -487,16 +475,15 @@ bool ParticleShape2dTSC<PointType>::InCell4(int index, PointType x1, PointType x
             x2 >= x2Array[points[index][3]] && x2 <= x2Array[points[index][6]] &&
             std::abs(x1 - x1Array[index]) < H1 / 2 && std::abs(x2 - x2Array[index]) < H2 / 2)
             return true;
-    };
+    }
 
     return false;
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::WcalculatePolar(int index, PointType x1, PointType x2,
                                                     PointType* W)
-{
-}
+{}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::Wcalculate(int index, PointType x1, PointType x2, PointType* W)
@@ -513,9 +500,9 @@ void ParticleShape2dTSC<PointType>::Wcalculate(int index, PointType x1, PointTyp
         return Wcalculate3(index, x1, x2, W);
     case 4:
         return Wcalculate4(index, x1, x2, W);
-    };
+    }
     return;
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::Wcalculate0(int index, PointType x1, PointType x2, PointType* W)
@@ -609,7 +596,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate1(int index, PointType x1, PointTy
         wx22 =
             PointType(0.5 * (0.5 + xx2) * (0.5 + xx2)) + PointType(0.5 * (0.5 - xx2) * (0.5 - xx2));
         wx21 = 1 - wx22;
-    };
+    }
 
     if (index == points[index][1])
     {
@@ -620,7 +607,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate1(int index, PointType x1, PointTy
         wx22 =
             PointType(0.5 * (0.5 + xx2) * (0.5 + xx2)) + PointType(0.5 * (0.5 - xx2) * (0.5 - xx2));
         wx21 = 1 - wx22;
-    };
+    }
 
     if (index == points[index][2])
     {
@@ -629,7 +616,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate1(int index, PointType x1, PointTy
 
         wx21 = 8.0 * xx2 * xx2 * xx2 - 8.0 * xx2 * xx2 + 3 * xx2;
         wx22 = 1 - wx21;
-    };
+    }
 
     if (index == points[index][3])
     {
@@ -638,13 +625,14 @@ void ParticleShape2dTSC<PointType>::Wcalculate1(int index, PointType x1, PointTy
 
         wx21 = 8.0 * xx2 * xx2 * xx2 - 8.0 * xx2 * xx2 + 3 * xx2;
         wx22 = 1 - wx21;
-    };
+    }
 
     W[0] = wx11 * wx21;
     W[1] = wx12 * wx21;
     W[2] = wx11 * wx22;
     W[3] = wx12 * wx22;
 }
+
 template <class PointType>
 void ParticleShape2dTSC<PointType>::Wcalculate2(int index, PointType x1, PointType x2, PointType* W)
 {
@@ -662,13 +650,13 @@ void ParticleShape2dTSC<PointType>::Wcalculate2(int index, PointType x1, PointTy
         wx22 =
             PointType(0.5 * (0.5 + xx2) * (0.5 + xx2)) + PointType(0.5 * (0.5 - xx2) * (0.5 - xx2));
         wx21 = 1 - wx22;
-    };
+    }
 
     if (index == points[index][4])
     {
         wx21 = 8.0 * xx2 * xx2 * xx2 - 8.0 * xx2 * xx2 + 3 * xx2;
         wx22 = 1 - wx21;
-    };
+    }
 
     PointType X = (x1Array[points[index][1]] - x1) / H1;
 
@@ -683,6 +671,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate2(int index, PointType x1, PointTy
     W[4] = wx22 * wx10;
     W[5] = wx22 * wx11;
 }
+
 template <class PointType>
 void ParticleShape2dTSC<PointType>::Wcalculate3(int index, PointType x1, PointType x2, PointType* W)
 {
@@ -698,13 +687,13 @@ void ParticleShape2dTSC<PointType>::Wcalculate3(int index, PointType x1, PointTy
     {
         wx11 = 8.0 * xx1 * xx1 * xx1 - 8.0 * xx1 * xx1 + 3 * xx1;
         wx12 = 1 - wx11;
-    };
+    }
 
     if (index == points[index][2])
     {
         wx12 = 8.0 * xx1 * xx1 * xx1 - 8.0 * xx1 * xx1 + 3 * xx1;
         wx11 = 1 - wx12;
-    };
+    }
 
     PointType X = (x2Array[points[index][2]] - x2) / H2;
 
@@ -758,8 +747,8 @@ void ParticleShape2dTSC<PointType>::Wcalculate4(int index, PointType x1, PointTy
             W[6] = 0;
             W[7] = 0;
             W[8] = 0;
-        };
-    };
+        }
+    }
 
     if (points[index][2] != -2)
     {
@@ -784,7 +773,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate4(int index, PointType x1, PointTy
             W[7] = 0;
             W[8] = 0;
         }
-    };
+    }
 
     if (points[index][6] != -1)
     {
@@ -809,7 +798,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate4(int index, PointType x1, PointTy
             W[5] = 0;
             W[8] = 0;
         }
-    };
+    }
 
     if (points[index][8] != -1)
     {
@@ -834,7 +823,7 @@ void ParticleShape2dTSC<PointType>::Wcalculate4(int index, PointType x1, PointTy
             W[3] = 0;
             W[7] = 0;
         }
-    };
+    }
 }
 
 template <class PointType>
@@ -854,8 +843,9 @@ void ParticleShape2dTSC<PointType>::ValueInterpolate(int index, const PointType*
         return ValueInterpolate3(index, W, ValueArray, result);
     case 4:
         return ValueInterpolate4(index, W, ValueArray, result);
-    };
-};
+    }
+}
+
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ValueInterpolate0(int index, const PointType* W,
                                                       const std::vector<PointType>& ValueArray,
@@ -876,7 +866,7 @@ void ParticleShape2dTSC<PointType>::ValueInterpolate1(int index, const PointType
     result = 0;
     for (int i = 0; i < 4; i++)
         result = result + W[i] * ValueArray[points[index][i]];
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ValueInterpolate2(int index, const PointType* W,
@@ -886,7 +876,7 @@ void ParticleShape2dTSC<PointType>::ValueInterpolate2(int index, const PointType
     result = 0;
     for (int i = 0; i < 6; i++)
         result = result + W[i] * ValueArray[points[index][i]];
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ValueInterpolate3(int index, const PointType* W,
@@ -896,7 +886,7 @@ void ParticleShape2dTSC<PointType>::ValueInterpolate3(int index, const PointType
     result = 0;
     for (int i = 0; i < 6; i++)
         result = result + W[i] * ValueArray[points[index][i]];
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ValueInterpolate4(int index, const PointType* W,
@@ -909,7 +899,7 @@ void ParticleShape2dTSC<PointType>::ValueInterpolate4(int index, const PointType
         if (points[index][i] != -1)
             result = result + W[i] * ValueArray[points[index][i]];
     }
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ChargeCalculate(int index, const PointType* W,
@@ -929,7 +919,7 @@ void ParticleShape2dTSC<PointType>::ChargeCalculate(int index, const PointType* 
         return ChargeCalculate4(index, W, particleCharge, rho);
     };
     return;
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ChargeCalculate0(int index, const PointType* W,
@@ -944,7 +934,7 @@ void ParticleShape2dTSC<PointType>::ChargeCalculate0(int index, const PointType*
     rho[levelHigh[index] - 1] = rho[levelHigh[index] - 1] + W[6] * particleCharge;
     rho[levelHigh[index]]     = rho[levelHigh[index]] + W[7] * particleCharge;
     rho[levelHigh[index] + 1] = rho[levelHigh[index] + 1] + W[8] * particleCharge;
-};
+}
 
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ChargeCalculate1(int index, const PointType* W,
@@ -979,16 +969,19 @@ void ParticleShape2dTSC<PointType>::ChargeCalculate4(int index, const PointType*
 template <class PointType>
 void ParticleShape2dTSC<PointType>::ChargeZeroing(){
 
-};
+}
 
 template <class PointType>
 PointType ParticleShape2dTSC<PointType>::CellArea()
 {
     return 0;
-};
+}
 
 template <class PointType>
 PointType ParticleShape2dTSC<PointType>::CellVolume(int index)
 {
     return cellVolume[index];
-};
+}
+
+template class ParticleShape2dTSC<float>;
+template class ParticleShape2dTSC<double>;

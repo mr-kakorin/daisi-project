@@ -4,83 +4,74 @@
 #include "Geom.h"
 #include "ParticleShape2d.h"
 
-template class GridData2daxs<double>;
-template class GridData2daxs<float>;
-
-template void
-GridData2daxs<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                            const unsigned int file_version);
-template void
-GridData2daxs<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                             const unsigned int file_version) const;
-
-template void
-GridData2daxs<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                             const unsigned int file_version);
-template void
-GridData2daxs<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                            const unsigned int file_version) const;
 
 template <class PointType>
 template <class Archive>
 void GridData2daxs<PointType>::save(Archive& ar, const unsigned int) const
 {
     ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-};
+}
+
 template <class PointType>
 template <class Archive>
 void GridData2daxs<PointType>::load(Archive& ar, const unsigned int)
 {
     ar& boost::serialization::base_object<GridDataBase<PointType>>(*this);
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_Er()
 {
     return this->E[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_Ez()
 {
     return this->E[1];
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_ErCol()
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_EzCol()
 {
     return this->ECol[1];
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_ErA()
 {
     return this->EA[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Get_EzA()
 {
     return this->EA[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Getr()
 {
     return this->X[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::Getz()
 {
     return this->X[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2daxs<PointType>::GetBphi()
 {
     return this->B[0];
-};
+}
 
 template <class PointType>
 void GridData2daxs<PointType>::interpolatePoint(double x1, double x2, double x3, double& Exin,
@@ -158,7 +149,7 @@ void GridData2daxs<PointType>::GetData(void* Array[1], int& size, int& sizeEleme
         if (flag == flagStringsSolver::PlotFlags2daxs[3])
             Array[0] = (void*)(&this->VCharge[0]);
     }
-};
+}
 
 template <class PointType>
 float GridData2daxs<PointType>::GetMaxSixe() const
@@ -174,7 +165,8 @@ float GridData2daxs<PointType>::GetMaxSixe() const
             Hmax = h;
     }
     return std::max(float(std::abs(this->X[0][1] - this->X[0][0])), float(Hmax));
-};
+}
+
 template <class PointType>
 int GridData2daxs<PointType>::InCell(double x1, double x2, double x3) const
 {
@@ -188,7 +180,7 @@ int GridData2daxs<PointType>::InCell(double x1, double x2, double x3) const
     if (i == this->CICArray.size() - 1)
         return -1;
     return i;
-};
+}
 
 template <class PointType>
 double GridData2daxs<PointType>::interpolatePoint(double x1, double x2, double, std::string value,
@@ -276,7 +268,7 @@ double GridData2daxs<PointType>::interpolatePoint(double x1, double x2, double, 
                                                               this->CICArray[i]);
 
     return result;
-};
+}
 
 template <class PointType>
 std::vector<DGeo::Edge<PointType>> GridData2daxs<PointType>::GetCellEdgesArray(int cellNumb) const
@@ -314,4 +306,21 @@ std::vector<DGeo::Edge<PointType>> GridData2daxs<PointType>::GetCellEdgesArray(i
     edge[3].point2 = p[0];
 
     return edge;
-};
+}
+
+template class GridData2daxs<double>;
+template class GridData2daxs<float>;
+
+template void
+GridData2daxs<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                            const unsigned int file_version);
+template void
+GridData2daxs<double>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                             const unsigned int file_version) const;
+
+template void
+GridData2daxs<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                             const unsigned int file_version);
+template void
+GridData2daxs<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                            const unsigned int file_version) const;

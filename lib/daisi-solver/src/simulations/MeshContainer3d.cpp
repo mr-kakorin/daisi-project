@@ -5,8 +5,6 @@
 #include "GridData.h"
 #include "ParticleGridInterface.h"
 
-template class MeshContainer3d<float>;
-template class MeshContainer3d<double>;
 
 template <class PointType>
 vtkUnstructuredGrid* MeshContainer3d<PointType>::GetVTKGrid(
@@ -49,7 +47,7 @@ vtkUnstructuredGrid* MeshContainer3d<PointType>::GetVTKGrid(
                         {
                             Mindist      = dist;
                             nearestIndex = i;
-                        };
+                        }
                         break;
                     case 1:
                         dist = std::abs(serialMeshData[templNumb(i, j, k)].y - param);
@@ -57,7 +55,7 @@ vtkUnstructuredGrid* MeshContainer3d<PointType>::GetVTKGrid(
                         {
                             Mindist      = dist;
                             nearestIndex = j;
-                        };
+                        }
                         break;
                     case 2:
                         dist = std::abs(serialMeshData[templNumb(i, j, k)].z - param);
@@ -65,10 +63,10 @@ vtkUnstructuredGrid* MeshContainer3d<PointType>::GetVTKGrid(
                         {
                             Mindist      = dist;
                             nearestIndex = k;
-                        };
+                        }
                         break;
                     }
-                };
+                }
             }
         }
     }
@@ -324,18 +322,20 @@ void MeshContainer3d<PointType>::Convert2GridData(
                     gridData->Gety()[i] = serialMeshData[i].y;
                     gridData->Getz()[i] = serialMeshData[i].z;
             };*/
-};
+}
+
 template <class PointType>
 vtkUnstructuredGrid* MeshContainer3d<PointType>::GetVTKGrid()
 {
     return VTKgrid;
-};
+}
+
 template <class PointType>
 vtkSmartPointer<vtkPolyData> MeshContainer3d<PointType>::GetVTKBoundaryPoints()
 {
     vtkSmartPointer<vtkPolyData> pointCloud = vtkSmartPointer<vtkPolyData>::New();
     return pointCloud;
-};
+}
 
 template <class PointType>
 void MeshContainer3d<PointType>::CreateCells()
@@ -384,14 +384,14 @@ void MeshContainer3d<PointType>::CreateCells()
                         celltmp[6] = templNumb(i + 1, j + 1, k + 1);
                         celltmp[7] = templNumb(i, j + 1, k + 1);
                         cellContainer.push_back(celltmp);
-                    };
-                };
-            };
-        };
+                    }
+                }
+            }
+        }
     }
 
     nCell = cellContainer.size();
-};
+}
 
 template <class PointType>
 void MeshContainer3d<PointType>::ConvertMesh2VTKUnstructuredGrid()
@@ -417,7 +417,7 @@ void MeshContainer3d<PointType>::ConvertMesh2VTKUnstructuredGrid()
 
     VTKgrid->SetPoints(points);
     VTKgrid->SetCells(VTK_HEXAHEDRON, cellArray);
-};
+}
 
 template <class PointType>
 DGeo::Point<int> MeshContainer3d<PointType>::doStepY(DGeo::Point<int> mpoint, int step)
@@ -451,7 +451,7 @@ DGeo::Point<int> MeshContainer3d<PointType>::doStepY(DGeo::Point<int> mpoint, in
     {
         return mpoint;
     }
-};
+}
 
 template <class PointType>
 DGeo::Point<int> MeshContainer3d<PointType>::doStepX(DGeo::Point<int> mpoint, int step)
@@ -485,7 +485,7 @@ DGeo::Point<int> MeshContainer3d<PointType>::doStepX(DGeo::Point<int> mpoint, in
     {
         return mpoint;
     }
-};
+}
 
 template <class PointType>
 void MeshContainer3d<PointType>::clear()
@@ -504,7 +504,7 @@ void MeshContainer3d<PointType>::clear()
         VTKgrid->Delete();
     VTKgrid     = NULL;
     resultPlane = NULL;
-};
+}
 
 template <class PointType>
 MeshContainer3d<PointType>::MeshContainer3d()
@@ -547,17 +547,7 @@ DGeo::Point<int> MeshContainer3d<PointType>::doStepZ(DGeo::Point<int> mpoint, in
     {
         return mpoint;
     }
-};
-
-template void MeshContainer3d<float>::serialize<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void MeshContainer3d<double>::serialize<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version);
-
-template void MeshContainer3d<double>::serialize<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void MeshContainer3d<float>::serialize<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version);
+}
 
 template <class PointType>
 template <class Archive>
@@ -575,7 +565,8 @@ void MeshContainer3d<PointType>::save(Archive& ar, const unsigned int) const
     ar& h1;
     ar& h2;
     ar& flagMatrix;
-};
+}
+
 template <class PointType>
 template <class Archive>
 void MeshContainer3d<PointType>::load(Archive& ar, const unsigned int)
@@ -601,4 +592,17 @@ void MeshContainer3d<PointType>::load(Archive& ar, const unsigned int)
         CreateCells();
         ConvertMesh2VTKUnstructuredGrid();
     }
-};
+}
+
+template class MeshContainer3d<float>;
+template class MeshContainer3d<double>;
+
+template void MeshContainer3d<float>::serialize<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void MeshContainer3d<double>::serialize<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version);
+
+template void MeshContainer3d<double>::serialize<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void MeshContainer3d<float>::serialize<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version);

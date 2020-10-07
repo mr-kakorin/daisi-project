@@ -22,11 +22,13 @@ template <class PointType>
 class Edge;
 template <class PointType>
 class Point;
-};
+}
+
 namespace Dmath
 {
 class imat;
-};
+}
+
 template <class PointType>
 class GridData2daxs;
 template <class PointType>
@@ -281,23 +283,17 @@ class ParticleGridInterface
     template <class PointType1>
     void axsPolar(Particles3d<PointType1>*                        particles,
                   const std::shared_ptr<GridData2dpolar<double>>& gridData,
-                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){
-
-    };
+                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){}
 
     template <class PointType1>
     void axsPolar(Particles2dpolar<PointType1>*                   particles,
                   const std::shared_ptr<GridData2dpolar<double>>& gridData,
-                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){
-
-    };
+                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){}
 
     template <class PointType1>
     void axsPolar(Particles2d<PointType1>*                        particles,
                   const std::shared_ptr<GridData2dpolar<double>>& gridData,
-                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){
-
-    };
+                  std::vector<unsigned int> EmptyPlaces, int i1, int i2, int thread){}
 
     std::vector<unsigned int>
     InCellWithEps(const std::shared_ptr<Particles3d<PointType>>& particles, int i1, int i2,

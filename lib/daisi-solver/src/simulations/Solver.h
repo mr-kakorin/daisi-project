@@ -179,7 +179,7 @@ class Solver
         // deviceStatusDevice, deviceStatus->boundariesDevice); 	test(); 		test
         // <<<blocksPerGrid,
         // threadsPerBlock>>>();
-    };
+    }
 
     template <class deviceType>
     void InitFieldSolver(const std::shared_ptr<deviceType>& deviceStatus, double& progress)
@@ -192,7 +192,7 @@ class Solver
                                 deviceStatus->GetboundaryConditions(), progress);
         //		flagInitSolver = 1;
         //	}
-    };
+    }
     template <class deviceType>
     void InitSolvers(const std::shared_ptr<deviceType>& deviceStatus, int flagRestart,
                      double& progressLoc, std::vector<std::string>& status);

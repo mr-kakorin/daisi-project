@@ -7,13 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wno-long-long -pedantic")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -flto -march=native -Os")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -flto -march=native -O3")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -fPIC")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld -fPIC")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi -v")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
 endif()
 
 add_subdirectory(../lib/daisi-solver "${CMAKE_CURRENT_BINARY_DIR}/daisi-solver")
@@ -44,8 +44,9 @@ include_directories(src)
 
 aux_source_directory(src SRC)
 
-add_executable(${PROJECT_NAME} 
+add_executable(${PROJECT_NAME}
                ${SRC})
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
 
 target_link_libraries(${PROJECT_NAME}
                       ${Boost_LIBRARIES}

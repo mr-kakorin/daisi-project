@@ -4,21 +4,20 @@
 #include "Geom.h"
 #include "geomTools.h"
 #include <Constants.h>
+#include <cmath>
 
-template class ElectrodeCurrent<float>;
-template class ElectrodeCurrent<double>;
 
 template <class PointType>
 std::vector<double> ElectrodeCurrent<PointType>::GetParameteres()
 {
     return parameters;
-};
+}
 
 template <class PointType>
 void ElectrodeCurrent<PointType>::SetParameteres(const std::vector<double>& input)
 {
     parameters = input;
-};
+}
 
 template <class PointType>
 ElectrodeCurrent<PointType>::ElectrodeCurrent()
@@ -26,18 +25,20 @@ ElectrodeCurrent<PointType>::ElectrodeCurrent()
     parameters.resize(2);
     parameters[0] = 200;
     parameters[1] = 20;
-};
+}
 
 template <class PointType>
 double ElectrodeCurrent<PointType>::GetCurrent()
 {
     return totalCurrent;
-};
+}
+
 template <class PointType>
 void ElectrodeCurrent<PointType>::SetCurrent(PointType cur)
 {
     totalCurrent = cur;
-};
+}
+
 template <class PointType>
 void ElectrodeCurrent<PointType>::InitParallel(int numThreads)
 {
@@ -62,7 +63,7 @@ void ElectrodeCurrent<PointType>::InitParallel(int numThreads)
         {
             EnergyAtPointsThreaded[i][j]  = 0;
             CurrentAtPointsThreaded[i][j] = 0;
-        };
+        }
     }
 
     for (int j = 0; j < averageIrradiatedPowerDensity.size(); j++)
@@ -77,13 +78,14 @@ void ElectrodeCurrent<PointType>::InitParallel(int numThreads)
     EnergyAtPointsLongTimes.clear();
     CurrentAtPointsTimes.clear();
     EnergyAtPointsTimes.clear();
-};
+}
+
 template <class PointType>
 void ElectrodeCurrent<PointType>::SetBoundaryList(
     std::vector<int> list, std::vector<std::shared_ptr<BoundaryContainer3d<PointType>>>& boundaries,
     std::string& errorMsg){
 
-};
+}
 
 /*template std::vector<std::vector<float>>  ElectrodeCurrent<double>::GetElectrodeValue<float>(int
 flag); template std::vector<std::vector<double>>
@@ -121,10 +123,11 @@ std::vector<std::vector<double>> ElectrodeCurrent<PointType>::GetElectrodeValueD
                 result[1][i - 1] = averageIrradiatedCurrentDensity[i];
             if (flag == 2)
                 result[1][i - 1] = averageCollectedCurrentDensity[i];
-        };
+        }
     }
     return result;
-};
+}
+
 template <class PointType>
 std::vector<std::vector<float>> ElectrodeCurrent<PointType>::GetElectrodeValueF(int flag)
 {
@@ -151,10 +154,10 @@ std::vector<std::vector<float>> ElectrodeCurrent<PointType>::GetElectrodeValueF(
                 result[1][i - 1] = averageIrradiatedCurrentDensity[i];
             if (flag == 2)
                 result[1][i - 1] = averageCollectedCurrentDensity[i];
-        };
+        }
     }
     return result;
-};
+}
 
 template <class PointType>
 void ElectrodeCurrent<PointType>::AddCharge(PointType charge, const DGeo::Point<PointType>& point,
@@ -246,6 +249,7 @@ void ElectrodeCurrent<PointType>::AddCharge(PointType charge, const DGeo::Point<
 
     };*/
 }
+
 template <class PointType>
 void ElectrodeCurrent<PointType>::ResetCurrent()
 {
@@ -272,7 +276,7 @@ void ElectrodeCurrent<PointType>::ResetPower()
         {
             EnergyAtPointsThreaded[i][j]  = 0;
             CurrentAtPointsThreaded[i][j] = 0;
-        };
+        }
     }
 
     for (int j = 0; j < averageIrradiatedPowerDensity.size(); j++)
@@ -331,7 +335,7 @@ void ElectrodeCurrent<PointType>::PowerAndCurrentsCalculate(int k, double t, dou
         CurrentAtPointsThreaded[0][j] = 0;
         EnergyAtPointsAverage[j]      = EnergyAtPointsAverage[j] / CurrentAtPointsTimes.size();
         EnergyAtPointsThreaded[0][j]  = 0;
-    };
+    }
 
     CurrentAtPointsAverageCollected = CurrentAtPointsAverage;
 
@@ -349,7 +353,7 @@ void ElectrodeCurrent<PointType>::PowerAndCurrentsCalculate(int k, double t, dou
         else
             koef                             = 1;
         averageCollectedCurrentDensitySim[j] = averageCollectedCurrentDensitySim[j] / koef;
-    };
+    }
 
     SetCurrent(std::abs(CurrentAtPointsAverageCollected.back()));
 
@@ -399,11 +403,11 @@ void ElectrodeCurrent<PointType>::PowerAndCurrentsCalculate(int k, double t, dou
             averageIrradiatedPowerDensity[j] =
                 (averageIrradiatedPowerDensity[j] / (ElectrodeEdges[j].length() * koef));
             averageCollectedCurrentDensity[j] = averageCollectedCurrentDensity[j] / koef;
-        };
+        }
 
         averageIrradiatedPowerDensity[0]   = averageIrradiatedPowerDensity[1];
         averageIrradiatedCurrentDensity[0] = averageIrradiatedCurrentDensity[1];
-    };
+    }
 }
 
 template <class PointType>
@@ -468,19 +472,7 @@ void ElectrodeCurrent<PointType>::SetBoundaryList(
                     };
             };
     };*/
-};
-
-template void
-ElectrodeCurrent<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                               const unsigned int file_version);
-template void ElectrodeCurrent<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void
-ElectrodeCurrent<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                                const unsigned int file_version);
-template void ElectrodeCurrent<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+}
 
 template <class PointType>
 template <class Archive>
@@ -525,3 +517,18 @@ void ElectrodeCurrent<PointType>::load(Archive& ar, const unsigned int)
     for (int j = 0; j < EnergyAtPoints[0].size(); j++)
             EnergyAtPoints[0][j] = 0;*/
 }
+
+template class ElectrodeCurrent<float>;
+template class ElectrodeCurrent<double>;
+
+template void
+ElectrodeCurrent<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                               const unsigned int file_version);
+template void ElectrodeCurrent<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void
+ElectrodeCurrent<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                                const unsigned int file_version);
+template void ElectrodeCurrent<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

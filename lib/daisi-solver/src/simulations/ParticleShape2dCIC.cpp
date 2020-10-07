@@ -9,11 +9,6 @@
 #include <mkl.h>
 #endif
 
-template class ParticleShape2dCIC<float>;
-template class ParticleShape2dCIC<double>;
-
-std::vector<int> numbers(1000);
-
 template <class PointType>
 int ParticleShape2dCIC<PointType>::InitEmCells(
     const std::vector<std::vector<NearCathodeVolume<PointType>>>& nearCathodeVolumes, PointType r1,
@@ -48,8 +43,8 @@ int ParticleShape2dCIC<PointType>::InitEmCells(
                 n++;
             }
             n1++;
-        };
-    };
+        }
+    }
     return -1;
 }
 
@@ -87,7 +82,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
             {
                 if (nearCathodeVolumes[s][0].flagCurrentLimited)
                     n = n - nearCathodeVolumes[s].size();
-            };
+            }
             if (nearCathodeVolumes[i][j].InCell(cartesianX1, cartesianX2) &&
                 0 == nearCathodeVolumes[i][j].flagCurrentLimited)
             {
@@ -97,10 +92,9 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                 }
 
                 Icoef(n, startCell) = Icoef(n, startCell) + kI * dt;
-                numbers[n] = numbers[n] + 1;
                 break;
             }
-        };
+        }
     }
 
     if (index1 == index2)
@@ -113,7 +107,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
         return;
     }
     int flagNeigh = 0;
-    ;
+
     if (index1 + 1 == index2 && levelHigh[index1] + 1 == levelHigh[index2])
     {
         flagNeigh = 1;
@@ -206,7 +200,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
         {
             if (InCell(s, rnew, znew))
                 break;
-        };
+        }
 
         if (s == i2 + 1)
             return;
@@ -220,7 +214,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
         else
         {
             Wcalculate(s, rnew, znew, W1tmp);
-        };
+        }
 
         ChargeCalculate(nearCathodeVolumes, emType, Icoef, kI, flag, emissionCells, startCell, r1,
                         z1, index1, W1, rnew, znew, s, W1tmp, I, dt / 2, rho, cartesianX1,
@@ -233,7 +227,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                         cartesianX12, cartesianX22);
 
         return;
-    };
+    }
 
     PointType W1tmp[4];
     PointType W2tmp[4];
@@ -285,10 +279,6 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
     PointType* cartesianX1, PointType* cartesianX2, int flagType, PointType* cartesianX12,
     PointType* cartesianX22)
 {
-    PointType rInt;
-    PointType zInt;
-    int       flagSearch = 1;
-
     PointType x, y;
 
     if (emType == 0)
@@ -334,7 +324,6 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                         0 == nearCathodeVolumes[i][j].flagCurrentLimited)
                     {
                         Icoef(n, startCell[ii]) = Icoef(n, startCell[ii]) + kI[ii] * dt;
-                        numbers[n] = numbers[n] + 1;
                         break;
                     }
                 };
@@ -437,7 +426,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(
                 {
                     if (InCell(s1, rnew1, znew1))
                         break;
-                };
+                }
 
                 if (s1 == ii2 + 1)
                 {
@@ -910,7 +899,7 @@ void ParticleShape2dCIC<PointType>::init(int size, const PointType* x1ArrayIn,
     cellVolume.resize(size);
     emCells.resize(size);
     cellNumber = 0;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::init(int size, const PointType* x1ArrayIn,
@@ -926,13 +915,14 @@ void ParticleShape2dCIC<PointType>::init(int size, const PointType* x1ArrayIn,
     cellVolume.resize(size);
     emCells.resize(size);
     cellNumber = 0;
-};
+}
 
 template <class PointType>
 PointType ParticleShape2dCIC<PointType>::GetH1(int index)
 {
     return x1Array[index + 1] - x1Array[index];
 }
+
 template <class PointType>
 PointType ParticleShape2dCIC<PointType>::GetH2(int index)
 {
@@ -946,9 +936,10 @@ int ParticleShape2dCIC<PointType>::InCell(PointType x1, PointType x2)
     {
         if (InCell(i, x1, x2))
             return i;
-    };
+    }
     return -1;
 }
+
 template <class PointType>
 int ParticleShape2dCIC<PointType>::InCellWithEps(PointType x1, PointType x2)
 {
@@ -956,7 +947,7 @@ int ParticleShape2dCIC<PointType>::InCellWithEps(PointType x1, PointType x2)
     {
         if (InCellWithEps(i, x1, x2))
             return i;
-    };
+    }
     return -1;
 }
 
@@ -967,7 +958,7 @@ int ParticleShape2dCIC<PointType>::InCellWithEps(PointType x1, PointType x2, Poi
     {
         if (InCellWithEps(i, x1, x2, x3))
             return i;
-    };
+    }
     return -1;
 }
 
@@ -980,13 +971,11 @@ bool ParticleShape2dCIC<PointType>::InCellWithEps(int basePoint, PointType x1, P
     PointType epsx1 = std::abs(1e-4 * (x1Array[basePoint + 1] - x1Array[basePoint]));
     PointType epsx2 = std::abs(1e-4 * (x2Array[levelHigh[basePoint]] - x2Array[basePoint]));
 
-    if ((x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
-        (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
-        (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
-        (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2))
-        return true;
-    return false;
-};
+    return (x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
+           (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
+           (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
+           (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2);
+}
 
 template <class PointType>
 bool ParticleShape2dCIC<PointType>::InCellWithEps(int basePoint, PointType x1, PointType x2,
@@ -1002,15 +991,13 @@ bool ParticleShape2dCIC<PointType>::InCellWithEps(int basePoint, PointType x1, P
     PointType epsx2 = std::abs(1e-4 * (x2Array[levelHigh[basePoint]] - x2Array[basePoint]));
     PointType epsx3 = std::abs(1e-4 * (x3Array[levelZ[basePoint]] - x3Array[basePoint]));
 
-    if ((x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
-        (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
-        (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
-        (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2) &&
-        (x3 >= x3Array[basePoint] || std::abs(x3 - x3Array[basePoint]) < epsx3) &&
-        (x3 <= x3Array[levelZ[basePoint]] || std::abs(x3 - x3Array[levelZ[basePoint]]) < epsx3))
-        return true;
-    return false;
-};
+    return (x1 >= x1Array[basePoint] || std::abs(x1 - x1Array[basePoint]) < epsx1) &&
+           (x1 <= x1Array[basePoint + 1] || std::abs(x1 - x1Array[basePoint + 1]) < epsx1) &&
+           (x2 >= x2Array[basePoint] || std::abs(x2 - x2Array[basePoint]) < epsx2) &&
+           (x2 <= x2Array[levelHigh[basePoint]] || std::abs(x2 - x2Array[levelHigh[basePoint]]) < epsx2) &&
+           (x3 >= x3Array[basePoint] || std::abs(x3 - x3Array[basePoint]) < epsx3) &&
+           (x3 <= x3Array[levelZ[basePoint]] || std::abs(x3 - x3Array[levelZ[basePoint]]) < epsx3);
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::AddCell(
@@ -1036,19 +1023,19 @@ void ParticleShape2dCIC<PointType>::AddCell(
             if (cellNumber == boundarypoints[k] || cellNumber + 1 == boundarypoints[k] ||
                 levelHighIn == boundarypoints[k] || levelHighIn + 1 == boundarypoints[k])
                 isBoundary[cellNumber] = 1;
-        };
+        }
     }
     else
     {
         levelHigh[cellNumber] = -1;
-    };
+    }
 
     int flagBound = 0;
     for (int k = 0; k < 9; k++)
     {
         if (pointsIn[k] == -1)
             flagBound = 1;
-    };
+    }
 
     if (flagBound == 0)
     {
@@ -1097,10 +1084,11 @@ void ParticleShape2dCIC<PointType>::AddCell(
                 ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                  (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
         }
-    };
+    }
 
     cellNumber++;
-};
+}
+
 template <class PointType>
 void ParticleShape2dCIC<PointType>::AddCell(
     const std::shared_ptr<GridData2d<PointType>>& gridData, unsigned int levelHighIn,
@@ -1125,19 +1113,19 @@ void ParticleShape2dCIC<PointType>::AddCell(
             if (cellNumber == boundarypoints[k] || cellNumber + 1 == boundarypoints[k] ||
                 levelHighIn == boundarypoints[k] || levelHighIn + 1 == boundarypoints[k])
                 isBoundary[cellNumber] = 1;
-        };
+        }
     }
     else
     {
         levelHigh[cellNumber] = -1;
-    };
+    }
 
     int flagBound = 0;
     for (int k = 0; k < 9; k++)
     {
         if (pointsIn[k] == -1)
             flagBound = 1;
-    };
+    }
 
     if (flagBound == 0)
     {
@@ -1179,10 +1167,10 @@ void ParticleShape2dCIC<PointType>::AddCell(
                 hx1 = (x1Array[pointsIn[5]] - x1Array[pointsIn[4]]);*/
 
         cellVolume[cellNumber] = hx2 * hx1;
-    };
+    }
 
     cellNumber++;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::AddCell(
@@ -1219,7 +1207,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
                 isBoundary[cellNumber] = 1;
                 break;
             }
-        };
+        }
 
         if (isBoundary[cellNumber] == 0)
         {
@@ -1232,12 +1220,12 @@ void ParticleShape2dCIC<PointType>::AddCell(
                         isBoundary[cellNumber] = 1;
                         break;
                     }
-                };
+                }
                 if (1 == isBoundary[cellNumber])
                     break;
-            };
+            }
         }
-    };
+    }
 
     if (levelZIn != -1 && levelHighIn != -1)
     {
@@ -1248,7 +1236,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
         cellVolume[cellNumber] = hx1 * hx2 * hx3;
     }
     cellNumber++;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::AddCell(
@@ -1274,19 +1262,19 @@ void ParticleShape2dCIC<PointType>::AddCell(
             if (cellNumber == boundarypoints[k] || cellNumber + 1 == boundarypoints[k] ||
                 levelHighIn == boundarypoints[k] || levelHighIn + 1 == boundarypoints[k])
                 isBoundary[cellNumber] = 1;
-        };
+        }
     }
     else
     {
         levelHigh[cellNumber] = -1;
-    };
+    }
 
     int flagBound = 0;
     for (int k = 0; k < 9; k++)
     {
         if (pointsIn[k] == -1)
             flagBound = 1;
-    };
+    }
 
     if (flagBound == 0)
     {
@@ -1331,21 +1319,18 @@ void ParticleShape2dCIC<PointType>::AddCell(
                 0.5 * hx2 * ((x1Array[cellNumber] + hx1 / 2) * (x1Array[cellNumber] + hx1 / 2) -
                              (x1Array[cellNumber] - hx1 / 2) * (x1Array[cellNumber] - hx1 / 2));
         }
-    };
-
+    }
     cellNumber++;
-};
+}
 
 template <class PointType>
 bool ParticleShape2dCIC<PointType>::InCell(int basePoint, PointType x1, PointType x2)
 {
     if (levelHigh[basePoint] == -1)
         return false;
-    if (x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
-        x2 <= x2Array[levelHigh[basePoint]])
-        return true;
-    return false;
-};
+    return x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
+           x2 <= x2Array[levelHigh[basePoint]];
+}
 
 template <class PointType>
 bool ParticleShape2dCIC<PointType>::InCell(int basePoint, PointType x1, PointType x2, PointType x3)
@@ -1355,12 +1340,10 @@ bool ParticleShape2dCIC<PointType>::InCell(int basePoint, PointType x1, PointTyp
     if (levelZ[basePoint] == -1)
         return false;
 
-    if (x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
-        x2 <= x2Array[levelHigh[basePoint]] && x3 >= x3Array[basePoint] &&
-        x3 <= x3Array[levelZ[basePoint]])
-        return true;
-    return false;
-};
+    return x1 >= x1Array[basePoint] && x1 <= x1Array[basePoint + 1] && x2 >= x2Array[basePoint] &&
+           x2 <= x2Array[levelHigh[basePoint]] && x3 >= x3Array[basePoint] &&
+           x3 <= x3Array[levelZ[basePoint]];
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(int basePoint, PointType x1, PointType x2,
@@ -1376,7 +1359,7 @@ void ParticleShape2dCIC<PointType>::Wcalculate(int basePoint, PointType x1, Poin
     W[1]           = wx12 * wx21;
     W[2]           = wx11 * wx22;
     W[3]           = wx12 * wx22;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(int basePoint, PointType x1, PointType x2,
@@ -1404,7 +1387,7 @@ void ParticleShape2dCIC<PointType>::Wcalculate(int basePoint, PointType x1, Poin
     W[5] = wx12 * wx21 * wx32;
     W[6] = wx11 * wx22 * wx32;
     W[7] = wx12 * wx22 * wx32;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointType* x1,
@@ -1445,7 +1428,7 @@ void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointTyp
         W[i - i1][6] = wx11 * wx22 * wx32;
         W[i - i1][7] = wx12 * wx22 * wx32;
     }
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointType* x1,
@@ -1477,7 +1460,7 @@ void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointTyp
         W[i - i1][6] = wx11 * wx22 * wx32;
         W[i - i1][7] = wx12 * wx22 * wx32;
     }
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointType* x1,
@@ -1531,8 +1514,8 @@ void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointTyp
     if (size < 1e-15)
     {
         int tt = 0;
-    };
-};
+    }
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointType* x1,
@@ -1551,7 +1534,7 @@ void ParticleShape2dCIC<PointType>::Wcalculate(unsigned int* basePoint, PointTyp
         W[i - i1][2]   = wx11 * wx22;
         W[i - i1][3]   = wx12 * wx22;
     }
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::WcalculatePolar(unsigned int* basePoint, PointType* x1,
@@ -1609,7 +1592,7 @@ void ParticleShape2dCIC<PointType>::WcalculatePolar(unsigned int* basePoint, Poi
     // }
 
     size = std::min(std::abs(tmp1[im1 - 1]), std::abs(tmp1[im2 - 1]));
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::WcalculatePolar(unsigned int* basePoint, PointType* x1,
@@ -1641,7 +1624,7 @@ void ParticleShape2dCIC<PointType>::WcalculatePolar(unsigned int* basePoint, Poi
         W[i - i1][2] = vol3 / V;
         W[i - i1][3] = vol1 / V;
     }
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::WcalculatePolar(int basePoint, PointType x1, PointType x2,
@@ -1666,7 +1649,7 @@ void ParticleShape2dCIC<PointType>::WcalculatePolar(int basePoint, PointType x1,
     W[1] = vol2 / V;
     W[2] = vol3 / V;
     W[3] = vol1 / V;
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::ValueInterpolate(int basePoint, const PointType* W,
@@ -1675,7 +1658,7 @@ void ParticleShape2dCIC<PointType>::ValueInterpolate(int basePoint, const PointT
 {
     result = W[0] * ValueArray[basePoint] + W[1] * ValueArray[basePoint + 1] +
              W[2] * ValueArray[levelHigh[basePoint]] + W[3] * ValueArray[levelHigh[basePoint] + 1];
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::ValueInterpolate3d(int basePoint, const PointType* W,
@@ -1687,7 +1670,7 @@ void ParticleShape2dCIC<PointType>::ValueInterpolate3d(int basePoint, const Poin
              W[4] * ValueArray[levelZ[basePoint]] + W[5] * ValueArray[levelZ[basePoint] + 1] +
              W[6] * ValueArray[levelZ[levelHigh[basePoint]]] +
              W[7] * ValueArray[levelZ[levelHigh[basePoint]] + 1];
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::ChargeCalculate(int basePoint, const PointType* W,
@@ -1711,7 +1694,7 @@ void ParticleShape2dCIC<PointType>::ChargeCalculate(int basePoint, const PointTy
                     __debugbreak();
                     int tt = 0;
             }*/
-};
+}
 
 template <class PointType>
 void ParticleShape2dCIC<PointType>::ChargeCalculate3d(int basePoint, const PointType* W,
@@ -1733,4 +1716,7 @@ template <class PointType>
 PointType ParticleShape2dCIC<PointType>::CellVolume(int index)
 {
     return cellVolume[index];
-};
+}
+
+template class ParticleShape2dCIC<float>;
+template class ParticleShape2dCIC<double>;

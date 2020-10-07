@@ -12,88 +12,6 @@
 #include "ParticleShape2dTSC.h"
 #include "WcalculateVector.h"
 
-template class ParticleGridInterface<float>;
-template class ParticleGridInterface<double>;
-
-template std::vector<unsigned int>&
-ParticleGridInterface<float>::CheckParticlesBoundaries<Particles3dcil<float>>(
-    const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
-    std::vector<unsigned int>&                                      result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
-    const std::shared_ptr<Particles3dcil<float>>&                   state1,
-    const std::shared_ptr<Particles3dcil<float>>& state2, float dt, float charge, float mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<float>::CheckParticlesBoundaries<Particles2d<float>>(
-    const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
-    std::vector<unsigned int>&                                      result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
-    const std::shared_ptr<Particles2d<float>>&                      state1,
-    const std::shared_ptr<Particles2d<float>>& state2, float dt, float charge, float mass, int i1,
-    int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<float>::CheckParticlesBoundaries<Particles2dpolar<float>>(
-    const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
-    std::vector<unsigned int>&                                      result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
-    const std::shared_ptr<Particles2dpolar<float>>&                 state1,
-    const std::shared_ptr<Particles2dpolar<float>>& state2, float dt, float charge, float mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<double>::CheckParticlesBoundaries<Particles3dcil<double>>(
-    const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
-    std::vector<unsigned int>&                                       result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
-    const std::shared_ptr<Particles3dcil<double>>&                   state1,
-    const std::shared_ptr<Particles3dcil<double>>& state2, double dt, double charge, double mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<double>::CheckParticlesBoundaries<Particles2d<double>>(
-    const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
-    std::vector<unsigned int>&                                       result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
-    const std::shared_ptr<Particles2d<double>>&                      state1,
-    const std::shared_ptr<Particles2d<double>>& state2, double dt, double charge, double mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<double>::CheckParticlesBoundaries<Particles2dpolar<double>>(
-    const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
-    std::vector<unsigned int>&                                       result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
-    const std::shared_ptr<Particles2dpolar<double>>&                 state1,
-    const std::shared_ptr<Particles2dpolar<double>>& state2, double dt, double charge, double mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<double>::CheckParticlesBoundaries<Particles3d<double>>(
-    const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
-    std::vector<unsigned int>&                                       result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
-    const std::shared_ptr<Particles3d<double>>&                      state1,
-    const std::shared_ptr<Particles3d<double>>& state2, double dt, double charge, double mass,
-    int i1, int i2, int thread);
-
-template std::vector<unsigned int>&
-ParticleGridInterface<float>::CheckParticlesBoundaries<Particles3d<float>>(
-    const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
-    std::vector<unsigned int>&                                      result,
-    const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
-    const std::shared_ptr<Particles3d<float>>&                      state1,
-    const std::shared_ptr<Particles3d<float>>& state2, float dt, float charge, float mass, int i1,
-    int i2, int thread);
 
 template <class PointType>
 template <class particlesType>
@@ -273,12 +191,12 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
                     }
                     flagContinue = 1;
                     break;
-                };
+                }
             }
 
             if (flagContinue)
                 break;
-        };
+        }
 
         if (flagContinue)
             continue;
@@ -333,7 +251,7 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
                 {
                     flagC = 1;
                     break;
-                };
+                }
             }
             if (flagC == 1)
                 break;
@@ -372,7 +290,7 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
                 particlesNumbers[s].push_back(k);
                 intersectionEdges[s].push_back(boundaries[list1[j]]->EdgesData[tmp]);
                 break;
-            };
+            }
         }
 
         if (flagIntersection == false)
@@ -393,7 +311,7 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
                     flagTest     = 1;
                     break;
                 }
-            };
+            }
             if (flagContinue)
                 break;
         }
@@ -406,7 +324,7 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
         {
             if (result[i] == particlesNumbers[s][j])
                 flag = 1;
-        };
+        }
         if (flag == 0)
             result.push_back(particlesNumbers[s][j]);
     }
@@ -427,7 +345,7 @@ std::vector<unsigned int>& ParticleGridInterface<PointType>::CheckParticlesBound
     }*/
 
     return result;
-};
+}
 
 template <class PointType>
 void ParticleGridInterface<PointType>::SearchBoundariesCells(
@@ -447,104 +365,9 @@ void ParticleGridInterface<PointType>::SearchBoundariesCells(
 
             int       cell = InCellWithEps(p.x, p.y, searchIndexesLoc);
             PointType H    = sqrt(GetH2(cell) * GetH2(cell) + GetH1(cell) * GetH1(cell));
-
-            if (boundaries[j]->EdgesData[i].length() < H)
-            {
-            }
-            else
-            {
-            };
         }
     }
-};
-
-template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles3dcil<float>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    std::vector<double> conditionProperties, Particles3dcil<float>* state1,
-    Particles3dcil<float>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
-    int thread);
-
-template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles2d<float>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    std::vector<double> conditionProperties, Particles2d<float>* state1, Particles2d<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
-    int thread);
-
-template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles2dpolar<float>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    std::vector<double> conditionProperties, Particles2dpolar<float>* state1,
-    Particles2dpolar<float>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
-    int thread);
-
-template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles3dcil<double>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    std::vector<double> conditionProperties, Particles3dcil<double>* state1,
-    Particles3dcil<double>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int i1, int thread);
-
-template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles2d<double>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    std::vector<double> conditionProperties, Particles2d<double>* state1,
-    Particles2d<double>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int i1, int thread);
-
-template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles2dpolar<double>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    std::vector<double> conditionProperties, Particles2dpolar<double>* state1,
-    Particles2dpolar<double>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int i1, int thread);
-
-template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles3d<double>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    std::vector<double> conditionProperties, Particles3d<double>* state1,
-    Particles3d<double>* state2, const std::vector<unsigned int>& particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int i1, int thread);
-
-template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles3d<float>*>(
-    const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
-    std::vector<unsigned int>& empty, const std::string& conditionType,
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    std::vector<double> conditionProperties, Particles3d<float>* state1, Particles3d<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
-    int thread);
+}
 
 template <class PointType>
 template <class particlesType>
@@ -582,7 +405,7 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                         particlesNumbers[i], {intersectionPoints[i].x, intersectionPoints[i].y});
                     state2->cellsNumbers[particlesNumbers[i]] = -1;
                 }
-            };
+            }
         }
         else
         {
@@ -607,9 +430,9 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                         particlesNumbers[i], {intersectionPoints[i].x, intersectionPoints[i].y});
                     state2->cellsNumbers[particlesNumbers[i]] = -1;
                 }
-            };
+            }
         }
-    };
+    }
 
     if (conditionType == flagStringsSolver::flowBoundaryTypeNames[2]) //"backscattering"
     {
@@ -669,7 +492,7 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                                              {intersectionPoints[k].x, intersectionPoints[k].y});
             }
         }
-    };
+    }
 
     if (conditionType == flagStringsSolver::flowBoundaryTypeNames[1]) // "Reflection"
     {
@@ -725,8 +548,8 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                 DGeo::Point<PointType> velocityPoint1 = traceEdge.Middle();
                 DGeo::Point<PointType> velocityPoint2;
 
-                PointType px = state2->GetCartesianPX(particlesNumbers[k]);
-                PointType py = state2->GetCartesianPY(particlesNumbers[k]);
+//                PointType px = state2->GetCartesianPX(particlesNumbers[k]);
+//                PointType py = state2->GetCartesianPY(particlesNumbers[k]);
 
                 velocityPoint2.x = velocityPoint1.x + state2->GetCartesianPX(particlesNumbers[k]);
                 velocityPoint2.y = velocityPoint1.y + state2->GetCartesianPY(particlesNumbers[k]);
@@ -748,80 +571,8 @@ void ParticleGridInterface<PointType>::ApplyBoundaryCondition(
                 state2->flagEmitted[particlesNumbers[k]] = 0;
             }
         }
-    };
-};
-
-template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles3dcil<float>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    Particles3dcil<float>* state1, Particles3dcil<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
-    int thread);
-
-template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles2d<float>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    Particles2d<float>* state1, Particles2d<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
-    int thread);
-
-template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles2dpolar<float>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    Particles2dpolar<float>* state1, Particles2dpolar<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
-    int thread);
-
-template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles3dcil<double>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    Particles3dcil<double>* state1, Particles3dcil<double>* state2,
-    const std::vector<unsigned int>&        particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int thread);
-
-template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles2d<double>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    Particles2d<double>* state1, Particles2d<double>* state2,
-    const std::vector<unsigned int>&        particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int thread);
-
-template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles2dpolar<double>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    Particles2dpolar<double>* state1, Particles2dpolar<double>* state2,
-    const std::vector<unsigned int>&        particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int thread);
-
-template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles3d<double>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
-    Particles3d<double>* state1, Particles3d<double>* state2,
-    const std::vector<unsigned int>&        particlesNumbers,
-    const std::vector<DGeo::Edge<double>>&  intersectionEdges,
-    const std::vector<DGeo::Point<double>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
-    int thread);
-
-template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles3d<float>*>(
-    const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
-    Particles3d<float>* state1, Particles3d<float>* state2,
-    const std::vector<unsigned int>&       particlesNumbers,
-    const std::vector<DGeo::Edge<float>>&  intersectionEdges,
-    const std::vector<DGeo::Point<float>>& intersectionPoints,
-    const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
-    int thread);
+    }
+}
 
 template <class PointType>
 template <class particlesType>
@@ -842,4 +593,248 @@ void ParticleGridInterface<PointType>::ApplyDefaultCondition(
                 state2->GetEnergy(particlesNumbers[i], mass), charge, thread);
     }
     //	state2->EmptyPlaces = particlesNumbers;
-};
+}
+
+template class ParticleGridInterface<float>;
+template class ParticleGridInterface<double>;
+
+template std::vector<unsigned int>&
+ParticleGridInterface<float>::CheckParticlesBoundaries<Particles3dcil<float>>(
+        const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
+        std::vector<unsigned int>&                                      result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
+        const std::shared_ptr<Particles3dcil<float>>&                   state1,
+        const std::shared_ptr<Particles3dcil<float>>& state2, float dt, float charge, float mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<float>::CheckParticlesBoundaries<Particles2d<float>>(
+        const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
+        std::vector<unsigned int>&                                      result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
+        const std::shared_ptr<Particles2d<float>>&                      state1,
+        const std::shared_ptr<Particles2d<float>>& state2, float dt, float charge, float mass, int i1,
+        int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<float>::CheckParticlesBoundaries<Particles2dpolar<float>>(
+        const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
+        std::vector<unsigned int>&                                      result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
+        const std::shared_ptr<Particles2dpolar<float>>&                 state1,
+        const std::shared_ptr<Particles2dpolar<float>>& state2, float dt, float charge, float mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<double>::CheckParticlesBoundaries<Particles3dcil<double>>(
+        const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
+        std::vector<unsigned int>&                                       result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
+        const std::shared_ptr<Particles3dcil<double>>&                   state1,
+        const std::shared_ptr<Particles3dcil<double>>& state2, double dt, double charge, double mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<double>::CheckParticlesBoundaries<Particles2d<double>>(
+        const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
+        std::vector<unsigned int>&                                       result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
+        const std::shared_ptr<Particles2d<double>>&                      state1,
+        const std::shared_ptr<Particles2d<double>>& state2, double dt, double charge, double mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<double>::CheckParticlesBoundaries<Particles2dpolar<double>>(
+        const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
+        std::vector<unsigned int>&                                       result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
+        const std::shared_ptr<Particles2dpolar<double>>&                 state1,
+        const std::shared_ptr<Particles2dpolar<double>>& state2, double dt, double charge, double mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<double>::CheckParticlesBoundaries<Particles3d<double>>(
+        const std::shared_ptr<BoundaryConditions>&                       boundaryConditions,
+        std::vector<unsigned int>&                                       result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>&    conductorList,
+        const std::shared_ptr<Particles3d<double>>&                      state1,
+        const std::shared_ptr<Particles3d<double>>& state2, double dt, double charge, double mass,
+        int i1, int i2, int thread);
+
+template std::vector<unsigned int>&
+ParticleGridInterface<float>::CheckParticlesBoundaries<Particles3d<float>>(
+        const std::shared_ptr<BoundaryConditions>&                      boundaryConditions,
+        std::vector<unsigned int>&                                      result,
+        const std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>&    conductorList,
+        const std::shared_ptr<Particles3d<float>>&                      state1,
+        const std::shared_ptr<Particles3d<float>>& state2, float dt, float charge, float mass, int i1,
+        int i2, int thread);
+
+template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles3dcil<float>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        Particles3dcil<float>* state1, Particles3dcil<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
+        int thread);
+
+template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles2d<float>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        Particles2d<float>* state1, Particles2d<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
+        int thread);
+
+template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles2dpolar<float>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        Particles2dpolar<float>* state1, Particles2dpolar<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
+        int thread);
+
+template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles3dcil<double>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        Particles3dcil<double>* state1, Particles3dcil<double>* state2,
+        const std::vector<unsigned int>&        particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int thread);
+
+template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles2d<double>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        Particles2d<double>* state1, Particles2d<double>* state2,
+        const std::vector<unsigned int>&        particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int thread);
+
+template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles2dpolar<double>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        Particles2dpolar<double>* state1, Particles2dpolar<double>* state2,
+        const std::vector<unsigned int>&        particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int thread);
+
+template void ParticleGridInterface<double>::ApplyDefaultCondition<Particles3d<double>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        Particles3d<double>* state1, Particles3d<double>* state2,
+        const std::vector<unsigned int>&        particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int thread);
+
+template void ParticleGridInterface<float>::ApplyDefaultCondition<Particles3d<float>*>(
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        Particles3d<float>* state1, Particles3d<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass,
+        int thread);
+
+
+template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles3dcil<float>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        std::vector<double> conditionProperties, Particles3dcil<float>* state1,
+        Particles3dcil<float>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
+        int thread);
+
+template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles2d<float>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        std::vector<double> conditionProperties, Particles2d<float>* state1, Particles2d<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
+        int thread);
+
+template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles2dpolar<float>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        std::vector<double> conditionProperties, Particles2dpolar<float>* state1,
+        Particles2dpolar<float>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
+        int thread);
+
+template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles3dcil<double>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        std::vector<double> conditionProperties, Particles3dcil<double>* state1,
+        Particles3dcil<double>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int i1, int thread);
+
+template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles2d<double>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        std::vector<double> conditionProperties, Particles2d<double>* state1,
+        Particles2d<double>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int i1, int thread);
+
+template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles2dpolar<double>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        std::vector<double> conditionProperties, Particles2dpolar<double>* state1,
+        Particles2dpolar<double>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int i1, int thread);
+
+template void ParticleGridInterface<double>::ApplyBoundaryCondition<Particles3d<double>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<double>>>& conductorList,
+        std::vector<double> conditionProperties, Particles3d<double>* state1,
+        Particles3d<double>* state2, const std::vector<unsigned int>& particlesNumbers,
+        const std::vector<DGeo::Edge<double>>&  intersectionEdges,
+        const std::vector<DGeo::Point<double>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, double dt, double charge, double mass,
+        int i1, int thread);
+
+template void ParticleGridInterface<float>::ApplyBoundaryCondition<Particles3d<float>*>(
+        const std::shared_ptr<BoundaryConditions>& boundaryConditions, int flag,
+        std::vector<unsigned int>& empty, const std::string& conditionType,
+        const std::vector<std::shared_ptr<ElectrodeCurrent<float>>>& conductorList,
+        std::vector<double> conditionProperties, Particles3d<float>* state1, Particles3d<float>* state2,
+        const std::vector<unsigned int>&       particlesNumbers,
+        const std::vector<DGeo::Edge<float>>&  intersectionEdges,
+        const std::vector<DGeo::Point<float>>& intersectionPoints,
+        const std::vector<int>& intersectionBoundaryNumber, float dt, float charge, float mass, int i1,
+        int thread);

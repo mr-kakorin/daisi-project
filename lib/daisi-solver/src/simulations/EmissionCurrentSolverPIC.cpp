@@ -10,68 +10,6 @@
 #include "ParticleSource.h"
 #include <Constants.h>
 
-template
-class EmissionCurrentSolverPIC<float>;
-
-template
-class EmissionCurrentSolverPIC<double>;
-
-template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2d<double>,
-    EmitterDevice2d<double>>(
-    const std::shared_ptr<EmitterDevice2d<double>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
-    const std::shared_ptr<GridData2d<double>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2daxs<double>,
-    EmitterDevice2daxs<double>>(
-    const std::shared_ptr<EmitterDevice2daxs<double>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
-    const std::shared_ptr<GridData2daxs<double>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void
-EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2d<float>, EmitterDevice2d<float>>(
-    const std::shared_ptr<EmitterDevice2d<float>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
-    const std::shared_ptr<GridData2d<float>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2daxs<float>,
-    EmitterDevice2daxs<float>>(
-    const std::shared_ptr<EmitterDevice2daxs<float>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
-    const std::shared_ptr<GridData2daxs<float>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2dpolar<float>,
-    EmitterDevice2d<float>>(
-    const std::shared_ptr<EmitterDevice2d<float>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
-    const std::shared_ptr<GridData2dpolar<float>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2dpolar<double>,
-    EmitterDevice2d<double>>(
-    const std::shared_ptr<EmitterDevice2d<double>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
-    const std::shared_ptr<GridData2dpolar<double>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void
-EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData3d<float>, EmitterDevice3d<float>>(
-    const std::shared_ptr<EmitterDevice3d<float>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
-    const std::shared_ptr<GridData3d<float>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
-template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData3d<double>,
-    EmitterDevice3d<double>>(
-    const std::shared_ptr<EmitterDevice3d<double>> &emitter,
-    const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
-    const std::shared_ptr<GridData3d<double>> &gridData, double timeStep, int flowNumber,
-    int stepNumber, double mass, double charge, int emissionType);
-
 template<class PointType>
 template<class gridDataType, class emittersType>
 void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
@@ -90,7 +28,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
 
     UpdateEmissionCurrent(emitter, particleGridInterface, gridData, PointType(timeStep),
                           flowNumber, stepNumber, mass, charge);
-  };
+  }
   if (emissionType == 1) {
     std::vector<std::vector<double>> cd =
         emitter->GetAssignedElectrode()->GetElectrodeValueD(1);
@@ -117,7 +55,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
   if (emissionType != 5)
     for (int i = 0; i < emitter->GetParticleSources().size(); i++)
       this->CalculateCathodeFields(emitter->GetParticleSources()[i], gridData, flowNumber);
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
@@ -131,9 +69,9 @@ void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
     for (int i = 0; i < emitter->GetParticleSource()[k]->sourceSurface.size(); i++) {
       emitter->GetParticleSource()[k]->sourceSurface[i].currentDensity =
           emitter->GetParticleSource()[k]->sourceSurface[i].currentDensity + dcurrentDensity;
-    };
+    }
   }
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
@@ -142,7 +80,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
     const std::shared_ptr<GridData2dpolar<PointType>> &gridData, PointType timeStep, int flowNumber,
     int stepNumber, double mass, double charge) {
 
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
@@ -151,7 +89,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
     const std::shared_ptr<GridData3d<PointType>> &gridData, PointType timeStep, int flowNumber,
     int stepNumber, double mass, double charge) {
 
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
@@ -162,8 +100,8 @@ void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
   for (int i = 0; i < emitter->GetParticleSource()->sourceSurface.size(); i++) {
     emitter->GetParticleSource()->sourceSurface[i].currentDensity =
         emitter->GetParticleSource()->sourceSurface[i].currentDensity + dcurrentDensity;
-  };
-};
+  }
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
@@ -178,8 +116,8 @@ void EmissionCurrentSolverPIC<PointType>::SetEmissionCurrent(
   for (int i = 0; i < emitter->GetParticleSource()->sourceSurface.size(); i++) {
     emitter->GetParticleSource()->sourceSurface[i].currentDensity =
         emitter->GetParticleSource()->sourceSurface[i].currentDensity + dcurrentDensity;
-  };
-};
+  }
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
@@ -259,7 +197,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
       jnew = 0;
 
     jv.push_back(jnew);
-  };
+  }
 
   this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
 
@@ -421,7 +359,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
   //	this->SetValueOnSource(emitter->GetParticleSources()[i], jvC, flowNumber, 1);
 
   // double decl = CathodeFields[flowNumber][i] / E0[flowNumber][i];
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
@@ -475,7 +413,7 @@ void EmissionCurrentSolverPIC<PointType>::UpdateEmissionCurrent(
               charge);
       break;
   }
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::ChargeConserving(
@@ -606,8 +544,8 @@ void EmissionCurrentSolverPIC<PointType>::ChargeConserving(
 
     baseOld = base;
     Jold = J;
-  };
-};
+  }
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
@@ -631,10 +569,27 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     return c * (pow(10, powers2[0]) * pow(E, powers2[1]));
   };
 
+    auto find_betta = [this](double E) {
+        double eps = 1e2;
+        int idx = -1;
+        while (idx == -1)
+        {
+            eps*=10;
+            for (int i = 0; i < this->E_vec.size(); ++i)
+            {
+                if ( std::abs( this->E_vec[i] - E ) < eps )
+                    idx = i;
+            }
+        }
+        return this->Betta_vec[idx];
+    };
+
   auto const& grad = this->gradients[flowNumber];
   auto const& source_points = this->points1[flowNumber];
-  for (int i = 0; i < source_points.size(); ++i) {
-    double jnew = 0;
+  std::size_t const source_length = source_points.size();
+  jv.resize( source_length );
+  for (int i = 0; i < source_length; ++i)
+  {
     double Er, Ez;
     double r = source_points[i].x,
            z = source_points[i].y;
@@ -646,26 +601,24 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
 //    double norm_z = this->nearCathodeVolumes[flowNumber][i].normalY[0];
     gridData->interpolatePoint(r, z, 0, Er,Ez);
     double cathField = (Er * norm_r + Ez * norm_z);
-    if (cathField * charge > 0) {
+    if (cathField * charge > 0)
+    {
       ErAverage = ErAverage + std::abs(cathField);
-      jv.push_back(jnew);
+      jv[i] = 0;
       continue;
     }
 
     double E = std::sqrt(Er * Er + Ez * Ez);
-    double betta_eff = powerlaw(E);
+    double betta_eff = find_betta( E );
     double E_eff = betta_eff * E;
     double y_coeff = yc * std::sqrt(E_eff) / wf;
     double y_coeff2 = y_coeff* y_coeff;
     double log_y_coeff = std::log(y_coeff);
 	double v  = 1 - y_coeff2 / 3 * (3 - log_y_coeff);
 	double t2 = 1 + y_coeff2 / 9 * (1 - log_y_coeff);
-
-    jnew = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
+    jv[i] = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
 
     ErAverage = ErAverage + std::abs(cathField);
-
-    jv.push_back(jnew);
   }
   this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
 }
@@ -803,10 +756,10 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode1(
     ErAverage = ErAverage + std::abs(cathField);
 
     jv.push_back(jnew);
-  };
+  }
 
   this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
-};
+}
 
 template<class PointType>
 void EmissionCurrentSolverPIC<PointType>::Poisson(
@@ -910,4 +863,67 @@ void EmissionCurrentSolverPIC<PointType>::Poisson(
           baseOld = base;
           Jold = J;
   };*/
-};
+}
+
+
+template
+class EmissionCurrentSolverPIC<float>;
+
+template
+class EmissionCurrentSolverPIC<double>;
+
+template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2d<double>,
+        EmitterDevice2d<double>>(
+        const std::shared_ptr<EmitterDevice2d<double>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
+        const std::shared_ptr<GridData2d<double>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2daxs<double>,
+        EmitterDevice2daxs<double>>(
+        const std::shared_ptr<EmitterDevice2daxs<double>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
+        const std::shared_ptr<GridData2daxs<double>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void
+EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2d<float>, EmitterDevice2d<float>>(
+        const std::shared_ptr<EmitterDevice2d<float>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
+        const std::shared_ptr<GridData2d<float>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2daxs<float>,
+        EmitterDevice2daxs<float>>(
+        const std::shared_ptr<EmitterDevice2daxs<float>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
+        const std::shared_ptr<GridData2daxs<float>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData2dpolar<float>,
+        EmitterDevice2d<float>>(
+        const std::shared_ptr<EmitterDevice2d<float>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
+        const std::shared_ptr<GridData2dpolar<float>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData2dpolar<double>,
+        EmitterDevice2d<double>>(
+        const std::shared_ptr<EmitterDevice2d<double>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
+        const std::shared_ptr<GridData2dpolar<double>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void
+EmissionCurrentSolverPIC<float>::UpdateEmissionCurrent<GridData3d<float>, EmitterDevice3d<float>>(
+        const std::shared_ptr<EmitterDevice3d<float>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<float>> &particleGridInterface,
+        const std::shared_ptr<GridData3d<float>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);
+
+template void EmissionCurrentSolverPIC<double>::UpdateEmissionCurrent<GridData3d<double>,
+        EmitterDevice3d<double>>(
+        const std::shared_ptr<EmitterDevice3d<double>> &emitter,
+        const std::shared_ptr<ParticleGridInterface<double>> &particleGridInterface,
+        const std::shared_ptr<GridData3d<double>> &gridData, double timeStep, int flowNumber,
+        int stepNumber, double mass, double charge, int emissionType);

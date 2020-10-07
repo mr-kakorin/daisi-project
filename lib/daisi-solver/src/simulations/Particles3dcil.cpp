@@ -2,8 +2,6 @@
 #include "Dmath.h"
 #include <Constants.h>
 
-template class Particles3dcil<double>;
-template class Particles3dcil<float>;
 
 template <class PointType>
 void Particles3dcil<PointType>::GetBeamMeasuriments(std::vector<std::vector<PointType>>& data,
@@ -64,7 +62,7 @@ phi[i])) / (gamma[i]
             data[3][0] = data[3][0] + beta2;
     }*/
 
-};
+}
 
 template <class PointType>
 void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>& data, int emFlag,
@@ -131,7 +129,7 @@ void Particles3dcil<PointType>::GetEmittanceData(std::vector<std::vector<float>>
                     Dmath::Polar2Cartesian(float(r[i]), float(phi[i]), data[0][i], data[1][i]);
             break;
     };*/
-};
+}
 
 template <class PointType>
 PointType Particles3dcil<PointType>::GetBeta(int number)
@@ -156,7 +154,7 @@ void Particles3dcil<PointType>::GetBetaComponents(PointType& beta1, PointType& b
     beta1 = this->momentums[0][number] / gamma;
     beta2 = this->momentums[1][number] / gamma;
     beta3 = this->momentums[2][number] / (gamma * this->positions[0][number]);
-};
+}
 
 template <class PointType>
 void Particles3dcil<PointType>::GammaCalc(std::vector<PointType>& gamma)
@@ -171,7 +169,7 @@ void Particles3dcil<PointType>::GammaCalc(std::vector<PointType>& gamma)
                              (this->momentums[2][number] / this->positions[0][number]) *
                                  (this->momentums[2][number] / this->positions[0][number]));
     }
-};
+}
 
 template <class PointType>
 PointType Particles3dcil<PointType>::GetEnergy(int number, PointType mass)
@@ -182,7 +180,7 @@ PointType Particles3dcil<PointType>::GetEnergy(int number, PointType mass)
                            (this->momentums[2][number] / this->positions[0][number]) *
                                (this->momentums[2][number] / this->positions[0][number]));
     return (-(gamma - 1) * en);
-};
+}
 
 template <class PointType>
 Particles3dcil<PointType>::Particles3dcil(int currentSolverType)
@@ -196,7 +194,7 @@ Particles3dcil<PointType>::Particles3dcil(int currentSolverType)
         this->additionalInfType.resize(1);
         this->additionalInf.resize(1);
     }
-};
+}
 
 /*template <class PointType>
 void Particles3dcil<PointType>::SetPartCharge(double I, int frequency)
@@ -206,3 +204,6 @@ void Particles3dcil<PointType>::SetPartCharge(double I, int frequency)
                 q[k] = I / (NParticles*frequency);
         }
 };*/
+
+template class Particles3dcil<double>;
+template class Particles3dcil<float>;

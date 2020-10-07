@@ -3,21 +3,6 @@
 #include "Particle.h"
 #include "updatePositionsVector.h"
 
-template class ParticlesMover<double>;
-template class ParticlesMover<float>;
-
-template void
-ParticlesMover<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                             const unsigned int file_version);
-template void ParticlesMover<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void
-ParticlesMover<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                              const unsigned int file_version);
-template void
-ParticlesMover<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                             const unsigned int file_version) const;
 
 template <class PointType>
 template <class Archive>
@@ -25,6 +10,7 @@ void ParticlesMover<PointType>::save(Archive& ar, const unsigned int) const
 {
     ar& params;
 }
+
 template <class PointType>
 template <class Archive>
 void ParticlesMover<PointType>::load(Archive& ar, const unsigned int)
@@ -39,7 +25,7 @@ void ParticlesMover<PointType>::InitParallel(int numThreads)
 {
     timeSteps.resize(numThreads);
     DT.resize(numThreads);
-};
+}
 
 template <class PointType>
 ParticlesMover<PointType>::ParticlesMover()
@@ -47,12 +33,14 @@ ParticlesMover<PointType>::ParticlesMover()
     params.resize(2);
     params[0] = 2; // timestep
     params[1] = 0; // type
-};
+}
+
 template <class PointType>
 PointType ParticlesMover<PointType>::GetTimeStep(int i, int thread)
 {
     return DT[thread];
-};
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::SetTimeSteps(std::vector<double> in)
 {
@@ -60,18 +48,21 @@ void ParticlesMover<PointType>::SetTimeSteps(std::vector<double> in)
     {
         timeSteps[i] = in;
     }
-};
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::SetParameters(std::vector<double> in)
 {
     params = in;
-};
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::DoubleTimeSteps()
 {
     //	for (int i = 0; i < timeSteps.size();i++)
     //		timeSteps[i] = timeSteps[i] * 2;
 }
+
 template <class PointType>
 void ParticlesMover<PointType>::HalveTimeSteps()
 {
@@ -83,35 +74,7 @@ template <class PointType>
 std::vector<double> ParticlesMover<PointType>::GetParameters()
 {
     return params;
-};
-
-template void ParticlesMover<float>::stepEstimate<Particles3dcil<float>>(
-    const std::shared_ptr<Particles3dcil<float>>& particlesData, int nlow, int i1, int i2,
-    int thread, int solverType);
-template void ParticlesMover<float>::stepEstimate<Particles2d<float>>(
-    const std::shared_ptr<Particles2d<float>>& particlesData, int nlow, int i1, int i2, int thread,
-    int solverType);
-template void ParticlesMover<float>::stepEstimate<Particles2dpolar<float>>(
-    const std::shared_ptr<Particles2dpolar<float>>& particlesData, int nlow, int i1, int i2,
-    int thread, int solverType);
-
-template void ParticlesMover<double>::stepEstimate<Particles3dcil<double>>(
-    const std::shared_ptr<Particles3dcil<double>>& particlesData, int nlow, int i1, int i2,
-    int thread, int solverType);
-template void ParticlesMover<double>::stepEstimate<Particles2d<double>>(
-    const std::shared_ptr<Particles2d<double>>& particlesData, int nlow, int i1, int i2, int thread,
-    int solverType);
-template void ParticlesMover<double>::stepEstimate<Particles2dpolar<double>>(
-    const std::shared_ptr<Particles2dpolar<double>>& particlesData, int nlow, int i1, int i2,
-    int thread, int solverType);
-
-template void ParticlesMover<double>::stepEstimate<Particles3d<double>>(
-    const std::shared_ptr<Particles3d<double>>& particlesData, int nlow, int i1, int i2, int thread,
-    int solverType);
-
-template void ParticlesMover<float>::stepEstimate<Particles3d<float>>(
-    const std::shared_ptr<Particles3d<float>>& particlesData, int nlow, int i1, int i2, int thread,
-    int solverType);
+}
 
 template <class PointType>
 template <class particlesdataType>
@@ -215,7 +178,7 @@ void ParticlesMover<PointType>::stepEstimate(
                     }
             }
             DT = timeSteps[nlow] * cellSizeMin;*/
-        };
+        }
     }
 }
 
@@ -248,8 +211,9 @@ void ParticlesMover<PointType>::updatePositions(
         particlesData->Get_x()[i] = particlesData->Get_x()[i] + DT[thread] * pxn / gamma;
         particlesData->Get_y()[i] = particlesData->Get_y()[i] + DT[thread] * pyn / gamma;
         particlesData->Get_z()[i] = particlesData->Get_z()[i] + DT[thread] * pzn / gamma;
-    };
-};
+    }
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::updateMomentums(
     const std::shared_ptr<Particles3d<PointType>>& particlesData,
@@ -323,9 +287,9 @@ void ParticlesMover<PointType>::updateMomentums(
         {
             DT[thread] = DT[thread] * 2;
             continue;
-        };
-    };
-};
+        }
+    }
+}
 
 template <class PointType>
 void ParticlesMover<PointType>::updatePositions(
@@ -364,7 +328,7 @@ void ParticlesMover<PointType>::updatePositions(
         if (dr > 0)
         {
             int tt = 0;
-        };
+        }
 
         PointType dPh                   = DT[thread] * pphi / (gamma * r * r);
         particlesData->Get_phiReal()[i] = particlesData->Get_phiReal()[i] + dPh;
@@ -398,8 +362,8 @@ void ParticlesMover<PointType>::updatePositions(
                 particlesData->Get_isPeriodical()[i] = 1;
             else
                 particlesData->Get_isPeriodical()[i] = 2;
-        };
-    };
+        }
+    }
     // particlesData->PeriodicalEvent(dPh);
     Dmath::Polar2Cartesian(&particlesData->Get_r()[0], &particlesData->Get_phi()[0],
                            &particlesData->Get_x()[0], &particlesData->Get_y()[0],
@@ -407,7 +371,7 @@ void ParticlesMover<PointType>::updatePositions(
     Dmath::Polar2Cartesian(&particlesData->Get_r()[0], &particlesData->Get_phiReal()[0],
                            &particlesData->Get_xReal()[0], &particlesData->Get_yReal()[0],
                            particlesData->NParticles());
-};
+}
 
 template <class PointType>
 void ParticlesMover<PointType>::updateMomentums(
@@ -490,9 +454,9 @@ void ParticlesMover<PointType>::updateMomentums(
         {
             DT[thread] = DT[thread] * 2;
             continue;
-        };
-    };
-};
+        }
+    }
+}
 
 template <class PointType>
 void ParticlesMover<PointType>::init(std::vector<PointType> alpha, int solverType)
@@ -518,8 +482,8 @@ void ParticlesMover<PointType>::init(std::vector<PointType> alpha, int solverTyp
             {
                 imin = i;
                 amin = std::abs(alpha[i]);
-            };
-        };
+            }
+        }
         for (int i = 0; i < alpha.size(); i++)
         {
             for (int thread          = 0; thread < timeSteps.size(); thread++)
@@ -527,7 +491,7 @@ void ParticlesMover<PointType>::init(std::vector<PointType> alpha, int solverTyp
         }
         return;
     }
-};
+}
 
 template <class PointType>
 void ParticlesMover<PointType>::updatePositions(
@@ -560,8 +524,9 @@ void ParticlesMover<PointType>::updatePositions(
         particlesData->Get_x()[i] = particlesData->Get_x()[i] + DT[thread] * pxn / gamma;
         particlesData->Get_y()[i] = particlesData->Get_y()[i] + DT[thread] * pyn / gamma;
         particlesData->Get_z()[i] = particlesData->Get_z()[i] + DT[thread] * pzn / gamma;
-    };
-};
+    }
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::updateMomentums(
     const std::shared_ptr<Particles2d<PointType>>& particlesData,
@@ -590,9 +555,9 @@ void ParticlesMover<PointType>::updateMomentums(
         {
             DT[thread] = DT[thread] * 2;
             continue;
-        };
-    };
-};
+        }
+    }
+}
 
 template <class PointType>
 void ParticlesMover<PointType>::updatePositions(
@@ -655,8 +620,9 @@ void ParticlesMover<PointType>::updatePositions(
             particlesData->Get_pr()[i]   = -particlesData->Get_pr()[i];
             particlesData->Get_pphi()[i] = 0;
         }
-    };
-};
+    }
+}
+
 template <class PointType>
 void ParticlesMover<PointType>::updateMomentums(
     const std::shared_ptr<Particles3dcil<PointType>>& particlesData,
@@ -756,6 +722,50 @@ void ParticlesMover<PointType>::updateMomentums(
         {
             DT[thread] = DT[thread] * 2;
             continue;
-        };
-    };
-};
+        }
+    }
+}
+
+template class ParticlesMover<double>;
+template class ParticlesMover<float>;
+
+template void ParticlesMover<float>::stepEstimate<Particles3dcil<float>>(
+        const std::shared_ptr<Particles3dcil<float>>& particlesData, int nlow, int i1, int i2,
+        int thread, int solverType);
+template void ParticlesMover<float>::stepEstimate<Particles2d<float>>(
+        const std::shared_ptr<Particles2d<float>>& particlesData, int nlow, int i1, int i2, int thread,
+        int solverType);
+template void ParticlesMover<float>::stepEstimate<Particles2dpolar<float>>(
+        const std::shared_ptr<Particles2dpolar<float>>& particlesData, int nlow, int i1, int i2,
+        int thread, int solverType);
+
+template void ParticlesMover<double>::stepEstimate<Particles3dcil<double>>(
+        const std::shared_ptr<Particles3dcil<double>>& particlesData, int nlow, int i1, int i2,
+        int thread, int solverType);
+template void ParticlesMover<double>::stepEstimate<Particles2d<double>>(
+        const std::shared_ptr<Particles2d<double>>& particlesData, int nlow, int i1, int i2, int thread,
+        int solverType);
+template void ParticlesMover<double>::stepEstimate<Particles2dpolar<double>>(
+        const std::shared_ptr<Particles2dpolar<double>>& particlesData, int nlow, int i1, int i2,
+        int thread, int solverType);
+
+template void ParticlesMover<double>::stepEstimate<Particles3d<double>>(
+        const std::shared_ptr<Particles3d<double>>& particlesData, int nlow, int i1, int i2, int thread,
+        int solverType);
+
+template void ParticlesMover<float>::stepEstimate<Particles3d<float>>(
+        const std::shared_ptr<Particles3d<float>>& particlesData, int nlow, int i1, int i2, int thread,
+        int solverType);
+
+template void
+ParticlesMover<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                             const unsigned int file_version);
+template void ParticlesMover<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void
+ParticlesMover<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                              const unsigned int file_version);
+template void
+ParticlesMover<float>::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                             const unsigned int file_version) const;

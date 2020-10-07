@@ -4,85 +4,96 @@
 #include "Geom.h"
 #include "ParticleShape2d.h"
 
-template class GridData3d<double>;
-template class GridData3d<float>;
 
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Getx()
 {
     return this->X[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Gety()
 {
     return this->X[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Getz()
 {
     return this->X[2];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_Ex()
 {
     return this->E[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_Ey()
 {
     return this->E[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_Ez()
 {
     return this->E[2];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_ExA()
 {
     return this->EA[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_EyA()
 {
     return this->EA[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_EzA()
 {
     return this->EA[2];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_ExCol()
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_EyCol()
 {
     return this->ECol[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::Get_EzCol()
 {
     return this->ECol[2];
-};
+}
 
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::GetBx()
 {
     return this->B[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::GetBy()
 {
     return this->B[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData3d<PointType>::GetBz()
 {
     return this->B[2];
-};
+}
 
 template <class PointType>
 float GridData3d<PointType>::GetMaxSixe() const
@@ -101,7 +112,7 @@ float GridData3d<PointType>::GetMaxSixe() const
     return float(std::abs(this->X[0][1] - this->X[0][0]));
 
     return std::max(float(std::abs(this->X[0][1] - this->X[0][0])), float(Hmax));
-};
+}
 
 template <class PointType>
 int GridData3d<PointType>::InCell(double x1, double x2, double x3) const
@@ -117,13 +128,13 @@ int GridData3d<PointType>::InCell(double x1, double x2, double x3) const
     if (i == this->CICArray.size() - 1)
         return -1;
     return i;
-};
+}
 
 template <class PointType>
 void GridData3d<PointType>::GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
                                     int PlotTypeFlag) const {
 
-};
+}
 
 template <class PointType>
 float GridData3d<PointType>::interpolatePoint(double x1, double x2, double x3, std::string value,
@@ -196,13 +207,11 @@ float GridData3d<PointType>::interpolatePoint(double x1, double x2, double x3, s
                                                                 this->CICArray, this->CICArrayZ);
 
     return result;
-};
+}
 
 template <class PointType>
 void GridData3d<PointType>::interpolatePoint(double x1, double x2, double x3, double& Exin,
-                                             double& Eyin) const
-{
-}
+                                             double& Eyin) const {}
 
 template <class PointType>
 std::vector<DGeo::Edge<PointType>> GridData3d<PointType>::GetCellEdgesArray(int cellNumb) const
@@ -210,3 +219,6 @@ std::vector<DGeo::Edge<PointType>> GridData3d<PointType>::GetCellEdgesArray(int 
     std::vector<DGeo::Edge<PointType>> edge(4);
     return edge;
 }
+
+template class GridData3d<double>;
+template class GridData3d<float>;

@@ -13,17 +13,6 @@
 #include <boost/serialization/vector.hpp>
 #include <Constants.h>
 
-template class ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>;
-template class ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>;
-
-template class ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>;
-template class ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>;
-
-template class ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>;
-template class ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>;
-
-template class ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>;
-template class ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>;
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetEmittanceData(
@@ -31,7 +20,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetEmittanc
 {
     Emittances[0][flagNumber]->GetEmittanceData(data, emFlag, mass,
                                                 EmitterDeviceStatus->GetLambda());
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::AddEmittancesData(int thread)
@@ -42,16 +31,14 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::AddEmittanc
 
     for (int i = 0; i < Emittances[thread].size(); i++)
         writeIndexes[thread][i].clear();
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 bool ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::isConfigure()
 {
-    if (DistributionStyle < 5 &&
-        !EmitterDeviceStatus->GetParticleSources()[0]->sourceSurface.size())
-        return false;
-    return true;
-};
+    return !(DistributionStyle < 5 &&
+             !EmitterDeviceStatus->GetParticleSources()[0]->sourceSurface.size());
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::MergeEmittancesData()
@@ -64,7 +51,8 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::MergeEmitta
             Emittances[thread][i]->clear();
         }
     }
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetRmsEmittances(
     std::vector<float>& emittance)
@@ -94,7 +82,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetRmsEmitt
     for (int i = 0; i < DynamicsDataParallel.size(); i++)
     {
         DynamicsDataParallel[i]->GetBeamMeasuriments(meas, mass, zAv, betaAv);
-    };
+    }
 
     for (int i = 0; i < 3; i++)
     {
@@ -102,7 +90,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetRmsEmitt
         float pp     = meas[i][1] / n - (meas[i][3] / n) * (meas[i][3] / n);
         float xxpp   = meas[i][4] / n - meas[i][2] * meas[i][3] / (n * n);
         emittance[i] = sqrt(xx * pp - xxpp * xxpp);
-    };
+    }
     emittance[0] = 4 * betaAv * emittance[0] * 1e5;
     emittance[1] = 4 * betaAv * emittance[1] * 1e5;
     emittance[2] = 4 * 1e9 * emittance[2] / (betaAv * LIGHT_VELOCITY());
@@ -112,24 +100,25 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetRmsEmitt
         if (std::isinf(emittance[i]) || std::isnan(emittance[i]) || emittance[i] < 0)
             emittance[i] = 0;
     }
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<double>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetEmittancesList()
 {
     return EmittancesList;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::AddEmittance(double param)
 {
     EmittancesList.push_back(param);
     Emittances[0].push_back(std::shared_ptr<ParticlesDataType>(new ParticlesDataType()));
-};
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::checkEmittances(int thread,
-                                                                                     int i1, int i2)
-{
+}
 
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::checkEmittances(int thread, int i1, int i2)
+{
     for (int i = 0; i < Emittances[thread].size(); i++)
     {
         std::vector<int> numbers = DynamicsDataParallel[thread]->CheckEmittanceCondition(
@@ -137,7 +126,8 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::checkEmitta
         writeIndexes[thread][i].insert(writeIndexes[thread][i].end(), numbers.begin(),
                                        numbers.end());
     }
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 long long ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetMemorySize()
 {
@@ -153,27 +143,29 @@ long long ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetMem
     result = result + newParticlesZ0->GetMemorySize();
 
     return result;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 int ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetNumberOfThreads()
 {
     return DynamicsDataParallel.size();
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-int ParticlesFlow<ParticlesDataType, EmitterDeviceType,
-                  PointType>::GetNumberOfParticles() // total number of particles in
-                                                     // DynamicsDataParallel
+int ParticlesFlow<ParticlesDataType, EmitterDeviceType,PointType>::GetNumberOfParticles() // total number of particles in DynamicsDataParallel
 {
     int res = 0;
     for (int i = 0; i < DynamicsDataParallel.size(); i++)
         res = res + DynamicsDataParallel[i]->NParticles();
     return res;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GenerateSyncParticle()
 {
     EmitterDeviceStatus->GenerateSyncParticle(DynamicsData, mass);
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CalculateFlowCurrent()
 {
@@ -183,24 +175,26 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CalculateFl
         res = res + std::abs(DynamicsDataParallel[i]->GetTotalCurrent());
 
     EmitterDeviceStatus->SetFlowCurrent(res);
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 int ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetMaxParticles()
 {
     return EmitterDeviceStatus->GetMaxParticles();
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::DivideForThreads(
     int numThreads){
 
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::clearParallel()
 {
     for (int j = 0; j < DynamicsDataParallel.size(); j++)
         DynamicsDataParallel[j]->clear();
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParallel(int size,
@@ -221,7 +215,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParalle
                 std::shared_ptr<ParticlesDataType>(new ParticlesDataType(flagMethod));
             Emittances[j][i]->clear();
         }
-    };
+    }
 
     int nowThreads = DynamicsDataParallel.size();
 
@@ -246,7 +240,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParalle
             DynamicsDataParallel[numThreads - 1]->RecombinateParticles(
                 DynamicsDataParallel[j].get(), DynamicsDataParallel[j]->NParticles());
         }
-    };
+    }
 
     if (nowThreads > numThreads)
     {
@@ -259,9 +253,9 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParalle
 
             DynamicsDataParallel[numThreads - 1]->RecombinateParticles(
                 DynamicsDataParallel[j].get(), DynamicsDataParallel[j]->NParticles());
-        };
+        }
         DynamicsDataParallel.resize(numThreads);
-    };
+    }
 
     writeIndexes.resize(numThreads);
 
@@ -298,12 +292,12 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParalle
             int index = rand() % allIndexes.size();
             indesexPerThread[i].push_back(allIndexes[index]);
             allIndexes.erase(allIndexes.begin() + index);
-        };
+        }
     }
     for (int i = 0; i < numThreads; i++)
     {
         std::sort(indesexPerThread[i].begin(), indesexPerThread[i].end());
-    };
+    }
 }
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
@@ -319,7 +313,7 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::InitParalle
         DynamicsDataParallelTmp[i]->ReserveMemory(blockSize * 2);
         DynamicsDataParallelTmp[i]->resize(blockSize * 2);
     }
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<double>
@@ -331,6 +325,7 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetFlowMCNumbers
     result[2] = maxTime;
     return result;
 }
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::SetFlowMCNumbers(
     std::vector<double> numbers)
@@ -339,31 +334,36 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::SetFlowMCNu
     charge  = std::abs(ELECTRON_CHARGE()) * numbers[1];
     maxTime = numbers[2];
 }
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 int ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetParticlesType()
 {
     return ParticlesType;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 int ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDistributionStyle()
 {
     return DistributionStyle;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 PointType ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetMass()
 {
     return mass;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 PointType ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetCharge()
 {
     return charge;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 PointType ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetAlpha()
 {
     return charge / (mass * LIGHT_VELOCITY() * LIGHT_VELOCITY());
-};
+}
 // EmitterDeviceType*  EmitterDeviceStatus;
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
@@ -371,20 +371,22 @@ std::shared_ptr<EmitterDeviceType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetEmitterDevice()
 {
     return EmitterDeviceStatus;
-};
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::shared_ptr<BoundaryConditions>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetboundaryConditions()
 {
     return boundaryConditions;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::shared_ptr<ParticlesDataType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsData()
 {
     return DynamicsData;
 }
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::shared_ptr<ParticlesDataType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsDataStart()
@@ -401,12 +403,14 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsDataT
 {
     return tmpData;
 }
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::shared_ptr<ParticlesDataType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsData(int thread)
 {
     return DynamicsDataParallel[thread];
 }
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::shared_ptr<ParticlesDataType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsDataTmp(int thread)
@@ -419,27 +423,32 @@ std::vector<std::shared_ptr<ParticlesDataType>>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetDynamicsDataParallelArray()
 {
     return DynamicsDataParallel;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<float>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetData(int Index)
 {
     return DynamicsData->GetData(Index, mass, charge);
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<void*> ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetData()
 {
     return DynamicsData->GetData();
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow()
 {
     EmitterDeviceStatus = std::shared_ptr<EmitterDeviceType>(new EmitterDeviceType());
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ReserveMemory(int size){
     //	DynamicsData->ReserveMemory()(size);
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
     int ParticlesTypeIn, int DistributionStyleIn, double MassNumber, double ChargeNumber,
@@ -459,14 +468,14 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
     newParticlesZ0 = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
     tmpData        = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
     DynamicsData   = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 bool ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CheckTimeLimit(int thread)
 {
-    if (maxTime * 1e-9 * LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time)
-        return true;
-    return false;
-};
+    return maxTime * 1e-9 * LIGHT_VELOCITY() < DynamicsDataParallel[thread]->Time;
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
     int ParticlesTypeIn, int DistributionStyleIn,
@@ -485,7 +494,8 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::ParticlesFlow(
     newParticlesZ0 = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
     tmpData        = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
     DynamicsData   = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<double>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetFlowProperties()
@@ -497,13 +507,14 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetFlowPropertie
     properties.push_back(charge);
     properties.push_back(maxTime);
     return properties;
-};
+}
+
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 std::vector<unsigned int>
 ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetNewIndexes(
     std::vector<unsigned int> EmptyPlaces)
 {
-    int particlesNumber = EmitterDeviceStatus->GetNumbersOfParticlesGeneration();
+    //int particlesNumber = EmitterDeviceStatus->GetNumbersOfParticlesGeneration();
     std::vector<unsigned int> result;
 
     for (int i = 0; i < DynamicsData->NParticles(); i++)
@@ -529,54 +540,7 @@ ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GetNewIndexes(
     k++;
     }*/
     return result;
-};
-
-template void
-ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::GenerateParticles<
-    GridData2daxs<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                          int stepNumber, const std::shared_ptr<GridData2daxs<float>>& grid,
-                          int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::GenerateParticles<
-    GridData2daxs<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                           int stepNumber, const std::shared_ptr<GridData2daxs<double>>& grid,
-                           int flagLocate, int flagDistrib);
-
-template void ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::GenerateParticles<
-    GridData2d<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                       int stepNumber, const std::shared_ptr<GridData2d<float>>& grid,
-                       int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::GenerateParticles<
-    GridData2d<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                        int stepNumber, const std::shared_ptr<GridData2d<double>>& grid,
-                        int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::GenerateParticles<
-    GridData2dpolar<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                            int stepNumber, const std::shared_ptr<GridData2dpolar<float>>& grid,
-                            int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::GenerateParticles<
-    GridData2dpolar<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                             int stepNumber, const std::shared_ptr<GridData2dpolar<double>>& grid,
-                             int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::GenerateParticles<
-    GridData3d<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                        int stepNumber, const std::shared_ptr<GridData3d<double>>& grid,
-                        int flagLocate, int flagDistrib);
-
-template void ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::GenerateParticles<
-    GridData3d<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-                       int stepNumber, const std::shared_ptr<GridData3d<float>>& grid,
-                       int flagLocate, int flagDistrib);
-
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 template <class GridDataType>
@@ -597,63 +561,8 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GeneratePar
         EmitterDeviceStatus->GenerateParticles(allIndexes, 0, 1, EmptyPlaces, DynamicsData, mass,
                                                charge, flagClear, dt, stepNumber, grid, flagLocate,
                                                flagDistrib);
-    };
-};
-
-template void
-ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::GenerateParticlesThreaded<
-    GridData2daxs<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                          int flagClear, double dt, int stepNumber,
-                          const std::shared_ptr<GridData2daxs<float>>& grid, int flagLocate,
-                          int flagDistrib);
-
-template void ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::
-    GenerateParticlesThreaded<GridData2daxs<double>>(
-        int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces, int flagClear,
-        double dt, int stepNumber, const std::shared_ptr<GridData2daxs<double>>& grid,
-        int flagLocate, int flagDistrib);
-
-template void
-ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::GenerateParticlesThreaded<
-    GridData2d<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                       int flagClear, double dt, int stepNumber,
-                       const std::shared_ptr<GridData2d<float>>& grid, int flagLocate,
-                       int flagDistrib);
-
-template void
-ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::GenerateParticlesThreaded<
-    GridData2d<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                        int flagClear, double dt, int stepNumber,
-                        const std::shared_ptr<GridData2d<double>>& grid, int flagLocate,
-                        int flagDistrib);
-
-template void
-ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::GenerateParticlesThreaded<
-    GridData2dpolar<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                            int flagClear, double dt, int stepNumber,
-                            const std::shared_ptr<GridData2dpolar<float>>& grid, int flagLocate,
-                            int flagDistrib);
-
-template void
-ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::GenerateParticlesThreaded<
-    GridData2dpolar<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                             int flagClear, double dt, int stepNumber,
-                             const std::shared_ptr<GridData2dpolar<double>>& grid, int flagLocate,
-                             int flagDistrib);
-
-template void
-ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::GenerateParticlesThreaded<
-    GridData3d<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                        int flagClear, double dt, int stepNumber,
-                        const std::shared_ptr<GridData3d<double>>& grid, int flagLocate,
-                        int flagDistrib);
-
-template void
-ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::GenerateParticlesThreaded<
-    GridData3d<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
-                       int flagClear, double dt, int stepNumber,
-                       const std::shared_ptr<GridData3d<float>>& grid, int flagLocate,
-                       int flagDistrib);
+    }
+}
 
 template <class ParticlesDataType, class EmitterDeviceType, class PointType>
 template <class GridDataType>
@@ -669,7 +578,205 @@ void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GeneratePar
         EmitterDeviceStatus->GenerateParticles(
             indesexPerThread[thread], thread, numThreads, EmptyPlaces, DynamicsDataParallel[thread],
             mass, charge, flagClear, dt, stepNumber, grid, flagLocate, flagDistrib);
-};
+}
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+template <class GridDataType>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GenerateParticlesThreadedTest(
+        int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+        int stepNumber, const std::shared_ptr<GridDataType>& grid, int flagLocate, int flagDistrib)
+{
+    if (DistributionStyle == 5)
+        EmitterDeviceStatus->GenerateParticlesLinac(
+                1, thread, numThreads, EmptyPlaces, DynamicsDataParallel[thread], mass,
+                Dmath::sign(charge), flagClear, dt, stepNumber, grid, flagLocate, flagDistrib);
+    else if (stepNumber == 0)
+        EmitterDeviceStatus->GenerateParticles(
+                indesexPerThread[thread], thread, numThreads, EmptyPlaces, DynamicsDataParallel[thread],
+                mass, charge, flagClear, dt, stepNumber, grid, flagLocate, flagDistrib);
+}
+
+/*template <class GridDataType>
+void GenerateParticlesVector(double dt, int stepNumber)
+{
+newParticles = ParticlesDataType();
+EmitterDeviceStatus->GenerateParticles(std::vector <unsigned int > {}, newParticles, mass,
+Dmath::sign(charge), 1, dt,
+stepNumber);
+};*/
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::setNewParticles(
+        const std::vector<unsigned int>& EmptyPlaces)
+{
+    // DynamicsData->setNewParticles(EmptyPlaces, newParticles.get());
+}
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CopyDynamicsDataToTmp(int i1,
+                                                                                           int i2)
+{
+    DynamicsData->FastCopy(tmpData.get(), i1, i2);
+}
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CopyDynamicsDataToTmpThreaded(
+        int thread, int i1, int i2)
+{
+    DynamicsDataParallel[thread]->FastCopy(DynamicsDataParallelTmp[thread].get(), i1, i2);
+}
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+template <class Archive>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::save(Archive& ar,
+                                                                          const unsigned int) const
+{
+    ar& ParticlesType;
+    ar& mass;
+    ar& charge;
+    ar& EmitterDeviceStatus;
+    //	ar & DynamicsData;
+    ar& boundaryConditions;
+    ar& DistributionStyle;
+    ar& newParticlesZ0;
+    ar& maxTime;
+    ar& EmittancesList;
+    ar& Emittances[0];
+}
+
+template <class ParticlesDataType, class EmitterDeviceType, class PointType>
+template <class Archive>
+void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::load(Archive& ar,
+                                                                          const unsigned int)
+{
+    ar& ParticlesType;
+    ar& mass;
+    ar& charge;
+    ar& EmitterDeviceStatus;
+    //	ar & DynamicsData;
+    ar& boundaryConditions;
+    ar& DistributionStyle;
+    ar& newParticlesZ0;
+    ar& maxTime;
+    ar& EmittancesList;
+    Emittances.resize(1);
+    ar& Emittances[0];
+    DynamicsData = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
+}
+
+template class ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>;
+template class ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>;
+
+template class ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>;
+template class ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>;
+
+template class ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>;
+template class ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>;
+
+template class ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>;
+template class ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>;
+
+template void
+ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::GenerateParticles<
+        GridData2daxs<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                              int stepNumber, const std::shared_ptr<GridData2daxs<float>>& grid,
+                              int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::GenerateParticles<
+        GridData2daxs<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                               int stepNumber, const std::shared_ptr<GridData2daxs<double>>& grid,
+                               int flagLocate, int flagDistrib);
+
+template void ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::GenerateParticles<
+        GridData2d<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                           int stepNumber, const std::shared_ptr<GridData2d<float>>& grid,
+                           int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::GenerateParticles<
+        GridData2d<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                            int stepNumber, const std::shared_ptr<GridData2d<double>>& grid,
+                            int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::GenerateParticles<
+        GridData2dpolar<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                                int stepNumber, const std::shared_ptr<GridData2dpolar<float>>& grid,
+                                int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::GenerateParticles<
+        GridData2dpolar<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                                 int stepNumber, const std::shared_ptr<GridData2dpolar<double>>& grid,
+                                 int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::GenerateParticles<
+        GridData3d<double>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                            int stepNumber, const std::shared_ptr<GridData3d<double>>& grid,
+                            int flagLocate, int flagDistrib);
+
+template void ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::GenerateParticles<
+        GridData3d<float>>(std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
+                           int stepNumber, const std::shared_ptr<GridData3d<float>>& grid,
+                           int flagLocate, int flagDistrib);
+
+
+template void
+ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::GenerateParticlesThreaded<
+        GridData2daxs<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                              int flagClear, double dt, int stepNumber,
+                              const std::shared_ptr<GridData2daxs<float>>& grid, int flagLocate,
+                              int flagDistrib);
+
+template void ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::
+GenerateParticlesThreaded<GridData2daxs<double>>(
+        int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces, int flagClear,
+        double dt, int stepNumber, const std::shared_ptr<GridData2daxs<double>>& grid,
+        int flagLocate, int flagDistrib);
+
+template void
+ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::GenerateParticlesThreaded<
+        GridData2d<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                           int flagClear, double dt, int stepNumber,
+                           const std::shared_ptr<GridData2d<float>>& grid, int flagLocate,
+                           int flagDistrib);
+
+template void
+ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::GenerateParticlesThreaded<
+        GridData2d<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                            int flagClear, double dt, int stepNumber,
+                            const std::shared_ptr<GridData2d<double>>& grid, int flagLocate,
+                            int flagDistrib);
+
+template void
+ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::GenerateParticlesThreaded<
+        GridData2dpolar<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                                int flagClear, double dt, int stepNumber,
+                                const std::shared_ptr<GridData2dpolar<float>>& grid, int flagLocate,
+                                int flagDistrib);
+
+template void
+ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::GenerateParticlesThreaded<
+        GridData2dpolar<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                                 int flagClear, double dt, int stepNumber,
+                                 const std::shared_ptr<GridData2dpolar<double>>& grid, int flagLocate,
+                                 int flagDistrib);
+
+template void
+ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::GenerateParticlesThreaded<
+        GridData3d<double>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                            int flagClear, double dt, int stepNumber,
+                            const std::shared_ptr<GridData3d<double>>& grid, int flagLocate,
+                            int flagDistrib);
+
+template void
+ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::GenerateParticlesThreaded<
+        GridData3d<float>>(int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces,
+                           int flagClear, double dt, int stepNumber,
+                           const std::shared_ptr<GridData3d<float>>& grid, int flagLocate,
+                           int flagDistrib);
 
 template void ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::
     GenerateParticlesThreadedTest<GridData2daxs<float>>(
@@ -723,133 +830,52 @@ ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::GeneratePartic
                        const std::shared_ptr<GridData3d<float>>& grid, int flagLocate,
                        int flagDistrib);
 
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-template <class GridDataType>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::GenerateParticlesThreadedTest(
-    int thread, int numThreads, std::vector<unsigned int>& EmptyPlaces, int flagClear, double dt,
-    int stepNumber, const std::shared_ptr<GridDataType>& grid, int flagLocate, int flagDistrib)
-{
-    if (DistributionStyle == 5)
-        EmitterDeviceStatus->GenerateParticlesLinac(
-            1, thread, numThreads, EmptyPlaces, DynamicsDataParallel[thread], mass,
-            Dmath::sign(charge), flagClear, dt, stepNumber, grid, flagLocate, flagDistrib);
-    else if (stepNumber == 0)
-        EmitterDeviceStatus->GenerateParticles(
-            indesexPerThread[thread], thread, numThreads, EmptyPlaces, DynamicsDataParallel[thread],
-            mass, charge, flagClear, dt, stepNumber, grid, flagLocate, flagDistrib);
-};
-
-/*template <class GridDataType>
-void GenerateParticlesVector(double dt, int stepNumber)
-{
-newParticles = ParticlesDataType();
-EmitterDeviceStatus->GenerateParticles(std::vector <unsigned int > {}, newParticles, mass,
-Dmath::sign(charge), 1, dt,
-stepNumber);
-};*/
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::setNewParticles(
-    const std::vector<unsigned int>& EmptyPlaces)
-{
-    // DynamicsData->setNewParticles(EmptyPlaces, newParticles.get());
-}
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CopyDynamicsDataToTmp(int i1,
-                                                                                           int i2)
-{
-    DynamicsData->FastCopy(tmpData.get(), i1, i2);
-};
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::CopyDynamicsDataToTmpThreaded(
-    int thread, int i1, int i2)
-{
-    DynamicsDataParallel[thread]->FastCopy(DynamicsDataParallelTmp[thread].get(), i1, i2);
-};
+template void ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
+template void ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::serialize<
+        boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                         const unsigned int               file_version);
 
 template void ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);
 template void ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::serialize<
-    boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                     const unsigned int               file_version);
-
-template void ParticlesFlow<Particles3dcil<float>, EmitterDevice2daxs<float>, float>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles3dcil<double>, EmitterDevice2daxs<double>, double>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles2d<float>, EmitterDevice2d<float>, float>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles2d<double>, EmitterDevice2d<double>, double>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles2dpolar<float>, EmitterDevice2d<float>, float>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles2dpolar<double>, EmitterDevice2d<double>, double>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles3d<double>, EmitterDevice3d<double>, double>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-template void ParticlesFlow<Particles3d<float>, EmitterDevice3d<float>, float>::serialize<
-    boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                     const unsigned int               file_version);
-
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-template <class Archive>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::save(Archive& ar,
-                                                                          const unsigned int) const
-{
-    ar& ParticlesType;
-    ar& mass;
-    ar& charge;
-    ar& EmitterDeviceStatus;
-    //	ar & DynamicsData;
-    ar& boundaryConditions;
-    ar& DistributionStyle;
-    ar& newParticlesZ0;
-    ar& maxTime;
-    ar& EmittancesList;
-    ar& Emittances[0];
-};
-
-template <class ParticlesDataType, class EmitterDeviceType, class PointType>
-template <class Archive>
-void ParticlesFlow<ParticlesDataType, EmitterDeviceType, PointType>::load(Archive& ar,
-                                                                          const unsigned int)
-{
-    ar& ParticlesType;
-    ar& mass;
-    ar& charge;
-    ar& EmitterDeviceStatus;
-    //	ar & DynamicsData;
-    ar& boundaryConditions;
-    ar& DistributionStyle;
-    ar& newParticlesZ0;
-    ar& maxTime;
-    ar& EmittancesList;
-    Emittances.resize(1);
-    ar& Emittances[0];
-    DynamicsData = std::shared_ptr<ParticlesDataType>(new ParticlesDataType(0));
-};
+        boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                         const unsigned int               file_version);

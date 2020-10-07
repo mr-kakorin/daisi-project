@@ -76,7 +76,7 @@ void GetTime(std::string& timeIn, std::string& dateIn)
             fprintf(fp, "@ TIME             %4s \"%d\.%d\.%d\" \n", "%08s", timeinfo->tm_hour, timeinfo->tm_min,
     timeinfo->tm_sec); else fprintf(fp, "@ TIME             %4s \"%d\.0%d\.%d\" \n", "%08s", timeinfo->tm_hour,
     timeinfo->tm_min, timeinfo->tm_sec);*/
-};
+}
 
 void strsplit(char* string, char* split, std::vector<std::string>& result)
 {
@@ -88,7 +88,7 @@ void strsplit(char* string, char* split, std::vector<std::string>& result)
         result.push_back(pch);
         pch = strtok(NULL, split);
     }
-};
+}
 
 void strsplit(char* string, char* split, std::vector<double>& result, std::string& error)
 {
@@ -101,7 +101,8 @@ void strsplit(char* string, char* split, std::vector<double>& result, std::strin
         result.push_back(std::stod(tmpStr));
         pch = strtok(NULL, split);
     }
-};
+}
+
 void strsplit(char* string, char* split, std::vector<float>& result, std::string& error)
 {
 
@@ -113,24 +114,29 @@ void strsplit(char* string, char* split, std::vector<float>& result, std::string
         result.push_back(std::stof(tmpStr));
         pch = strtok(NULL, split);
     }
-};
+}
+
 std::vector<std::string>& myunsorted_map::GetKeys()
 {
     return keys;
-};
+}
+
 std::vector<double>& myunsorted_map::GetValues()
 {
     return values;
-};
+}
+
 void myunsorted_map::SetValues(const std::vector<double>& in)
 {
     values = in;
-};
+}
+
 void myunsorted_map::insert(const std::string& v1, double v2)
 {
     keys.push_back(v1);
     values.push_back(v2);
-};
+}
+
 void myunsorted_map::clear()
 {
 	keys.clear();
@@ -145,10 +151,10 @@ int myunsorted_map::find(const std::string& key, double& val)
         {
             val = values[i];
             return i;
-        };
-    };
+        }
+    }
     return -1;
-};
+}
 
 void myunsorted_map::set(const std::string& key, const double val)
 {
@@ -157,8 +163,8 @@ void myunsorted_map::set(const std::string& key, const double val)
 		if (keys[i] == key)
 		{
 			values[i] = val;
-		};
-	};
+		}
+	}
 }
 
 
@@ -168,7 +174,7 @@ double myunsorted_map::find(const std::string& key)
     {
         if (keys[i] == key)
             return values[i];
-    };
+    }
     return -1;
 }
 
@@ -221,6 +227,7 @@ std::shared_ptr<boost::property_tree::ptree> readJSONString(const std::string& c
 		return nullptr;
 	}
 }
+
 std::shared_ptr<boost::property_tree::ptree> readJSONFile(const std::string& path)
 {
 

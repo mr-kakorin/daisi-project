@@ -65,15 +65,15 @@ double Dmath::Interpolate(const std::vector<double>& X, const std::vector<double
             {
                 I = i;
                 break;
-            };
-        };
+            }
+        }
     }
 
     double w1 = (X[I + 1] - x) / (X[I + 1] - X[I]);
     double w2 = 1 - w1;
     res       = w1 * Y[I] + w2 * Y[I + 1];
     return res;
-};
+}
 
 template <class PointType>
 PointType Dmath::CRSMatrix<PointType>::getElement(int i, int j)
@@ -98,7 +98,8 @@ PointType Dmath::CRSMatrix<PointType>::getElement(int i, int j)
             return value[k];
     }
     return 0.0;
-};
+}
+
 template <class PointType>
 int Dmath::CRSMatrix<PointType>::getStrSize(int i)
 {
@@ -113,7 +114,8 @@ int Dmath::CRSMatrix<PointType>::getStrSize(int i)
         end = rowIndex[i + 1];
     }
     return end - begin - 1;
-};
+}
+
 template <class PointType>
 void Dmath::CRSMatrix<PointType>::setElement(int i, int j, PointType val)
 {
@@ -145,7 +147,8 @@ void Dmath::CRSMatrix<PointType>::setElement(int i, int j, PointType val)
         rowIndex[m]++;
     }
     return;
-};
+}
+
 template <class PointType>
 void Dmath::CRSMatrix<PointType>::initMatrix(int size)
 {
@@ -155,7 +158,8 @@ void Dmath::CRSMatrix<PointType>::initMatrix(int size)
         col.push_back(0);
         value.push_back(0);
     }
-};
+}
+
 template <class PointType>
 void Dmath::CRSMatrix<PointType>::returnColIndexes(int i, std::vector<int>& result)
 {
@@ -177,17 +181,16 @@ void Dmath::CRSMatrix<PointType>::returnColIndexes(int i, std::vector<int>& resu
         result[m] = col[j];
         ++m;
     }
-};
+}
+
 template <class PointType>
 void Dmath::CRSMatrix<PointType>::destruct()
 {
     value.clear();
     col.clear();
     rowIndex.clear();
-};
+}
 
-template void Dmath::Cartesian2Polar<float>(float x, float y, float& r, float& phi);
-template void Dmath::Cartesian2Polar<double>(double x, double y, double& r, double& phi);
 
 template <class PointType>
 void Dmath::Cartesian2Polar(PointType x, PointType y, PointType& r, PointType& phi)
@@ -223,11 +226,7 @@ void Dmath::Cartesian2Polar(PointType x, PointType y, PointType& r, PointType& p
         phi = 2 * PI() - phi;
         return;
     }
-};
-
-template void Dmath::Polar2Cartesian<float>(float* r, float* phi, float* x, float* y, int size);
-template void Dmath::Polar2Cartesian<double>(double* r, double* phi, double* x, double* y,
-                                             int size);
+}
 
 template <class PointType>
 void Dmath::Polar2Cartesian(PointType* r, PointType* phi, PointType* x, PointType* y, int size)
@@ -237,20 +236,14 @@ void Dmath::Polar2Cartesian(PointType* r, PointType* phi, PointType* x, PointTyp
         x[i] = r[i] * std::cos(double(2 * PI() - phi[i]));
         y[i] = r[i] * std::sin(double(2 * PI() - phi[i]));
     }
-};
-
-template void Dmath::Polar2Cartesian<float>(float r, float phi, float& x, float& y);
-template void Dmath::Polar2Cartesian<double>(double r, double phi, double& x, double& y);
+}
 
 template <class PointType>
 void Dmath::Polar2Cartesian(PointType r, PointType phi, PointType& x, PointType& y)
 {
     x = r * std::cos(double(2 * PI() - phi));
     y = r * std::sin(double(2 * PI() - phi));
-};
-
-template void Dmath::SmoothMovingAverage<float>(std::vector<float>& data, int N);
-template void Dmath::SmoothMovingAverage<double>(std::vector<double>& data, int N);
+}
 
 template <class PointType>
 void Dmath::SmoothMovingAverage(std::vector<PointType>& data, int N)
@@ -265,17 +258,18 @@ void Dmath::SmoothMovingAverage(std::vector<PointType>& data, int N)
 
         data[i] = tmp / (2.0 * double(border) + 1.0);
     }
-};
+}
 
 int Dmath::imat::getElemIndex(int i, int j)
 {
     return i + j * nrow;
-};
+}
 
 std::vector<int> Dmath::imat::GetData()
 {
     return data;
-};
+}
+
 int Dmath::imat::getElem(int base, int d1, int d2)
 {
     if (base + d1 + d2 * nrow < 0)
@@ -284,23 +278,28 @@ int Dmath::imat::getElem(int base, int d1, int d2)
         return -1;
 
     return data[base + d1 + d2 * nrow];
-};
+}
+
 int Dmath::imat::GetNrow()
 {
     return nrow;
-};
+}
+
 int Dmath::imat::GetNcol()
 {
     return ncol;
-};
+}
+
 int Dmath::imat::GetNz()
 {
     return nz;
-};
+}
+
 int Dmath::imat::ArSize() const
 {
     return int(data.size());
-};
+}
+
 void Dmath::imat::ones(int nrowIn, int ncolIn)
 {
     nrow = nrowIn;
@@ -310,14 +309,16 @@ void Dmath::imat::ones(int nrowIn, int ncolIn)
     data = std::vector<int>(size);
     for (int i  = 0; i < size; i++)
         data[i] = 1;
-};
+}
+
 Dmath::imat Dmath::imat::operator*(int right)
 {
     imat result = *this;
     for (int i         = 0; i < size; i++)
         result.data[i] = result.data[i] * right;
     return result;
-};
+}
+
 Dmath::imat Dmath::imat::operator+(int right)
 {
     imat result = *this;
@@ -327,16 +328,17 @@ Dmath::imat Dmath::imat::operator+(int right)
             result.data[i] = result.data[i] + right;
     }
     return result;
-};
+}
+
 int& Dmath::imat::operator()(int i, int j)
 {
     return data[i + j * nrow];
-};
+}
 
 int Dmath::imat::getElemIndex(int i, int j, int k)
 {
     return i + j * nrow + k * nrow * ncol;
-};
+}
 
 int Dmath::imat::getElem(int base, int d1, int d2, int d3)
 {
@@ -346,7 +348,8 @@ int Dmath::imat::getElem(int base, int d1, int d2, int d3)
         return -1;
 
     return data[base + d1 + d2 * nrow + d3 * nrow * ncol];
-};
+}
+
 void Dmath::imat::clear()
 {
     nrow = 0;
@@ -354,12 +357,13 @@ void Dmath::imat::clear()
     nz   = 0;
     size = 0;
     data.clear();
-};
+}
+
 void Dmath::imat::Set(const imat& right, int startPos)
 {
     for (int i             = 0; i < right.ArSize(); i++)
         data[i + startPos] = right.data[i];
-};
+}
 
 void Dmath::imat::ones(int nrowIn, int ncolIn, int nzIn)
 {
@@ -371,11 +375,13 @@ void Dmath::imat::ones(int nrowIn, int ncolIn, int nzIn)
     data = std::vector<int>(size);
     for (int i  = 0; i < size; i++)
         data[i] = 1;
-};
+}
+
 int& Dmath::imat::operator()(int i, int j, int k)
 {
     return data[i + j * nrow + k * nrow * ncol];
-};
+}
+
 Dmath::imat& Dmath::imat::operator=(const imat& right)
 {
     if (this == &right)
@@ -388,4 +394,16 @@ Dmath::imat& Dmath::imat::operator=(const imat& right)
     nz   = right.nz;
     size = right.size;
     return *this;
-};
+}
+
+template void Dmath::Cartesian2Polar<float>(float x, float y, float& r, float& phi);
+template void Dmath::Cartesian2Polar<double>(double x, double y, double& r, double& phi);
+
+template void Dmath::Polar2Cartesian<float>(float* r, float* phi, float* x, float* y, int size);
+template void Dmath::Polar2Cartesian<double>(double* r, double* phi, double* x, double* y,
+                                             int size);
+template void Dmath::Polar2Cartesian<float>(float r, float phi, float& x, float& y);
+template void Dmath::Polar2Cartesian<double>(double r, double phi, double& x, double& y);
+
+template void Dmath::SmoothMovingAverage<float>(std::vector<float>& data, int N);
+template void Dmath::SmoothMovingAverage<double>(std::vector<double>& data, int N);

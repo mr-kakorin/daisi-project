@@ -2,16 +2,6 @@
 #include "BoundaryContainer2d.h"
 #include "Geom.h"
 
-template void
-mergeSortResize<float>(int nElements, std::vector<int> list,
-                       std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
-                       std::vector<DGeo::Edge<float>>& result, std::string& errorMsg);
-
-template void
-mergeSortResize<double>(int nElements, std::vector<int> list,
-                        std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
-                        std::vector<DGeo::Edge<double>>& result, std::string& errorMsg);
-
 template <class PointType>
 void mergeSortResize(int nElements, std::vector<int> list,
                      std::vector<std::shared_ptr<BoundaryContainer2d<PointType>>>& boundaries,
@@ -24,7 +14,7 @@ void mergeSortResize(int nElements, std::vector<int> list,
     {
         for (int j = 0; j < boundaries[list[i]]->EdgesData.size(); j++)
             edges.push_back(boundaries[list[i]]->EdgesData[j]);
-    };
+    }
 
     double length = 0;
 
@@ -87,7 +77,7 @@ void mergeSortResize(int nElements, std::vector<int> list,
     {
         errorMsg = "Boundary is not continuous!";
         return;
-    };
+    }
 
     std::vector<DGeo::Edge<PointType>> resArr;
     int                                resize;
@@ -103,7 +93,7 @@ void mergeSortResize(int nElements, std::vector<int> list,
                                   result.back().point2.Dist2Point(resArr[i].point2)))
             {
                 resArr[i].SwapPoints();
-            };
+            }
             result.push_back(resArr[i]);
         }
 
@@ -117,7 +107,7 @@ void mergeSortResize(int nElements, std::vector<int> list,
                     flag2++;
                 if (nextPoint.isEqual(edges[i].point2, tol))
                     flag1++;
-            };
+            }
             if (flag1 == 0 && flag2 != 0)
             {
                 nextPoint      = edges[i].point2;
@@ -142,5 +132,15 @@ void mergeSortResize(int nElements, std::vector<int> list,
     {
         if (result[i].IsEqual(result[i + 1], 1e-12))
             result.erase(result.begin() + i);
-    };
-};
+    }
+}
+
+template void
+mergeSortResize<float>(int nElements, std::vector<int> list,
+                       std::vector<std::shared_ptr<BoundaryContainer2d<float>>>& boundaries,
+                       std::vector<DGeo::Edge<float>>& result, std::string& errorMsg);
+
+template void
+mergeSortResize<double>(int nElements, std::vector<int> list,
+                        std::vector<std::shared_ptr<BoundaryContainer2d<double>>>& boundaries,
+                        std::vector<DGeo::Edge<double>>& result, std::string& errorMsg);

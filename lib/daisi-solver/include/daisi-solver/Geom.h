@@ -11,7 +11,7 @@ namespace DGeo
 
 template <class PointType> class Point
 {
-    friend class boost::serialization::access;
+  friend class boost::serialization::access;
 
   public:
     PointType x;
@@ -27,7 +27,7 @@ template <class PointType> class Point
         ar& z;
         ar& Number;
         ar& isOut;
-    };
+    }
     template <class Archive> void load(Archive& ar, const unsigned int)
     {
         ar& x;
@@ -35,7 +35,7 @@ template <class PointType> class Point
         ar& z;
         ar& Number;
         ar& isOut;
-    };
+    }
     bool isEqual(Point<PointType> point1, PointType epsilon) const;
     PointType Radius();
     PointType Dist2Point(const Point<PointType>& point1) const;
@@ -73,7 +73,8 @@ CurvePoints_t<PointType> calc_grad2d(std::vector<DGeo::Point<PointType>> const& 
     return result;
 }
 
-template <class PointType> PointType Pfabs(PointType val)
+template <class PointType>
+inline PointType Pfabs(PointType val)
 {
     if (val.x < 0)
         val.x = -val.x;
@@ -82,9 +83,10 @@ template <class PointType> PointType Pfabs(PointType val)
     if (val.z < 0)
         val.z = -val.z;
     return val;
-};
+}
 
-template <class PointType> int PointCmp(Point<PointType> p1, Point<PointType> p2, int key)
+template <class PointType>
+inline int PointCmp(Point<PointType> p1, Point<PointType> p2, int key)
 {
     if (key == 0)
     {
@@ -96,12 +98,13 @@ template <class PointType> int PointCmp(Point<PointType> p1, Point<PointType> p2
         {
             if (p1.x < p2.x)
                 return -1;
-        };
-    };
+        }
+    }
     return 1;
-};
+}
 
-template <class PointType> class Edge
+template <class PointType>
+class Edge
 {
   public:
     Point<PointType> point1;

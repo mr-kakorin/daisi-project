@@ -4,39 +4,43 @@
 #include "Geom.h"
 #include "ParticleShape2d.h"
 
-template class GridData2d<double>;
-template class GridData2d<float>;
 
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_Ex()
 {
     return this->E[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_Ey()
 {
     return this->E[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_ExCol()
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_EyCol()
 {
     return this->ECol[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_ExA()
 {
     return this->EA[0];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Get_EyA()
 {
     return this->EA[1];
-};
+}
+
 template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Getx()
 {
@@ -46,53 +50,61 @@ template <class PointType>
 std::vector<PointType>& GridData2d<PointType>::Gety()
 {
     return this->X[1];
-};
+}
 
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_Ex() const
 {
     return this->E[0];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_Ey() const
 {
     return this->E[1];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::GetECol() const
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_EyCol() const
 {
     return this->ECol[1];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_ExCol() const
 {
     return this->ECol[0];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_ExA() const
 {
     return this->EA[0];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Get_EyA() const
 {
     return this->EA[1];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Getx() const
 {
     return this->X[0];
-};
+}
+
 template <class PointType>
 const std::vector<PointType>& GridData2d<PointType>::Gety() const
 {
     return this->X[1];
-};
+}
 
 template <class PointType>
 void GridData2d<PointType>::GetData(void* Array[1], int& size, int& sizeElement, std::string flag,
@@ -127,7 +139,7 @@ void GridData2d<PointType>::GetData(void* Array[1], int& size, int& sizeElement,
         if (flag == flagStringsSolver::PlotFlags2d[3])
             Array[0] = (void*)(&this->VCharge[0]);
     }
-};
+}
 
 template <class PointType>
 float GridData2d<PointType>::interpolatePoint(double x1, double x2, double, std::string value,
@@ -242,7 +254,7 @@ float GridData2d<PointType>::interpolatePoint(double x1, double x2, double, std:
     }
 
     return result;
-};
+}
 
 template <class PointType>
 void GridData2d<PointType>::interpolatePoint(double x1, double x2, double x3, double& Exin,
@@ -284,7 +296,7 @@ void GridData2d<PointType>::interpolatePoint(double x1, double x2, double x3, do
 
     // Eyin = result;
     Eyin = result + result1;
-};
+}
 
 template <class PointType>
 float GridData2d<PointType>::GetMaxSixe() const
@@ -300,7 +312,7 @@ float GridData2d<PointType>::GetMaxSixe() const
             Hmax = h;
     }
     return std::max(float(std::abs(this->X[0][1] - this->X[0][0])), float(Hmax));
-};
+}
 
 template <class PointType>
 int GridData2d<PointType>::InCell(double x1, double x2, double x3) const
@@ -315,7 +327,7 @@ int GridData2d<PointType>::InCell(double x1, double x2, double x3) const
     if (i == this->CICArray.size() - 1)
         return -1;
     return i;
-};
+}
 
 template <class PointType>
 std::vector<DGeo::Edge<PointType>> GridData2d<PointType>::GetCellEdgesArray(int cellNumb) const
@@ -353,4 +365,7 @@ std::vector<DGeo::Edge<PointType>> GridData2d<PointType>::GetCellEdgesArray(int 
     edge[3].point2 = p[0];
 
     return edge;
-};
+}
+
+template class GridData2d<double>;
+template class GridData2d<float>;

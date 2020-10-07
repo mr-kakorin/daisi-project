@@ -14,7 +14,7 @@ SimulationDataAccel::SimulationDataAccel(const std::vector<std::string>& dataFla
     for (int i = 0; i < size1; i++)
     {
         XData[i].resize(size2);
-    };
+    }
 }
 
 SimulationDataAccel::SimulationDataAccel(const std::vector<std::string>& dataFlagsInput,
@@ -29,31 +29,34 @@ SimulationDataAccel::SimulationDataAccel(const std::vector<std::string>& dataFla
     for (int i = 0; i < size; i++)
     {
         YData[i].resize(Ysizes[i]);
-    };
-};
+    }
+}
 
 void SimulationDataAccel::addData(int position, float XDataIn, const std::vector<float>& YDataIn)
 {
     XData[position].push_back(XDataIn);
     YData[position].push_back(YDataIn);
-};
+}
+
 void SimulationDataAccel::addData(int position, float XDataIn, const std::vector<double>& YDataIn)
 {
     XData[position].push_back(XDataIn);
     YData[position].push_back({});
     for (int i = 0; i < YDataIn.size(); i++)
         YData[position].back().push_back(YDataIn[i]);
-};
+}
+
 void SimulationDataAccel::addData(int position, float XDataIn, float YDataIn)
 {
     XData[position].push_back(XDataIn);
     YData[position][0].push_back(YDataIn);
-};
+}
 
 DynamicsData::DynamicsData()
 {
     sizeElement = 0;
-};
+}
+
 float DynamicsData::StartTime()
 {
     if (TimeArray.size() == 0)
@@ -63,7 +66,8 @@ float DynamicsData::StartTime()
         return -1;
 
     return TimeArray[0][0];
-};
+}
+
 void DynamicsData::SetEmptyPlaces(const std::vector<unsigned int>& EmptyPlaces, int threadNumber)
 {
     int n = int(saveIndexes[threadNumber].size());
@@ -81,14 +85,15 @@ void DynamicsData::SetEmptyPlaces(const std::vector<unsigned int>& EmptyPlaces, 
                     k--;
                 if (j != 0)
                     j--;
-            };
-        };
-    };
+            }
+        }
+    }
 }
+
 void DynamicsData::SetRemove(std::vector<unsigned int> EmptyPlaces, int threadNumber)
 {
     int n  = int(saveIndexes[threadNumber].size());
-    int km = EmptyPlaces.size();
+    //int km = EmptyPlaces.size();
 
     n = int(saveIndexes[threadNumber].size());
 
@@ -116,6 +121,7 @@ void DynamicsData::SetRemove(std::vector<unsigned int> EmptyPlaces, int threadNu
             }
     }*/
 }
+
 void DynamicsData::SetRemovePTI(std::vector<unsigned int> EmptyPlaces, int threadNumber)
 {
     int n  = int(saveIndexes[threadNumber].size());
@@ -128,9 +134,9 @@ void DynamicsData::SetRemovePTI(std::vector<unsigned int> EmptyPlaces, int threa
             {
                 writeIndexes[threadNumber][j] = -1;
                 saveIndexes[threadNumber][j]  = -1;
-            };
-        };
-    };
+            }
+        }
+    }
 
     if (saveIndexes[threadNumber].size() != 0)
     {
@@ -143,7 +149,7 @@ void DynamicsData::SetRemovePTI(std::vector<unsigned int> EmptyPlaces, int threa
                 saveIndexes[threadNumber].erase(saveIndexes[threadNumber].begin() + k);
                 n--;
                 k--;
-            };
+            }
         }
     }
     std::vector<int> diff(saveIndexes[threadNumber].size());
@@ -185,15 +191,15 @@ void DynamicsData::SetDataAdd(std::vector<void*> dataIn, float Time)
     for (int i = 0; i < data1[0].size(); i++)
     {
         TimeArray1[i].push_back(Time / (1e-9));
-    };
-};
+    }
+}
 
 void DynamicsData::SetData(std::vector<void*> dataIn, float Time, int threadNumber, int saveParam,
                            int flag)
 {
     if (sizeElement == 0)
         return;
-    int n = int(saveIndexes[threadNumber].size());
+    //int n = int(saveIndexes[threadNumber].size());
 
     float tmp;
     for (int j = 0; j < dataIn.size(); j++)
@@ -227,8 +233,9 @@ void DynamicsData::SetData(std::vector<void*> dataIn, float Time, int threadNumb
         }
         if (flag == 1)
             steps[writeIndexes[threadNumber][i]]++;
-    };
-};
+    }
+}
+
 void DynamicsData::Init(int dataSize, float massIn, float chargeIn, int sizeElementIn,
                         int numberSaveTraces, int NumberThreades, float lambdaIn)
 {
@@ -299,7 +306,7 @@ void DynamicsData::AddSavedTraces(std::vector<unsigned int> saveIndexesIn, int t
         steps[currentTraces + i] = 0;
         writeIndexes[threadNumber].push_back(i + currentTraces);
     }
-};
+}
 
 void DynamicsData::Init(int dataSize, float massIn, float chargeIn, int sizeElementIn,
                         int NumberThreades, float lambdaIn)
@@ -313,6 +320,7 @@ void DynamicsData::Init(int dataSize, float massIn, float chargeIn, int sizeElem
     writeIndexes.resize(NumberThreades);
     saveIndexes.resize(NumberThreades);
 }
+
 void DynamicsData::AddBlock(std::vector<unsigned int> saveIndexesIn, int threadNumber, int nBlocks,
                             int blockNumber)
 {
@@ -330,11 +338,12 @@ void DynamicsData::AddBlock(std::vector<unsigned int> saveIndexesIn, int threadN
         {
             int k = rand() % saveIndexesIn.size();
             saveIndexesIn.erase(saveIndexesIn.begin() + k);
-        };
-    };
+        }
+    }
     steps.resize(numberSaveTraces);
     saveIndexes[threadNumber] = saveIndexesIn;
 }
+
 void DynamicsData::AddBlock(int saveInd1, int saveInd2, int threadNumber, int nBlocks,
                             int blockNumber)
 {
@@ -360,8 +369,8 @@ void DynamicsData::AddBlock(int saveInd1, int saveInd2, int threadNumber, int nB
         {
             int k = rand() % saveIndexesIn.size();
             saveIndexesIn.erase(saveIndexesIn.begin() + k);
-        };
-    };
+        }
+    }
     steps.resize(numberSaveTraces);
     saveIndexes[threadNumber] = saveIndexesIn;
 }
@@ -377,29 +386,7 @@ void DynamicsData::addDataDyn(int index, float T, const std::vector<float>& X)
     TimeArray[index].push_back(T);
     for (int i = 0; i < data.size(); i++)
         data[i][index].push_back(X[i]);
-};
-
-template void
-DynamicsData::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                         const unsigned int file_version);
-template void
-DynamicsData::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                         const unsigned int file_version);
-
-template void
-SimulationDataAccel::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                                const unsigned int file_version);
-template void
-SimulationDataAccel::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                                const unsigned int file_version);
-
-template void
-SimulationDataAccel::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                           const unsigned int file_version);
-
-template void
-SimulationDataAccel::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
-                                                           const unsigned int file_version) const;
+}
 
 template <class Archive>
 void SimulationDataAccel::save(Archive& ar, const unsigned int) const
@@ -423,3 +410,58 @@ void SimulationDataAccel::load(Archive& ar, const unsigned int)
     ar& props;
     ar& names;
 }
+
+template <class Archive>
+void DynamicsData::save(Archive& ar, const unsigned int) const
+{
+    ar& TimeArray;
+    ar& data;
+    ar& mass;
+    ar& charge;
+    ar& lambda;
+    ar& TimeArrayAdd;
+    ar& dataAdd;
+    ar& tag;
+}
+
+template <class Archive>
+void DynamicsData::load(Archive& ar, const unsigned int)
+{
+    ar& TimeArray;
+    ar& data;
+    ar& mass;
+    ar& charge;
+    ar& lambda;
+    ar& TimeArrayAdd;
+    ar& dataAdd;
+    ar& tag;
+}
+
+template void
+DynamicsData::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                         const unsigned int file_version);
+template void
+DynamicsData::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                         const unsigned int file_version);
+
+template void
+SimulationDataAccel::serialize<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                                const unsigned int file_version);
+template void
+SimulationDataAccel::serialize<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                                const unsigned int file_version);
+
+template void
+SimulationDataAccel::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                           const unsigned int file_version);
+
+template void
+SimulationDataAccel::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                           const unsigned int file_version) const;
+template void
+DynamicsData::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                           const unsigned int file_version);
+
+template void
+DynamicsData::save<boost::archive::binary_oarchive>(boost::archive::binary_oarchive& ar,
+                                                           const unsigned int file_version) const;

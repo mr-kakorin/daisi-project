@@ -11,8 +11,6 @@
 #include "ParticleShape2dTSC.h"
 #include "WcalculateVector.h"
 
-template class ParticleGridInterface<float>;
-template class ParticleGridInterface<double>;
 
 template <class PointType>
 void ParticleGridInterface<PointType>::Grid2Particles(
@@ -111,4 +109,7 @@ void ParticleGridInterface<PointType>::Wcalculate(
         };
         break;
     }
-};
+}
+
+template class ParticleGridInterface<float>;
+template class ParticleGridInterface<double>;

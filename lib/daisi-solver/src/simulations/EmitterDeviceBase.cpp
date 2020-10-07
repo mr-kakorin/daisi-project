@@ -7,12 +7,10 @@
 #include "Tools.h"
 #include <Constants.h>
 
+
 static std::default_random_engine             generator;
 static std::normal_distribution<double>       distribution(0, 1);
 static std::uniform_real_distribution<double> distributionUn(0, 1);
-
-template class EmitterDeviceBase<float>;
-template class EmitterDeviceBase<double>;
 
 template <class PointType>
 void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexesParallel,
@@ -44,7 +42,7 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
     {
         if (Data[4][i] > z1 && Data[4][i] < z2)
             sliceIndexes.push_back(i);
-    };
+    }
     /*
     int i = 0;
     while (Data[4][i]>z2)
@@ -68,7 +66,7 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
     {
         int r = rand() % sliceIndexes.size();
         sliceIndexes.erase(sliceIndexes.begin() + r);
-    };
+    }
 
     phMin = 100000;
     phMax = -100000;
@@ -80,7 +78,7 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
 
         if (Data[4][sliceIndexes[i]] < phMin)
             phMin = Data[4][sliceIndexes[i]];
-    };
+    }
 
     // if (Data[4][particlesPerBunch]>z1)//there is no bunch coming at this time, just remove
     // Emptyplaces
@@ -94,14 +92,14 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
     if (thread == numThreads - 1)
     {
         j2 = sliceIndexes.size();
-    };
+    }
 
     sliceIndexesParallel.resize(j2 - j1);
 
     for (int j = j1; j < j2; j++)
     {
         sliceIndexesParallel[j - j1] = sliceIndexes[j];
-    };
+    }
 
     int totalParticles;
 
@@ -111,7 +109,7 @@ void EmitterDeviceBase<PointType>::GetSliceIndexes(std::vector<int>& sliceIndexe
         totalParticles = sliceIndexesParallel.size();
 
     sliceIndexesParallel.resize(totalParticles);
-};
+}
 
 template <class PointType>
 void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
@@ -176,7 +174,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
 
         if (Xparam[i] > 0)
             phi[i] = phi[i] + PI() / 2;
-    };
+    }
 
     Data.resize(6);
     for (int i = 0; i < 6; i++)
@@ -189,7 +187,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
         {
             xtmp = (Major[0] / 3) * distribution(generator);
             ytmp = (Minor[0] / 3) * distribution(generator);
-        };
+        }
         if (flagsParams[0] == 1)
         {
             while (1)
@@ -199,7 +197,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
                 if ((xtmp * xtmp / (Major[0] * Major[0]) + ytmp * ytmp / (Minor[0] * Minor[0])) < 1)
                     break;
             }
-        };
+        }
 
         if (Xparam[0] < 0)
         {
@@ -210,13 +208,13 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
         {
             Data[1][i] = xtmp * std::cos(phi[0]) - ytmp * std::sin(phi[0]) + DistribParams[14];
             Data[0][i] = xtmp * std::sin(phi[0]) + ytmp * std::cos(phi[0]) + DistribParams[12];
-        };
+        }
 
         if (flagsParams[0] == 0)
         {
             xtmp = (Major[1] / 3) * distribution(generator);
             ytmp = (Minor[1] / 3) * distribution(generator);
-        };
+        }
         if (flagsParams[0] == 1)
         {
             while (1)
@@ -226,7 +224,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
                 if ((xtmp * xtmp / (Major[1] * Major[1]) + ytmp * ytmp / (Minor[1] * Minor[1])) < 1)
                     break;
             }
-        };
+        }
 
         if (Xparam[1] < 0)
         {
@@ -237,21 +235,21 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
         {
             Data[3][i] = xtmp * std::cos(phi[1]) - ytmp * std::sin(phi[1]) + DistribParams[15];
             Data[2][i] = xtmp * std::sin(phi[1]) + ytmp * std::cos(phi[1]) + DistribParams[13];
-        };
+        }
 
         if (flagsParams[0] == 0)
         {
             Data[4][i] = (DistribParams[5] + DistribParams[4]) / 2 +
                          ((DistribParams[5] - DistribParams[4]) / 6) * distribution(generator);
             Data[5][i] = P + (P * DistribParams[2] / (100 * 3)) * distribution(generator);
-        };
+        }
         if (flagsParams[0] == 1)
         {
             double dp  = DistribParams[2] / 100;
             Data[4][i] = DistribParams[4] +
                          distributionUn(generator) * ((DistribParams[5] - DistribParams[4]));
             Data[5][i] = P - P * dp + distributionUn(generator) * (2 * P * dp);
-        };
+        }
         while (Data[4][i] < 0)
             Data[4][i] = Data[4][i] + 2 * PI();
     }
@@ -271,7 +269,7 @@ void EmitterDeviceBase<PointType>::GenerateEllipses(double restMass)
         Data[5][k1] = temp1[IndexOrder[k1]];
     }
     double max = *std::max_element(Data[1].begin(), Data[1].end());
-};
+}
 
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetnParticlesBunch()
@@ -284,13 +282,14 @@ const std::shared_ptr<ElectrodeCurrent<PointType>>&
 EmitterDeviceBase<PointType>::GetAssignedElectrode()
 {
     return Assignedelectrode;
-};
+}
+
 template <class PointType>
 void EmitterDeviceBase<PointType>::SetGetAssignedElectrode(
     const std::shared_ptr<ElectrodeCurrent<PointType>>& in)
 {
     Assignedelectrode = in;
-};
+}
 
 template <class PointType>
 void EmitterDeviceBase<PointType>::SetDirectionPoints(std::vector<double> sP,
@@ -298,7 +297,7 @@ void EmitterDeviceBase<PointType>::SetDirectionPoints(std::vector<double> sP,
 {
     startPoint = sP;
     endPoint   = eP;
-};
+}
 
 template <class PointType>
 std::vector<std::vector<double>> EmitterDeviceBase<PointType>::GetDirectionPoints()
@@ -307,25 +306,27 @@ std::vector<std::vector<double>> EmitterDeviceBase<PointType>::GetDirectionPoint
     result[0] = startPoint;
     result[1] = endPoint;
     return result;
-};
+}
 
 template <class PointType>
 std::shared_ptr<ParticleSource2d<PointType>> EmitterDeviceBase<PointType>::GetParticleSource()
 {
     return particleSource;
-};
+}
+
 template <class PointType>
 std::vector<std::shared_ptr<ParticleSource2d<PointType>>>
 EmitterDeviceBase<PointType>::GetParticleSources()
 {
     return std::vector<std::shared_ptr<ParticleSource2d<PointType>>>{particleSource};
-};
+}
 
 template <class PointType>
 std::vector<int> EmitterDeviceBase<PointType>::GetBoundariesList()
 {
     return boundaryList;
-};
+}
+
 template <class PointType>
 EmitterDeviceBase<PointType>::EmitterDeviceBase(int DistributionStyleIn)
     : get_energy_distribution( nullptr )
@@ -371,13 +372,14 @@ EmitterDeviceBase<PointType>::EmitterDeviceBase(int DistributionStyleIn)
     // endPoint = { 0, 0, 1 };
     // startPoint.resize(3);
     // endPoint.resize(3);
-};
+}
 
 template <class PointType>
 double EmitterDeviceBase<PointType>::GetLambda()
 {
     return LIGHT_VELOCITY() / DistribParams[3];
-};
+}
+
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetMaxParticles()
 {
@@ -387,10 +389,11 @@ int EmitterDeviceBase<PointType>::GetMaxParticles()
         if (NumbersParams[i] > 0)
         {
             result = result * NumbersParams[i];
-        };
+        }
     }
     return result;
-};
+}
+
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetNumbersOfParticlesGeneration()
 {
@@ -400,15 +403,16 @@ int EmitterDeviceBase<PointType>::GetNumbersOfParticlesGeneration()
         if (NumbersParams[i] > 0)
         {
             result = result * NumbersParams[i];
-        };
+        }
     }
     return result;
-};
+}
+
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetEmitPeriod()
 {
     return NumbersParams[0];
-};
+}
 
 template <class PointType>
 std::vector<std::vector<double>> EmitterDeviceBase<PointType>::GetAllParameters()
@@ -423,7 +427,8 @@ std::vector<std::vector<double>> EmitterDeviceBase<PointType>::GetAllParameters(
     result.back() = DistribParams;
 
     return result;
-};
+}
+
 template <class PointType>
 void EmitterDeviceBase<PointType>::SetAllParameters(const std::vector<std::vector<double>>& In)
 {
@@ -435,63 +440,57 @@ void EmitterDeviceBase<PointType>::SetAllParameters(const std::vector<std::vecto
 
     DistribParams = In[flagsParams.size() + 1];
     // NumbersParams
-};
+}
 
 template <class PointType>
 std::vector<double> EmitterDeviceBase<PointType>::GetDistribParams()
 {
     return DistribParams;
-};
+}
 
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetEmissionType()
 {
     return flagsParams[0];
-};
+}
 
 template <class PointType>
 void EmitterDeviceBase<PointType>::SetFlowCurrent(double res)
 {
     particleSource->SetFlowCurrent(res);
-};
+}
+
 template <class PointType>
 double EmitterDeviceBase<PointType>::GetSourceSize()
 {
     if (particleSource->sourceSurface.size() == 0)
         return 0;
     return particleSource->sourceSurface.back().curveLength;
-};
+}
+
 template <class PointType>
 int EmitterDeviceBase<PointType>::GetnParticlesEmitter()
 {
     return NumbersParams[2];
-};
+}
+
 template <class PointType>
 double EmitterDeviceBase<PointType>::getErAverage()
 {
     return particleSource->getErAverage();
-};
+}
+
 template <class PointType>
 std::vector<std::vector<double>> EmitterDeviceBase<PointType>::GetEmitterField()
 {
     return particleSource->GetEmitterField();
-};
+}
+
 template <class PointType>
 std::vector<double> EmitterDeviceBase<PointType>::GetEmitterInitParameters()
 {
     return emitterInitParam;
-};
-
-template void
-EmitterDeviceBase<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                                const unsigned int file_version);
-template void EmitterDeviceBase<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void EmitterDeviceBase<double>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void EmitterDeviceBase<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+}
 
 template <class PointType>
 template <class Archive>
@@ -504,7 +503,8 @@ void EmitterDeviceBase<PointType>::save(Archive& ar, const unsigned int) const
     ar& flagsParams;
     ar& Assignedelectrode;
     ar& emitterInitParam;
-};
+}
+
 template <class PointType>
 template <class Archive>
 void EmitterDeviceBase<PointType>::load(Archive& ar, const unsigned int)
@@ -516,4 +516,18 @@ void EmitterDeviceBase<PointType>::load(Archive& ar, const unsigned int)
     ar& flagsParams;
     ar& Assignedelectrode;
     ar& emitterInitParam;
-};
+}
+
+template class EmitterDeviceBase<float>;
+template class EmitterDeviceBase<double>;
+
+template void
+EmitterDeviceBase<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                                const unsigned int file_version);
+template void EmitterDeviceBase<double>::save<boost::archive::binary_oarchive>(
+    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void EmitterDeviceBase<double>::load<boost::archive::binary_iarchive>(
+    boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void EmitterDeviceBase<float>::save<boost::archive::binary_oarchive>(
+    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;

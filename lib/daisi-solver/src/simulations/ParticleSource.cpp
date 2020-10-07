@@ -7,14 +7,12 @@
 #include "geomTools.h"
 #include <Constants.h>
 
-template class ParticleSource2d<float>;
-template class ParticleSource2d<double>;
 
 template <class PointType>
 void ParticleSource2d<PointType>::SetFlowCurrent(double res)
 {
     sourceCurrent = res;
-};
+}
 
 template <class PointType>
 bool ParticleSource2d<PointType>::EdgeCmp(DGeo::Edge<PointType>& Edge1,
@@ -23,19 +21,19 @@ bool ParticleSource2d<PointType>::EdgeCmp(DGeo::Edge<PointType>& Edge1,
     double r1 = Edge1.Middle().Radius();
     double r2 = Edge2.Middle().Radius();
     return r1 < r2;
-};
+}
 
 template <class PointType>
 void ParticleSource2d<PointType>::setErAverage(double in)
 {
     ErAverage = in;
-};
+}
 
 template <class PointType>
 double ParticleSource2d<PointType>::getErAverage()
 {
     return ErAverage;
-};
+}
 
 template <class PointType>
 std::vector<DGeo::Point<double>> ParticleSource2d<PointType>::GetSufacePoints()
@@ -49,28 +47,16 @@ std::vector<DGeo::Point<double>> ParticleSource2d<PointType>::GetSufacePoints()
         tmpx.y = tmp.y;
         tmpx.z = tmp.z;
         x.push_back(tmpx);
-    };
+    }
     return x;
-};
+}
 
 template <class PointType>
 double ParticleSource2d<PointType>::length()
 {
     return sourceSurface.back().curveLength +
            sourceSurface.back().extractingEdge->length() / 2; // for 2daxs case
-};
-
-template void
-ParticleSource2d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                               const unsigned int file_version);
-template void ParticleSource2d<double>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
-
-template void
-ParticleSource2d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
-                                                                const unsigned int file_version);
-template void ParticleSource2d<float>::save<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+}
 
 template <class PointType>
 template <class Archive>
@@ -79,6 +65,7 @@ void ParticleSource2d<PointType>::save(Archive& ar, const unsigned int) const
     ar& sourceSurface;
     ar& polinom;
 }
+
 template <class PointType>
 template <class Archive>
 void ParticleSource2d<PointType>::load(Archive& ar, const unsigned int)
@@ -87,6 +74,7 @@ void ParticleSource2d<PointType>::load(Archive& ar, const unsigned int)
     ar& polinom;
     sourceCurrent = 0;
 }
+
 template<typename T>
 void write_out( const std::vector<T> &to_out, const std::string &out_name ) {
 	ofstream out_stream;
@@ -95,6 +83,7 @@ void write_out( const std::vector<T> &to_out, const std::string &out_name ) {
 		out_stream << std::setprecision(16) << to_out[i] << std::endl;
 	out_stream.close();
 }
+
 template <class PointType>
 std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, PointType L2,
                                                                 int flag)
@@ -135,7 +124,7 @@ std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, Po
 
         if (lMiddle <= sourceSurface[middle].curveLength)
             j1 = middle;
-    };
+    }
     /*for (int i = lastIndex; i < sourceSurface.size(); i++)
     {
             if (sourceSurface[i - 1].curveLength <= lMiddle && sourceSurface[i].curveLength >=
@@ -178,7 +167,7 @@ std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, Po
     out[6] = PointType(sourceSurface[j].cellNumber);
 
     return out;
-};
+}
 
 template <class PointType>
 bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L2,
@@ -239,13 +228,13 @@ bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L
 	out[8] = -(x2-x1) / len;
 	out[9] = 0;
 	return out;
-};
+}
 
 template <class PointType>
 void ParticleSource2d<PointType>::resetSearch()
 {
     lastIndex = 1;
-};
+}
 
 template <class PointType>
 double ParticleSource2d<PointType>::GetEmissionCurrent(int flag)
@@ -261,7 +250,7 @@ double ParticleSource2d<PointType>::GetEmissionCurrent(int flag)
             double jj =
                 std::min(sourceSurface[i].currentDensity, sourceSurface[i].maximalCurrentDensity);
             current = current + sourceSurface[i].extractingEdge->length() * jj;
-        };
+        }
     }
     if (flag == 1) // for 2daxs case
     {
@@ -272,40 +261,10 @@ double ParticleSource2d<PointType>::GetEmissionCurrent(int flag)
             current = current +
                       sourceSurface[i].extractingEdge->length() * jj * 2 * PI() *
                           sourceSurface[i].extractingEdge->Middle().x;
-        };
+        }
     }
     return current;
-};
-
-template void ParticleSource2d<double>::InitEmissionBoundary<GridData2daxs<double>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
-    const std::shared_ptr<GridData2daxs<double>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
-
-template void ParticleSource2d<float>::InitEmissionBoundary<GridData2daxs<float>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
-    const std::shared_ptr<GridData2daxs<float>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
-
-template void ParticleSource2d<double>::InitEmissionBoundary<GridData2d<double>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
-    const std::shared_ptr<GridData2d<double>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
-
-template void ParticleSource2d<float>::InitEmissionBoundary<GridData2d<float>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
-    const std::shared_ptr<GridData2d<float>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
-
-template void ParticleSource2d<double>::InitEmissionBoundary<GridData3d<double>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
-    const std::shared_ptr<GridData3d<double>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
-
-template void ParticleSource2d<float>::InitEmissionBoundary<GridData3d<float>>(
-    std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
-    const std::shared_ptr<GridData3d<float>>& grid, std::vector<double> parametersIn,
-    std::string& errorMsg);
+}
 
 template <class PointType>
 template <class gridDataType>
@@ -341,7 +300,7 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
         double dist = pTest.Dist2Point(EdgesDataTmp[i].point1);
         if (dist < minDist)
             nearestEdge = i;
-    };
+    }
 
     float HP = 2 * grid->GetMaxSixe();
 
@@ -460,7 +419,7 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
 
     for (int i = 0; i < polinom.size(); i++)
             polinom[i] = 0;*/
-};
+}
 
 template <class PointType>
 void ParticleSource2d<PointType>::InitEmissionBoundary(
@@ -555,8 +514,8 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
                     {
                         flag = 1;
                         break;
-                    };
-                };
+                    }
+                }
                 if (flag == 0)
                 {
                     ptmp = resArr[j].GetNormalPoint1(HP);
@@ -572,9 +531,9 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
                         ptmp.y - resArr[j].Middle().y));
                 }
                 curveLength = curveLength + resArr[j].length();
-            };
-        };
-    };
+            }
+        }
+    }
 
     polinom.resize(11);
 
@@ -691,7 +650,7 @@ void ParticleSource2d<PointType>::InitEmissionBoundary(
     boundary.EdgesData = electrodeIn->ElectrodeEdges;
     InitEmissionBoundary({std::shared_ptr<BoundaryContainer2d<PointType>>(&boundary)}, gridData,
                          parametersIn, errorMsg);
-};
+}
 
 template <class PointType>
 std::vector<std::vector<float>> ParticleSource2d<PointType>::GetCurrentDensityDistribution()
@@ -708,7 +667,7 @@ std::vector<std::vector<float>> ParticleSource2d<PointType>::GetCurrentDensityDi
     result.push_back(v1);
     result.push_back(v2);
     return result;
-};
+}
 
 template <class PointType>
 std::vector<std::vector<double>> ParticleSource2d<PointType>::GetEmitterField()
@@ -724,7 +683,7 @@ std::vector<std::vector<double>> ParticleSource2d<PointType>::GetEmitterField()
     result.push_back(v1);
     result.push_back(v2);
     return result;
-};
+}
 
 template <class PointType>
 void ParticleSource2d<PointType>::SetZCoordinate(double Z)
@@ -733,18 +692,8 @@ void ParticleSource2d<PointType>::SetZCoordinate(double Z)
     {
         sourceSurface[i].extractingEdge->point1.z = Z;
         sourceSurface[i].extractingEdge->point2.z = Z;
-    };
-};
-
-template void ParticleSourceEdge<float>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void ParticleSourceEdge<double>::load<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version);
-
-template void ParticleSourceEdge<double>::load<boost::archive::binary_iarchive>(
-    boost::archive::binary_iarchive& ar, const unsigned int file_version);
-template void ParticleSourceEdge<float>::load<boost::archive::binary_oarchive>(
-    boost::archive::binary_oarchive& ar, const unsigned int file_version);
+    }
+}
 
 template <class PointType>
 template <class Archive>
@@ -758,6 +707,7 @@ void ParticleSourceEdge<PointType>::save(Archive& ar, const unsigned int) const
     ar& cellNumber;
     ar& maximalCurrentDensity;
 }
+
 template <class PointType>
 template <class Archive>
 void ParticleSourceEdge<PointType>::load(Archive& ar, const unsigned int)
@@ -771,6 +721,7 @@ void ParticleSourceEdge<PointType>::load(Archive& ar, const unsigned int)
     ar& maximalCurrentDensity;
     E = 0;
 }
+
 template <class PointType>
 ParticleSourceEdge<PointType>::ParticleSourceEdge(DGeo::Edge<PointType>& Edge,
                                                   double curveLengthPrev, int cell, double X,
@@ -784,8 +735,64 @@ ParticleSourceEdge<PointType>::ParticleSourceEdge(DGeo::Edge<PointType>& Edge,
     cellNumber            = cell;
     alphaNormal           = X;
     flagNormal            = Y;
-};
+}
+
 template <class PointType>
 ParticleSourceEdge<PointType>::ParticleSourceEdge(){
 
-};
+}
+
+template class ParticleSource2d<float>;
+template class ParticleSource2d<double>;
+
+template void ParticleSource2d<double>::InitEmissionBoundary<GridData2daxs<double>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
+        const std::shared_ptr<GridData2daxs<double>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSource2d<float>::InitEmissionBoundary<GridData2daxs<float>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
+        const std::shared_ptr<GridData2daxs<float>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSource2d<double>::InitEmissionBoundary<GridData2d<double>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
+        const std::shared_ptr<GridData2d<double>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSource2d<float>::InitEmissionBoundary<GridData2d<float>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
+        const std::shared_ptr<GridData2d<float>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSource2d<double>::InitEmissionBoundary<GridData3d<double>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<double>>> boundaryIn,
+        const std::shared_ptr<GridData3d<double>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSource2d<float>::InitEmissionBoundary<GridData3d<float>>(
+        std::vector<std::shared_ptr<BoundaryContainer2d<float>>> boundaryIn,
+        const std::shared_ptr<GridData3d<float>>& grid, std::vector<double> parametersIn,
+        std::string& errorMsg);
+
+template void ParticleSourceEdge<float>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void ParticleSourceEdge<double>::load<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version);
+
+template void ParticleSourceEdge<double>::load<boost::archive::binary_iarchive>(
+        boost::archive::binary_iarchive& ar, const unsigned int file_version);
+template void ParticleSourceEdge<float>::load<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version);
+
+template void
+ParticleSource2d<float>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                               const unsigned int file_version);
+template void ParticleSource2d<double>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
+
+template void
+ParticleSource2d<double>::load<boost::archive::binary_iarchive>(boost::archive::binary_iarchive& ar,
+                                                                const unsigned int file_version);
+template void ParticleSource2d<float>::save<boost::archive::binary_oarchive>(
+        boost::archive::binary_oarchive& ar, const unsigned int file_version) const;
