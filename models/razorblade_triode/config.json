@@ -1,9 +1,9 @@
 {
   "type": "triode",
   "emission_type": "autoemission",
-  "potentials": { "emitter": [0], "anode": [3, 6, 9, 12] , "gateway": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] },
-  "project_path": "/home/artoria/projects/daisi-project/models/razorblade_triode/",
-  "timeout": 0.0004,
+  "potentials": { "emitter": [0], "anode": [9] , "gateway": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] },
+  "project_path": "/home/artoria/projects/daisi-project/models/razorblade_triode/.dproj",
+  "timeout": 0.0006,
   "num_cores": 6,
   "energy_distribution_type": "bimodal"
 }

@@ -11,9 +11,9 @@ class TriodeTasksCreator
         : public ITasksCreator {
 public:
     TriodeTasksCreator( std::vector<double> &&anode_V, std::vector<double> &&emitter_V, std::vector<double> &&gateway_V,
-                        std::string &&project_path,
+                        std::string &&project_path, std::string &&energy_distribution_type,
                         double timeout_ns, unsigned int num_cores  )
-            : ITasksCreator( std::move(project_path), timeout_ns, num_cores )
+            : ITasksCreator( std::move(project_path), std::move( energy_distribution_type ), timeout_ns, num_cores )
             , _anode_V( std::move( anode_V ) )
             , _emitter_V( std::move( emitter_V ) )
             , _gateway_V( std::move( gateway_V ) )

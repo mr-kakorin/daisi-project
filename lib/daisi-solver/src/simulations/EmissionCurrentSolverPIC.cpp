@@ -584,7 +584,7 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
         return this->Betta_vec[idx];
     };
 
-  auto const& grad = this->gradients[flowNumber];
+ /* auto const& grad = this->gradients[flowNumber];
   auto const& source_points = this->points1[flowNumber];
   std::size_t const source_length = source_points.size();
   jv.resize( source_length );
@@ -609,7 +609,7 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
     }
 
     double E = std::sqrt(Er * Er + Ez * Ez);
-    double betta_eff = find_betta( E );
+    double betta_eff = 40; //find_betta( E );
     double E_eff = betta_eff * E;
     double y_coeff = yc * std::sqrt(E_eff) / wf;
     double y_coeff2 = y_coeff* y_coeff;
@@ -620,7 +620,52 @@ void EmissionCurrentSolverPIC<PointType>::VirtualDiode(
 
     ErAverage = ErAverage + std::abs(cathField);
   }
-  this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);
+  this->SetValueOnSource(emitter->GetParticleSource(), jv, flowNumber, 1);*/
+
+    double c_l = std::abs( ELECTRON_CHARGE() ) / ( VACUUM_PERMITTIVITY() * 4 * PI() );
+	auto const& grad = this->gradients[flowNumber];
+	auto& sourceSurface = emitter->GetParticleSource()->sourceSurface;
+	auto& source_points = sourceSurface;
+	std::size_t const source_length = sourceSurface.size();
+	//jv.resize( source_length );
+	for (int i = 0; i < source_length; ++i)
+	{
+		double Er, Ez;
+		double r = source_points[i].extractingEdge->Middle().x,
+				z = source_points[i].extractingEdge->Middle().y;
+		double norm_r = -grad.y[i],
+		       norm_z = grad.x[i];
+//    double r = this->nearCathodeVolumes[flowNumber][i].fieldPointsX[0];
+//    double z = this->nearCathodeVolumes[flowNumber][i].fieldPointsY[0];
+//    double norm_r = this->nearCathodeVolumes[flowNumber][i].normalX[0];
+//    double norm_z = this->nearCathodeVolumes[flowNumber][i].normalY[0];
+		gridData->interpolatePoint(r, z, 0, Er,Ez);
+		double cathField = (Er * norm_r + Ez * norm_z);
+		if (cathField * charge > 0)
+		{
+			ErAverage = ErAverage + std::abs(cathField);
+			//jv[i] = 0;
+			source_points[i].currentDensity = 0;
+			continue;
+		}
+
+		double E = std::sqrt(Er * Er + Ez * Ez);
+		if ( E == 0 )
+			int ttt = 0;
+		double betta_eff = 40; //find_betta( E );
+		double E_eff = betta_eff * E;
+		double l = c_l * E_eff / ( wf * wf );
+		double v = 1 - l + l * std::log( l ) / 6;
+		double t2 = 1 + l * ( 1/9 - 1/18 * std::log( l ) );
+		//double y_coeff = yc * std::sqrt(E_eff) / wf;
+		//double y_coeff2 = y_coeff* y_coeff;
+		//double log_y_coeff = std::log(y_coeff);
+		//double v  = 1 - y_coeff2 / 3 * (3 - log_y_coeff);
+		//double t2 = 1 + y_coeff2 / 9 * (1 - log_y_coeff);
+		//jv[i] = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
+		source_points[i].currentDensity = A * E_eff * E_eff * std::exp(-B * (std::sqrt(wf) * wf) * v / E_eff) / (wf * t2);
+		ErAverage = ErAverage + std::abs(cathField);
+	}
 }
 
 template<class PointType>

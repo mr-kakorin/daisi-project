@@ -2,8 +2,8 @@
   "type": "diode",
   "emission_type": "autoemission",
   "potentials": { "emitter": [0], "anode": [3.41, 4.88, 6.44, 7.54, 9.12, 11.19, 18.75] },
-  "project_path": "/home/artoria/projects/daisi-project/models/razorblade_diode/",
-  "timeout": 0.0004,
-  "num_cores": 6,
-  "energy_distribution_type": "bimodal"
+  "project_path": "/home/artoria/projects/daisi-project/models/razorblade_diode/.dproj",
+  "timeout": 0.0008,
+  "num_cores": 1,
+  "energy_distribution_type": "nonbimodal"
 }

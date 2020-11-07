@@ -14,15 +14,28 @@ class vtkPolyData;
 
 template <class T>
 class vtkSmartPointer;
-using EnergyDistribution = double(*)();
+
+namespace Daisi::Emission
+{
+	enum EnergyDistributionType
+	{
+		EnergyDistributionType_Bimodal,
+		EnergyDistributionType_Maxwell
+	};
+}
 
 class ModelInterface
 {
   public:
     virtual ~ModelInterface() = default;
+    virtual std::vector<std::vector<double>> get_particles_positions() = 0;
+    virtual std::vector<std::vector<double>> get_particles_moments() = 0;
+    virtual std::vector<double> get_particles_charge() = 0;
     virtual std::vector<double> GetElectrodeParametersList(int number) = 0;
+    virtual std::vector<std::vector<std::pair<double,double>>> get_mesh() = 0;
+    virtual std::vector<double> get_volume_charge() = 0;
     virtual void setElectrodeParametersList(int number, std::vector<double>& input) = 0;
-	virtual void setEnergyDistribution( EnergyDistribution get_energy_distribution ) {};
+	virtual void setEnergyDistribution( Daisi::Emission::EnergyDistributionType const type ) {};
     virtual void SetglobalFieldConditions(const std::vector<double>& in)             = 0;
     virtual std::vector<double>              GetglobalFieldConditions()              = 0;
     virtual std::vector<std::vector<double>> GetSolverParametersPTI()                = 0;
@@ -131,6 +144,9 @@ class ModelInterface
     virtual void GetParticlesCloud(int flag, int flowNumber,
                                    std::vector<std::vector<void*>>& pointArray,
                                    std::vector<int>& sizeArray, int& sizeElement) = 0;
+	virtual void GetMomentumsParticlesCloud(int flag, int flowNumber,
+	                               std::vector<std::vector<void*>>& pointArray,
+	                               std::vector<int>& sizeArray, int& sizeElement) = 0;
     virtual void GetGridData(void* Array[1], int& size, int& sizeElement, std::string flag,
                              int PlotTypeFlag) = 0;
     virtual void GetGridData(void* Array[1], int& size, int& sizeElement, int flag,

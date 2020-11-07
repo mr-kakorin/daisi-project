@@ -5,6 +5,7 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <vector>
+#include <daisi-solver/ModelInterface.h>
 
 template <class PointType>
 class BoundaryContainer2d;
@@ -88,7 +89,7 @@ class EmitterDeviceBase
     std::vector<std::vector<double>> Data;
 
   public:
-	EnergyDistribution get_energy_distribution;
+	Daisi::Emission::EnergyDistributionType             energy_distribution{ Daisi::Emission::EnergyDistributionType_Bimodal };
     std::vector<double>                                 GetEmitterInitParameters();
     const std::shared_ptr<ElectrodeCurrent<PointType>>& GetAssignedElectrode();
     void SetGetAssignedElectrode(const std::shared_ptr<ElectrodeCurrent<PointType>>& in);
@@ -115,9 +116,7 @@ class EmitterDeviceBase
     void GenerateEllipses(double restMass);
     void GetSliceIndexes(std::vector<int>& sliceIndexesParallel, int flagTest, double t1, double t2,
                          double& phMin, double& phMax, int numThreads, int thread);
-    EmitterDeviceBase(): get_energy_distribution( nullptr ){
-
-    };
+    EmitterDeviceBase() = default;
     void SetDirectionPoints(std::vector<double> sP, std::vector<double> eP); //
     std::vector<std::vector<double>> GetDirectionPoints();                   //
 };

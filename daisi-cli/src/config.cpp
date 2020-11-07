@@ -15,7 +15,8 @@ ITasksCreator *read_diode( const json &json_object ) {
 	auto file_name = json_object["project_path"].get<std::string>();
 	auto timeout_ns = json_object["timeout"].get<double>();
 	auto num_cores = json_object["num_cores"].get<unsigned int>();
-	return new DiodeTasksCreator( std::move( anode_v ), std::move( emitter_v ), std::move( file_name ), timeout_ns, num_cores );
+	auto energy_type = json_object["energy_distribution_type"].get<std::string>();
+	return new DiodeTasksCreator( std::move( anode_v ), std::move( emitter_v ), std::move( file_name ), std::move( energy_type ), timeout_ns, num_cores );
 }
 
 ITasksCreator *read_triode( const json &json_object ) {
@@ -25,8 +26,9 @@ ITasksCreator *read_triode( const json &json_object ) {
 	auto file_name = json_object["project_path"].get<std::string>();
 	auto timeout_ns = json_object["timeout"].get<double>();
 	auto num_cores = json_object["num_cores"].get<unsigned int>();
+	auto energy_type = json_object["energy_distribution_type"].get<std::string>();
 	return new TriodeTasksCreator( std::move( anode_v ), std::move( emitter_v ), std::move( gateway_v ),
-	                               std::move( file_name ), timeout_ns, num_cores );
+	                               std::move( file_name ), std::move( energy_type ), timeout_ns, num_cores );
 }
 
 

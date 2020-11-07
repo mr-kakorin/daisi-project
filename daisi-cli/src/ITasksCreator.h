@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <sstream>
 #include "DaisiResult.h"
-#include "EnergyDistribution.h"
 
 using CalculationTask = std::function<void()>;
 
@@ -24,10 +23,11 @@ struct boundary_values_t
 
 class ITasksCreator {
 public:
-	ITasksCreator( std::string &&project_path,
+	ITasksCreator( std::string &&project_path, std::string &&energy_distribution_type,
                    double timeout_ns, unsigned int num_cores )
 		: _num_cores( num_cores )
-		, _project_path( project_path )
+		, _project_path( std::move( project_path ) )
+		, _energy_distribution_type( std::move( energy_distribution_type ) )
 		, _timeout_ns( timeout_ns )
 	{}
 	virtual ~ITasksCreator() = default;
@@ -45,6 +45,7 @@ protected:
 
     unsigned int _num_cores;
     std::string _project_path;
+    std::string _energy_distribution_type;
     double      _timeout_ns;
 };
 

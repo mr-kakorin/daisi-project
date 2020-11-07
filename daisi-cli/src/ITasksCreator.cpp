@@ -12,7 +12,8 @@ CalculationTask ITasksCreator::boundary_to_task( boundary_values_t const& bounda
         set_timeout( currentProject, timeout );
         double progress = 0, progressLoc = 0; std::vector<std::string> status; bool flagAbort = true;
 
-        currentProject.currentModel->setEnergyDistribution( &get_initial_energy_bimodal );
+		Daisi::Emission::EnergyDistributionType const ed_type = _energy_distribution_type == "bimodal" ? Daisi::Emission::EnergyDistributionType_Bimodal : Daisi::Emission::EnergyDistributionType_Maxwell;
+	    currentProject.currentModel->setEnergyDistribution( ed_type );
         currentProject.currentModel->SimulateCPUPIC( progress, progressLoc, status, flagAbort, 1,
                                                      errorMsg );
 

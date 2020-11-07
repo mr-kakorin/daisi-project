@@ -201,7 +201,6 @@ void DynamicsData::SetData(std::vector<void*> dataIn, float Time, int threadNumb
         return;
     //int n = int(saveIndexes[threadNumber].size());
 
-    float tmp;
     for (int j = 0; j < dataIn.size(); j++)
     {
         for (int i = 0; i < saveIndexes[threadNumber].size(); i++)
@@ -210,13 +209,13 @@ void DynamicsData::SetData(std::vector<void*> dataIn, float Time, int threadNumb
             {
                 if (sizeElement == 4)
                 {
-                    tmp =
+                    float tmp =
                         *((float*)((char*)dataIn[j] + saveIndexes[threadNumber][i] * sizeElement));
                     data[j][writeIndexes[threadNumber][i]].push_back(tmp);
                 }
                 if (sizeElement == 8)
                 {
-                    tmp =
+                    double tmp =
                         *((double*)((char*)dataIn[j] + saveIndexes[threadNumber][i] * sizeElement));
 
                     data[j][writeIndexes[threadNumber][i]].push_back(tmp);
@@ -379,9 +378,9 @@ void DynamicsData::addDataDyn(int index, float T, const std::vector<float>& X)
 {
     if (index >= TimeArray.size())
     {
-        TimeArray.push_back(std::vector<float>{});
+        TimeArray.push_back(std::vector<double>{});
         for (int i = 0; i < data.size(); i++)
-            data[i].push_back(std::vector<float>{});
+            data[i].push_back(std::vector<double>{});
     };
     TimeArray[index].push_back(T);
     for (int i = 0; i < data.size(); i++)

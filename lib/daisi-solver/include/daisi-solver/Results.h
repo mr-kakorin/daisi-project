@@ -112,19 +112,19 @@ class DynamicsData
     void AddSavedTraces(std::vector<unsigned int> saveIndexesIn, int threadNumber);
     void AddBlock(int saveInd1, int saveInd2, int threadNumber, int nBlocks, int blockNumber);
 
-    std::vector<float>              TimeArrayAdd;
-    std::vector<std::vector<float>> dataAdd;
+    std::vector<double>              TimeArrayAdd;
+    std::vector<std::vector<double>> dataAdd;
 
-    void SetAdditionalData(const std::vector<float>&        TimeArrayAddIn,
-                           std::vector<std::vector<float>>& dataAddIn);
+    void SetAdditionalData(const std::vector<double>&        TimeArrayAddIn,
+                           std::vector<std::vector<double>>& dataAddIn);
     void InitAdd(int dataSize, int nParticles);
     void SetDataAdd(std::vector<void*> dataIn, float Time);
 
-    std::vector<std::vector<float>>              TimeArray;
-    std::vector<std::vector<std::vector<float>>> data;
+    std::vector<std::vector<double>>              TimeArray;
+    std::vector<std::vector<std::vector<double>>> data;
 
-    std::vector<std::vector<float>>              TimeArray1;
-    std::vector<std::vector<std::vector<float>>> data1;
+    std::vector<std::vector<double>>              TimeArray1;
+    std::vector<std::vector<std::vector<double>>> data1;
 
     float            mass;
     float            charge;

@@ -125,7 +125,8 @@ class ParticlesBase
     ParticlesBase& operator=(ParticlesBase* object);
     void GetParticlesCloud(int flag, std::vector<void*>& pointArray, int& sizeArray,
                            int& sizeElement);
-
+	void GetMomentumsParticlesCloud(int flag, std::vector<void*>& pointArray, int& sizeArray,
+	                       int& sizeElement);
     std::vector<std::vector<PointType>> positions;
     std::vector<std::vector<PointType>> momentums;
     std::vector<std::vector<PointType>> coloumbFields;

@@ -5,6 +5,7 @@
 #include <random>
 #include <Constants.h>
 
+#include "EnergyDistribution.h"
 #include "Dmath.h"
 #include "EmitterDevice2daxs.h"
 #include "EmitterDevice2daxsVectorized.h"
@@ -122,7 +123,7 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
         int    i1 = indesexPerThread[ii1];
         double L  = i1 * dL;
 
-        this->particleSource->GetParticleOptimized(L, L + dL, 1, particleData);
+        this->particleSource->GetParticleOptimized(L, L + dL, 1, particleData, dt);
 
         if (particleData[2] == 0)
         {
@@ -144,42 +145,58 @@ void EmitterDevice2daxs<PointType>::GenerateParticles(
         seachIntersictionP1.y = z;
         seachIntersictionP1.z = 0;*/
 	    currentFrom_dl = particleData[2];
+
+	    double restEnergy = -restMass * LIGHT_VELOCITY() * LIGHT_VELOCITY() / ELECTRON_CHARGE();
+	    //double gamma = (restEnergy + EnergyAv) / restEnergy;
+	    //double beta  = sqrt(gamma * gamma - 1) / gamma;
         for (int i0 = 0; i0 < nParticlesEnergyLoc; i0++)
         {
+	        if (k < empty)
+	        {
+		        index          = EmptyPlaces[k];
+		        EmptyPlaces[k] = -1;
+	        }
+	        else
+	        {
+		        index = nowParticles + k1;
+		        k1++;
+	        }
 
-			double v;
-			if( EmitterDeviceBase<PointType>::get_energy_distribution )
-            {
-                double energy = std::abs( EmitterDeviceBase<PointType>::get_energy_distribution() ) * 1.602e-19;
-                v = sqrt( 2 * energy/ restMass );
-            }
-			else
-            {
-                double vNorm = std::abs(sigma * distribution(generator));
-                double vTang = sigma * distribution(generator);
-                double vPhi  = sigma * distribution(generator);
-                v = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
-            }
+			double v = 0;
+	        switch ( this->energy_distribution )
+	        {
+		        case Daisi::Emission::EnergyDistributionType_Bimodal:
+		        {
+			        double energy = std::abs( get_initial_energy_bimodal() ) * 1.602e-19;
+			        v = sqrt( 2 * energy/ restMass );
+			        break;
+		        }
+		        case Daisi::Emission::EnergyDistributionType_Maxwell:
+		        {
+			        double vNorm = std::abs(sigma * distribution(generator));
+			        double vTang = sigma * distribution(generator);
+			        double vPhi  = sigma * distribution(generator);
+			        v = sqrt(vNorm * vNorm + vTang * vTang + vPhi * vPhi);
+//	                double beta = v / LIGHT_VELOCITY();
+//	                double gamma = 1 / sqrt(1 - beta * beta);
+//	                double alpha = particleData[4];
+//	                particlesData->Get_pr()[index] = gamma * (vNorm * cos(alpha) - vTang * sin(alpha)) / LIGHT_VELOCITY();
+//	                particlesData->Get_pz()[index] = gamma * (vNorm * sin(alpha) + vTang * cos(alpha)) / LIGHT_VELOCITY();
+//	                particlesData->Get_pphi()[index] = (vPhi / LIGHT_VELOCITY()) * gamma * r;
+		        	break;
+		        }
+	        }
 
-            double beta = v / LIGHT_VELOCITY();
-            double gamma = 1 / sqrt(1 - beta * beta);
-            if (k < empty)
-            {
-                index          = EmptyPlaces[k];
-                EmptyPlaces[k] = -1;
-            }
-            else
-            {
-                index = nowParticles + k1;
-                k1++;
-            }
+	        double beta = v / LIGHT_VELOCITY();
+	        double gamma = 1 / sqrt(1 - beta * beta);
 
-            particlesData->Get_pr()[index] =
-                gamma * (v*particleData[7]) / LIGHT_VELOCITY();
-            particlesData->Get_pz()[index] =
-                gamma * (v*particleData[8]) / LIGHT_VELOCITY();
 
-            particlesData->Get_pphi()[index] = (v * particleData[9] / LIGHT_VELOCITY()) * gamma * r;
+	        particlesData->Get_pr()[index] =
+			        gamma * (v * particleData[7]) / LIGHT_VELOCITY();
+	        particlesData->Get_pz()[index] =
+			        gamma * (v * particleData[8]) / LIGHT_VELOCITY();
+	        particlesData->Get_pphi()[index] = (v * particleData[9] / LIGHT_VELOCITY()) * gamma * r;
+
             particlesData->Get_phi()[index]  = 0;
 
             particlesData->Get_r()[index] = r;

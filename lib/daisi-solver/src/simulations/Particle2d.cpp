@@ -105,8 +105,8 @@ void ParticlesBase<PointType>::GetEmittanceData(std::vector<std::vector<float>>&
             data[1][i] = this->positions[1][i];
         }
         break;
-    };
-};
+    }
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::RecombinateParticles(ParticlesBase<PointType>* newParticles,
@@ -119,7 +119,7 @@ void ParticlesBase<PointType>::RecombinateParticles(ParticlesBase<PointType>* ne
     InsertParticels(newParticles, Indexes);
 
     newParticles->removeParticle(Indexes);
-};
+}
 
 template <class PointType>
 PointType ParticlesBase<PointType>::GetTotalCurrent()
@@ -128,7 +128,7 @@ PointType ParticlesBase<PointType>::GetTotalCurrent()
     for (int i = 0; i < q.size(); i++)
         result = result + q[i];
     return result;
-};
+}
 
 template <class PointType>
 long long ParticlesBase<PointType>::GetMemorySize()
@@ -140,14 +140,14 @@ long long ParticlesBase<PointType>::GetMemorySize()
              sizeof(Get_currentCoef()[0]) * Get_currentCoef().capacity();
 
     return result;
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::markBadParticles(const std::vector<unsigned int>& indexes)
 {
     for (int i                   = 0; i < indexes.size(); i++)
         cellsNumbers[indexes[i]] = -1;
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::Reset()
@@ -155,30 +155,30 @@ void ParticlesBase<PointType>::Reset()
 #pragma ivdep
     for (int i          = 0; i < q.size(); i++)
         cellsNumbers[i] = 0;
-};
+}
 template <class PointType>
 ParticlesBase<PointType>::ParticlesBase()
 {
     Time     = 0;
     avCharge = 1e27;
     minStep  = -1;
-};
+}
 
 template <class PointType>
 PointType* ParticlesBase<PointType>::GetPointerToMomentum1()
 {
     return &this->momentums[0][0];
-};
+}
 template <class PointType>
 PointType* ParticlesBase<PointType>::GetPointerToMomentum2()
 {
     return &this->momentums[1][0];
-};
+}
 template <class PointType>
 PointType* ParticlesBase<PointType>::GetPointerToMomentum3()
 {
     return &this->momentums[2][0];
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::searchBadParticle(std::vector<unsigned int>& Indexes)
@@ -199,8 +199,8 @@ void ParticlesBase<PointType>::searchBadParticle(std::vector<unsigned int>& Inde
             if (0 == flagAdd)
                 Indexes.push_back(i);
         }
-    };
-};
+    }
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::GetSaveIndexes(std::vector<unsigned int>& saveIndexes,
@@ -236,9 +236,9 @@ void ParticlesBase<PointType>::GetSaveIndexes(std::vector<unsigned int>& saveInd
                 if (t <= tracesSaveProbability * 100)
                     saveIndexes.push_back(i);
             }
-        };
-    };
-};
+        }
+    }
+}
 
 template <class PointType>
 std::vector<unsigned int> ParticlesBase<PointType>::GetStartCellNumbersGrid()
@@ -264,9 +264,9 @@ std::vector<unsigned int> ParticlesBase<PointType>::GetStartCellNumbersGrid()
             break;
 
         i0 = i1 + 1;
-    };
+    }
     return result;
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::removeBadParticle()
@@ -274,7 +274,7 @@ void ParticlesBase<PointType>::removeBadParticle()
     std::vector<unsigned int> Indexes;
     searchBadParticle(Indexes);
     removeParticle(Indexes);
-};
+}
 
 template <class PointType>
 PointType ParticlesBase<PointType>::GetBeta(int i)
@@ -301,7 +301,7 @@ void ParticlesBase<PointType>::GammaCalc(std::vector<PointType>& gamma)
 
         gamma[k] = sqrt(1 + pp);
     }
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::GetBetaComponents(PointType& beta1, PointType& beta2,
@@ -318,7 +318,7 @@ void ParticlesBase<PointType>::GetBetaComponents(PointType& beta1, PointType& be
         beta3 = this->momentums[2][i] / gamma;
     else
         beta3 = 0;
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::resize(int totalParticles)
@@ -343,13 +343,13 @@ void ParticlesBase<PointType>::resize(int totalParticles)
     q.resize(totalParticles);
     cellsNumbers.resize(totalParticles);
     flagEmitted.resize(totalParticles);
-};
+}
 
 template <class PointType>
 PointType ParticlesBase<PointType>::GetEnergy(int number, PointType mass)
 {
     return 0;
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::ReserveMemory(int size)
@@ -374,14 +374,14 @@ void ParticlesBase<PointType>::ReserveMemory(int size)
     q.reserve(size);
     cellsNumbers.reserve(size);
     flagEmitted.reserve(size);
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::resizeLight(int totalParticles)
 {
     for (int j = 0; j < this->positions.size(); j++)
         this->positions[j].resize(totalParticles);
-};
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::FastCopy(ParticlesBase<PointType>* object, int i1, int i2)
@@ -408,8 +408,8 @@ void ParticlesBase<PointType>::FastCopy(ParticlesBase<PointType>* object, int i1
         for (int k = 0; k < this->positions.size(); k++)
             cblas_dcopy(i2 - i1, (double*)&this->positions[k][i1], ink,
                         (double*)&object->positions[k][0], ink);
-    };
-};
+    }
+}
 
 template <class PointType>
 void ParticlesBase<PointType>::removeParticle(std::vector<unsigned int>& indexes)
@@ -420,7 +420,7 @@ void ParticlesBase<PointType>::removeParticle(std::vector<unsigned int>& indexes
     for (int i = 0; i < n; i++)
     {
         this->positions[0][indexes[i]] = -1;
-    };
+    }
 
     int n1 = int(this->positions[0].size());
     int j;
@@ -468,11 +468,11 @@ void ParticlesBase<PointType>::removeParticle(std::vector<unsigned int>& indexes
 
             n1 = n1 - (j - i);
             i  = i - 1;
-        };
+        }
     }
 
     //	indexes.clear();
-};
+}
 
 template <class PointType>
 std::vector<float> ParticlesBase<PointType>::GetData(int i, float mass, float charge)
@@ -490,7 +490,7 @@ std::vector<float> ParticlesBase<PointType>::GetData(int i, float mass, float ch
     result.back() = q[i];
 
     return result;
-};
+}
 template <class PointType>
 std::vector<void*> ParticlesBase<PointType>::GetData()
 {
@@ -509,12 +509,12 @@ std::vector<void*> ParticlesBase<PointType>::GetData()
 
     result.back() = (void*)(&q[0]);
     return result;
-};
+}
 template <class PointType>
 int ParticlesBase<PointType>::SpaseSize()
 {
     return 2 * this->positions.size() + 1;
-};
+}
 template <class PointType>
 Particles2d<PointType>::Particles2d(int currentSolverType)
 {
@@ -526,7 +526,7 @@ Particles2d<PointType>::Particles2d(int currentSolverType)
         this->additionalInfType.resize(1);
         this->additionalInf.resize(1);
     }
-};
+}
 
 template <class PointType>
 ParticlesBase<PointType>& ParticlesBase<PointType>::operator=(ParticlesBase<PointType>* object)
@@ -538,7 +538,7 @@ ParticlesBase<PointType>& ParticlesBase<PointType>::operator=(ParticlesBase<Poin
     this->positions = object->positions;
     this->momentums = object->momentums;
     return *this;
-};
+}
 template <class PointType>
 void ParticlesBase<PointType>::GetParticlesCloud(int flag, std::vector<void*>& pointArray,
                                                  int& sizeArray, int& sizeElement)
@@ -555,7 +555,30 @@ void ParticlesBase<PointType>::GetParticlesCloud(int flag, std::vector<void*>& p
         pointArray[k] = (void*)(&this->positions[k][0]);
 
     sizeElement = sizeof(this->positions[0][0]);
+}
+
+template <class PointType>
+void ParticlesBase<PointType>::GetMomentumsParticlesCloud(int flag, std::vector<void*>& pointArray,
+                                                 int& sizeArray, int& sizeElement)
+{
+	if (q.size() <= 0)
+	{
+		sizeArray   = 0;
+		sizeElement = 8;
+		return;
+	}
+	pointArray.resize( this->positions.size() + this->momentums.size() + 1);
+	sizeArray = q.size();
+	int kk = 0;
+	for (int k        = 0; k < this->positions.size(); k++)
+		pointArray[kk++] = (void*)(&this->positions[k][0]);
+	for (int k        = 0; k < this->momentums.size(); k++)
+		pointArray[kk++] = (void*)(&this->momentums[k][0]);
+	pointArray[kk] = (void*)(&this->q[0]);
+
+	sizeElement = sizeof(this->positions[0][0]);
 };
+
 template <class PointType>
 void ParticlesBase<PointType>::clear()
 {

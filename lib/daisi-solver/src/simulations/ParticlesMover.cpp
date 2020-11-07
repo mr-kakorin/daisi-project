@@ -587,15 +587,15 @@ void ParticlesMover<PointType>::updatePositions(
         if (particlesData->flagEmitted[i] < 1)
             continue;
 
-        if (i == 1545)
-        {
-            int tt = 0;
-        }
-
-        if (std::abs(particlesData->Get_pr()[i]) > 1e-3)
-        {
-            int tt = 0;
-        }
+//        if (i == 1545)
+//        {
+//            int tt = 0;
+//        }
+//
+//        if (std::abs(particlesData->Get_pr()[i]) > 1e-3)
+//        {
+//            int tt = 0;
+//        }
 
         r    = particlesData->Get_r()[i];
         prn  = particlesData->Get_pr()[i];

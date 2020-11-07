@@ -21,7 +21,72 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
+#include "MeshContainer2d.h"
 
+template <class DeviceType, class PointType>
+std::vector<std::vector<std::pair<double,double>>> ModelTemplate<DeviceType, PointType>::get_mesh()
+{
+	std::vector<std::vector<DGeo::Point<PointType>>> mesh = deviceStatus->Getmesh()->meshData;
+	std::vector<std::vector<std::pair<double,double>>> result;
+	result.resize( mesh.size() );
+	for ( int i=0; i< mesh.size(); ++i)
+	{
+		result[i].resize(mesh[i].size());
+		for(int j=0;j<mesh[i].size();++j)
+			result[i][j] = { mesh[i][j].x, mesh[i][j].y};
+	}
+	return result;
+
+}
+
+template <class DeviceType, class PointType>
+std::vector<double> ModelTemplate<DeviceType, PointType>::get_volume_charge()
+{
+
+}
+
+template <class DeviceType, class PointType>
+std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::get_particles_positions()
+{
+	auto const& vec = deviceStatus->GetFlow( 0 )->GetDynamicsData()->positions;
+	std::vector<std::vector<double>> result;
+	result.resize( vec.size() );
+	for(int i=0; i < vec.size(); ++i)
+	{
+		result[i].resize(vec[i].size());
+		for (int j =0; j< vec[i].size();++j)
+			result[i][j] = vec[i][j];
+	}
+	return result;
+}
+
+template <class DeviceType, class PointType>
+std::vector<std::vector<double>> ModelTemplate<DeviceType, PointType>::get_particles_moments()
+{
+	auto const& vec = deviceStatus->GetFlow( 0 )->GetDynamicsData()->momentums;
+	std::vector<std::vector<double>> result;
+	result.resize( vec.size() );
+	for(int i=0; i < vec.size(); ++i)
+	{
+		result[i].resize(vec[i].size());
+		for (int j =0; j< vec[i].size();++j)
+			result[i][j] = vec[i][j];
+	}
+	return result;
+}
+
+template <class DeviceType, class PointType>
+std::vector<double> ModelTemplate<DeviceType, PointType>::get_particles_charge()
+{
+	auto const& vec = deviceStatus->GetFlow( 0 )->GetDynamicsData()->q;
+	std::vector<double> result;
+	result.resize( vec.size() );
+	for(int i=0; i < vec.size(); ++i)
+	{
+			result[i] = vec[i];
+	}
+	return result;
+}
 
 template <class DeviceType, class PointType>
 std::vector<int> ModelTemplate<DeviceType, PointType>::GetNumberParticlesFlowsTypes()
@@ -675,6 +740,30 @@ void ModelTemplate<DeviceType, PointType>::GetParticlesCloud(
         deviceStatus->GetFlow(flowNumber)
             ->GetDynamicsData(i)
             ->GetParticlesCloud(flag, pointArray[i], sizeArray[i], sizeElement);
+}
+
+template <class DeviceType, class PointType>
+void ModelTemplate<DeviceType, PointType>::GetMomentumsParticlesCloud(
+		int flag, int flowNumber, std::vector<std::vector<void*>>& pointArray,
+		std::vector<int>& sizeArray, int& sizeElement)
+{
+	int n = deviceStatus->GetFlow(flowNumber)->GetNumberOfThreads();
+
+	if (n == 0)
+	{
+		pointArray.resize(1);
+		sizeArray.resize(1);
+		deviceStatus->GetFlow(flowNumber)
+				->GetDynamicsData()
+				->GetMomentumsParticlesCloud(flag, pointArray[0], sizeArray[0], sizeElement);
+		return;
+	}
+	pointArray.resize(n);
+	sizeArray.resize(n);
+	for (int i = 0; i < n; i++)
+		deviceStatus->GetFlow(flowNumber)
+				->GetDynamicsData(i)
+				->GetMomentumsParticlesCloud(flag, pointArray[i], sizeArray[i], sizeElement);
 }
 
 template <class DeviceType, class PointType>

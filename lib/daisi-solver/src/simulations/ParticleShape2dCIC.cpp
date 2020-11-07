@@ -1007,7 +1007,7 @@ void ParticleShape2dCIC<PointType>::AddCell(
     const std::vector<int>& boundarypoints, int problemType)
 {
     levelHigh[cellNumber] = levelHighIn;
-
+	auto const p = emCells.size();
     isBoundary[cellNumber] = 0;
     PointType hx1          = 0;
     PointType hx2          = 0;

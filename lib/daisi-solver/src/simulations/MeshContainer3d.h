@@ -30,7 +30,8 @@ class MeshContainer3d
                                     const std::shared_ptr<GridData3d<PointType>>& gridData,
                                     std::string                                   name);
     std::vector<MeshContainer2d<PointType>> mesh;
-    DGeo::Point<int> doStepX(DGeo::Point<int> mpoint, int step);
+	std::vector<std::vector<DGeo::Point<PointType>>> meshData;
+	DGeo::Point<int> doStepX(DGeo::Point<int> mpoint, int step);
 
     DGeo::Point<int> doStepY(DGeo::Point<int> mpoint, int step);
 

@@ -27,12 +27,13 @@ class ParticleSourceEdge
     double                                 curveLength;
     double                                 currentDensity;
     double                                 maximalCurrentDensity;
+    double                                 accumulatedCurrentDensity;
     double                                 normalX;
     double                                 normalY;
     double                                 alphaNormal;
     double                                 flagNormal;
     int                                    cellNumber;
-    float                                  E;
+    double                                 E;
     BOOST_SERIALIZATION_SPLIT_MEMBER()
     template <class Archive>
     void save(Archive& ar, const unsigned int) const;
@@ -67,7 +68,7 @@ class ParticleSource2d
 
     std::vector<PointType> GetParticle(PointType L1, PointType L2, int flag);
 
-	bool GetParticleOptimized(PointType L1, PointType L2, int flag, PointType*const& out);
+	bool GetParticleOptimized(PointType L1, PointType L2, int flag, PointType*const& out, double const timestep);
 
     double length();
 

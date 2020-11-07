@@ -21,11 +21,16 @@ class ModelTemplate : public ModelInterface
 
   public:
     virtual ~ModelTemplate() override = default;
+	std::vector<std::vector<double>> get_particles_positions() override;
+	std::vector<std::vector<double>> get_particles_moments() override;
+	std::vector<double> get_particles_charge() override;
+	std::vector<std::vector<std::pair<double,double>>> get_mesh() override;
+	std::vector<double> get_volume_charge() override;
     int  i;
-	virtual void setEnergyDistribution( EnergyDistribution get_energy_distribution ) override {
+	virtual void setEnergyDistribution( Daisi::Emission::EnergyDistributionType const type ) override {
 		auto dev_em_statuses = deviceStatus->GetEmittersVector();
 		for( auto& x: dev_em_statuses )
-			x->get_energy_distribution = get_energy_distribution;
+			x->energy_distribution = type;
 	};
 
     void SetglobalFieldConditions(const std::vector<double>& in);
@@ -125,6 +130,8 @@ class ModelTemplate : public ModelInterface
     std::vector<double> GetAcceleratorParams();
     void GetParticlesCloud(int flag, int flowNumber, std::vector<std::vector<void*>>& pointArray,
                            std::vector<int>& sizeArray, int& sizeElement);
+	void GetMomentumsParticlesCloud(int flag, int flowNumber, std::vector<std::vector<void*>>& pointArray,
+	                       std::vector<int>& sizeArray, int& sizeElement);
     std::vector<std::vector<float>> GetCurrentDensityDistribution(int flowNumber);
     void GenerateParticles(int flowNumber, int flagClear);
     double GetEmissionCurrent(int flowNumber);

@@ -5,7 +5,10 @@
 #include <thread>
 #include <vector>
 #include <vtkSmartPointer.h>
+#include <vtkPNGWriter.h>
 
+#include <vtkImageCanvasSource2D.h>
+#include <vtkImageCast.h>
 #include "colors.h"
 
 class QVTKWidget;
@@ -70,6 +73,15 @@ class vtkComponent
                                         std::string xName, std::string yName, int n, int Distrtype,
                                         std::vector<int> props, float& ymax, float& ymin, int startPoint = 0,
                                         int endPoint = -1);
+	void addVisualizationDataPlotsAutoY(const std::vector<std::vector<double>>& Xdata,
+	                                    const std::vector<std::vector<double>>& Ydata, const float* color, float width,
+	                                    std::string xName, std::string yName, int n, int Distrtype,
+	                                    std::vector<int> props, float& ymax, float& ymin, int startPoint = 0,
+	                                    int endPoint = -1);
+	void addVisualizationDataPlots(const std::vector<std::vector<double>>& Xdata,
+	                                             const std::vector<std::vector<double>>& Ydata, const float* color,
+	                                             float width, std::string xName, std::string yName, int n, int Distrtype,
+	                                             std::vector<int> props, float yMin, float yMax);
     void addVisualizationDataPlots(const std::vector<std::vector<float>>& Xdata,
                                    const std::vector<std::vector<float>>& Ydata, const float* color, float width,
                                    std::string xName, std::string yName, int n, int Distrtype, std::vector<int> props,

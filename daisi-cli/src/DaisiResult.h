@@ -10,9 +10,40 @@
 #include <daisi-solver/project.h>
 #include <daisi-solver/Results.h>
 #include <memory>
-
+#include <vtkSmartPointer.h>
+#include <vtkDataSetMapper.h>
+#include <vtkProperty.h>
+#include <vtkScalarBarActor.h>
+#include "vtkBrush.h"
+#include "vtkContext2D.h"
+#include "vtkContextActor.h"
+#include "vtkContextItem.h"
+#include <vtkLookupTable.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkGL2PSExporter.h>
+#include "vtkContextScene.h"
+#include "vtkObjectFactory.h"
+#include "vtkOpenGLContextDevice2D.h"
+#include "vtkPen.h"
+#include "vtkRenderWindow.h"
+#include "vtkRenderWindowInteractor.h"
+#include "vtkRenderer.h"
+#include "vtkSmartPointer.h"
+#include "vtkStdString.h"
+#include "vtkTextProperty.h"
 using dynamicsDaisiData = std::vector<std::vector<std::vector<std::shared_ptr<DynamicsData>>>>;
 using simulationDaisiData = std::vector<std::shared_ptr<SimulationData>>;
+
+namespace colors
+{
+	const float                     whitecolor[3] = {255, 255, 255};
+	const float                     redcolor[3]   = {1.0, 0.0, 0.0};
+	const float                     greencolor[3] = {0.0, 1.0, 0.0};
+	const float                     blackcolor[3] = {0.0, 0.0, 0.0};
+	const float                     bluecolor[3]  = {0.0, 0.0, 1.0};
+	const std::vector<const float*> colors        = {redcolor, greencolor, bluecolor};
+	const std::vector<const float*> colorsPoints  = {blackcolor, greencolor, bluecolor};
+}
 
 class DaisiEnv {
 private:
@@ -26,7 +57,7 @@ private:
 
 		strftime( buffer, sizeof( buffer ), "%d-%m-%Y %H:%M:%S", timeinfo );
 		std::string time_of_start( buffer );
-		return "./" + time_of_start + "/";
+		return "/home/artoria/results/" + time_of_start + "/";
 	}
 public :
 	inline const static std::string version = "1.2.0";
@@ -43,9 +74,16 @@ struct DaisiPlot {
 
 class DaisiResult {
 public:
+	static inline std::mutex vtk_mutex{};
+
     DaisiResult( Dproject::project& dProject )
         : proj( dProject )
     {
+	    double background[]         = {255, 255, 255};
+	    renderer = vtkSmartPointer<vtkRenderer>::New() ;
+	    renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+	    renderWindow->AddRenderer(renderer);
+	    renderer->SetBackground(background);
         dynamicsDaisiData dynamicData = proj.currentModel->GetDynamicsData();
         simulationDaisiData simData = proj.currentModel->GetSimulationData();
         for (int nd = 0; nd < dynamicData.size(); nd++) {
@@ -70,6 +108,12 @@ public:
         saveElectrodeData( fname_prefix );
         saveFlowData( fname_prefix );
         saveEmitterField( fname_prefix );
+        saveParticlesPos( fname_prefix );
+        saveParticlesMom( fname_prefix );
+        saveParticlesQ( fname_prefix );
+	    saveVisualizationDataMesh( fname_prefix );
+	    saveCloud( fname_prefix );
+	    saveMesh ( fname_prefix );
     }
 
 private:
@@ -161,7 +205,174 @@ private:
 			outfile.close();
 		}
 	}
-    Dproject::project& proj;
+
+	void saveParticlesPos( const std::string &p)
+	{
+		auto pos = proj.currentModel->get_particles_positions();
+		std::ofstream outfile( DaisiEnv::result_path + p + "Positions" + std::string( ".csv" ));
+		for (int i = 0; i < pos.size(); ++i){
+			for (int j = 0; j< pos[i].size(); ++j)
+			outfile << pos[i][j] << ',' << std::endl;
+		}
+		outfile.close();
+	}
+
+	void saveParticlesMom( const std::string &p)
+	{
+		auto mom = proj.currentModel->get_particles_moments();
+		std::ofstream outfile( DaisiEnv::result_path + p + "Momentums" + std::string( ".csv" ));
+		for (int i = 0; i < mom.size(); ++i){
+			for (int j = 0; j< mom[i].size(); ++j)
+				outfile << mom[i][j] << ',' << std::endl;
+		}
+		outfile.close();
+	}
+
+	void saveParticlesQ( const std::string &p)
+	{
+		auto q = proj.currentModel->get_particles_charge();
+		std::ofstream outfile( DaisiEnv::result_path + p + "Charge" + std::string( ".csv" ));
+		for (int i = 0; i < q.size(); ++i) {
+			outfile << q[i] << ',' << std::endl;
+		}
+		outfile.close();
+	}
+
+	void saveCloud( const std::string &p) {
+		std::vector<int> list = proj.currentModel->GetBoundariesList();
+		std::ofstream boundaries_x( DaisiEnv::result_path + p + "Boundaries_x" + std::string( ".csv" ));
+		std::ofstream boundaries_y( DaisiEnv::result_path + p + "Boundaries_y" + std::string( ".csv" ));
+		for (int i = 0; i < list.size(); i++)
+		{
+			std::vector<float> X;
+			std::vector<float> Y;
+			proj.currentModel->GetPlotXYBoundary( list[i], X, Y );
+			for (int i=0;i<X.size(); ++i)
+				boundaries_x << X[i] << ',';
+			for (int i=0;i<Y.size(); ++i)
+				boundaries_y << Y[i] << ',';
+			boundaries_x<<std::endl;
+			boundaries_y<<std::endl;
+		}
+
+		std::vector<int>                arraySize;
+		int                             elemSize;
+		std::vector<std::vector<void*>> pointArray;
+		proj.currentModel->GetMomentumsParticlesCloud( 0, 0, pointArray, arraySize, elemSize );
+		std::ofstream cloud( DaisiEnv::result_path + p + "ParticlesCloud" + std::string( ".csv" ));
+
+		for ( int thread = 0; thread < pointArray.size(); thread++ )
+		{
+			for ( int i = 0; i < arraySize[thread]; i++ )
+			{
+				for ( int k = 0; k < pointArray[thread].size(); k++ )
+					cloud << ( *((double*)((char*)pointArray[thread][k] + i * elemSize)) ) << ',';
+				cloud << std::endl;
+			}
+		}
+	}
+
+	void saveMesh( std::string const& p )
+	{
+		std::vector<std::vector<std::pair<double,double>>> meshData = proj.currentModel->get_mesh();
+		std::ofstream mesh_x( DaisiEnv::result_path + p + "Mesh_x" + std::string( ".csv" ));
+		std::ofstream mesh_y( DaisiEnv::result_path + p + "Mesh_y" + std::string( ".csv" ));
+		for (int i=0;i<meshData.size();++i) {
+			for (int j = 0; j < meshData[i].size(); ++j)
+				mesh_x << meshData[i][j].first << ',';
+			mesh_x << std::endl;
+		}
+		for (int i=0;i<meshData.size();++i) {
+			for (int j = 0; j < meshData[i].size(); ++j)
+				mesh_y << meshData[i][j].second << ',';
+			mesh_y << std::endl;
+		}
+	}
+
+	vtkSmartPointer<vtkRenderer> renderer;
+	vtkSmartPointer<vtkRenderWindow> renderWindow;
+	void saveVisualizationDataMesh( std::string const& fname_prefix )
+	{
+		std::lock_guard<std::mutex> lock( DaisiResult::vtk_mutex );
+		void* Array[1];
+		int   size;
+		int   elemSize;
+		proj.currentModel->GetGridData(Array, size, elemSize, "Charge density, cl/m^3", 0);
+		vtkSmartPointer<vtkFloatArray> vtkData = vtkSmartPointer<vtkFloatArray>::New();
+
+		vtkData->SetName("Charge density, cl/m^3");
+
+		vtkUnstructuredGrid*                 VTKgrid    = proj.currentModel->GetVTKGrid();
+		vtkSmartPointer<vtkUnstructuredGrid> newVTKgrid = vtkSmartPointer<vtkUnstructuredGrid>::New();
+		newVTKgrid->ShallowCopy(VTKgrid);
+
+		double minVal = *((double*)((char*)Array[0]));
+		double maxVal = *((double*)((char*)Array[0]));
+		double valtmp;
+		for (int i = 1; i < size; i++)
+		{
+			valtmp = *((double*)((char*)Array[0] + i * elemSize));
+			if (valtmp < minVal && !std::isnan(valtmp) && !std::isinf(valtmp))
+				minVal = valtmp;
+			if (valtmp > maxVal && !std::isnan(valtmp) && !std::isinf(valtmp))
+				maxVal = valtmp;
+		}
+		double newmaxVal = maxVal - minVal;
+		for (int i = 0; i < size; i++)
+		{
+			valtmp = (*((double*)((char*)Array[0] + i * elemSize)) - minVal) / newmaxVal;
+			vtkData->InsertNextValue(valtmp);
+		}
+
+		newVTKgrid->GetPointData()->SetScalars(vtkData);
+
+		vtkSmartPointer<vtkDataSetMapper> mapper = vtkSmartPointer<vtkDataSetMapper>::New();
+		vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+		mapper->SetInputData(newVTKgrid);
+
+		actor->SetMapper(mapper);
+		actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
+
+		renderer->AddActor(actor);
+
+		vtkSmartPointer<vtkPolyData> poly = vtkSmartPointer<vtkPolyData>::New();
+		poly->DeepCopy(newVTKgrid);
+		poly->GetPointData()->SetScalars(vtkData);
+
+		vtkSmartPointer<vtkPolyDataMapper> poly_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+
+		poly_mapper->SetInputData(poly);
+		poly_mapper->ScalarVisibilityOn();
+		poly_mapper->SetScalarModeToUsePointData();
+		poly_mapper->SetColorModeToMapScalars();
+
+		vtkSmartPointer<vtkScalarBarActor> scalarBar = vtkSmartPointer<vtkScalarBarActor>::New();
+		scalarBar->SetLookupTable(mapper->GetLookupTable());
+		scalarBar->SetTitle("Charge density, cl/m^3");
+		scalarBar->GetTitleTextProperty()->SetColor(colors::blackcolor[0], colors::blackcolor[1], colors::blackcolor[2]);
+		scalarBar->SetNumberOfLabels(10);
+		scalarBar->GetLabelTextProperty()->SetColor(colors::blackcolor[0], colors::blackcolor[1], colors::blackcolor[2]);
+
+		vtkSmartPointer<vtkLookupTable> hueLut = vtkSmartPointer<vtkLookupTable>::New();
+		hueLut->SetTableRange(minVal, maxVal);
+		hueLut->Build();
+
+		poly_mapper->SetLookupTable(hueLut);
+		scalarBar->SetLookupTable(hueLut);
+
+		renderer->AddActor2D(scalarBar);
+
+		vtkSmartPointer<vtkGL2PSExporter> vtext;
+		vtext = vtkSmartPointer<vtkGL2PSExporter>::New();
+		vtext->SetFileFormatToEPS();
+		vtext->SetLineWidthFactor(1.5);
+		vtext->SetRenderWindow(renderWindow);
+		vtext->SetFilePrefix( ( DaisiEnv::result_path + fname_prefix + "_ChargeDensity").c_str());
+		vtext->Write();
+	};
+
+
+	Dproject::project& proj;
     std::vector<DaisiPlot> _flowPlots;
     std::vector<DaisiPlot> _electrodePlots;
 };

@@ -104,15 +104,25 @@ void vtkComponent::AddText(const std::vector<std::string>& input, std::vector<co
 
 void vtkComponent::SaveData2File(std::string name)
 {
-    FILE* fp = fopen(name.c_str(), "w");
-    for (int i = 0; i < XdataCurrent.size(); i++)
-    {
-        fprintf(fp, "%.5f\t", XdataCurrent[i]);
-        for (int j = 0; j < YdataCurrent.size(); j++)
-            fprintf(fp, "%.5f\t", YdataCurrent[j][i]);
-        fprintf(fp, "\n");
-    };
-    fclose(fp);
+//    FILE* fp = fopen(name.c_str(), "w");
+//    for (int i = 0; i < XdataCurrent.size(); i++)
+//    {
+//        fprintf(fp, "%.5f\t", XdataCurrent[i]);
+//        for (int j = 0; j < YdataCurrent.size(); j++)
+//            fprintf(fp, "%.5f\t", YdataCurrent[j][i]);
+//        fprintf(fp, "\n");
+//    };
+//    fclose(fp);
+    std::ofstream out;
+    out.open( name.c_str() );
+	for (int i = 0; i < XdataCurrent.size(); i++)
+	{
+		out<< XdataCurrent[i] << '\t';
+		for (int j = 0; j < YdataCurrent.size(); j++)
+			out<< YdataCurrent[j][i] << '\t';
+		out << std::endl;
+	};
+	out.close();
 }
 void vtkComponent::CheckType(int viewTypeIn)
 {
@@ -400,6 +410,357 @@ void vtkComponent::addVisualizationDataPlotsAutoY(const std::vector<std::vector<
     // chart->GetAxis(vtkAxis::LEFT)->SetBehavior(vtkAxis::);
     //	ymax = chart->GetAxis(vtkAxis::LEFT)->GetUnscaledMaximum();
     //	ymin = chart->GetAxis(vtkAxis::LEFT)->GetUnscaledMinimum();
+}
+
+void vtkComponent::addVisualizationDataPlotsAutoY(const std::vector<std::vector<double>>& Xdata,
+                                                 const std::vector<std::vector<double>>& Ydata, const float* color,
+                                                 float width, std::string xName, std::string yName, int n,
+                                                 int Distrtype, std::vector<int> props, float& ymax, float& ymin,
+                                                 int startPoint, int endPoint)
+{
+
+	xName                   = xName + std::string("\n ");
+	yName                   = yName + std::string("\n ");
+	int              nPlots = int(Ydata.size());
+	std::vector<int> dashed;
+	std::vector<int> indexes;
+	ymax = -1e20;
+	ymin = 1e20;
+	if (0 == n)
+	{
+		indexes.resize(nPlots);
+		for (int i     = 0; i < nPlots; i++)
+			indexes[i] = i;
+
+		dashed = {1, 2, 10, 11};
+		dashed = {};
+	}
+	else
+	{
+		if (Distrtype == 0)
+		{
+			indexes.resize(nPlots);
+			for (int i     = 0; i < nPlots; i++)
+				indexes[i] = i;
+
+			for (int i = 0; i < nPlots - n; i++)
+			{
+				int k = rand() % indexes.size();
+				indexes.erase(indexes.begin() + k);
+			}
+		}
+		if (Distrtype == 1)
+		{
+			std::vector<int> indexesTmp;
+
+			indexesTmp.resize(nPlots);
+			for (int i        = 0; i < nPlots; i++)
+				indexesTmp[i] = i;
+
+			std::sort(indexesTmp.begin(), indexesTmp.end(), [&](int i, int j) { return Xdata[i][0] > Xdata[j][0]; });
+
+			int dn = nPlots / n;
+
+			for (int i = 0; i < n; i++)
+				indexes.push_back(indexesTmp[dn * i]);
+		}
+	}
+
+	//	view->GetScene()->AddItem(chart);
+
+	for (int j = 0; j < indexes.size(); j++)
+	{
+		int i = indexes[j];
+
+		int endpointLoc = int(Xdata[i].size());
+
+		int flag = 0;
+		if (endPoint != -1 && endPoint < endpointLoc)
+			endpointLoc = endPoint;
+
+		if (endpointLoc - startPoint < 2)
+			flag = 1;
+		// continue;
+		if (endpointLoc - startPoint == 0)
+			continue;
+
+		vtkPlot* line;
+
+		if (flag == 0)
+			line = chart->AddPlot(vtkChart::LINE);
+
+		if (flag == 1)
+		{
+			line = chart->AddPlot(vtkChart::POINTS);
+			vtkPlotPoints::SafeDownCast(line)->SetMarkerStyle(vtkPlotPoints::CIRCLE);
+			vtkPlotPoints::SafeDownCast(line)->SetMarkerSize(width);
+		}
+
+		tables.push_back(vtkSmartPointer<vtkTable>::New());
+		vtkSmartPointer<vtkFloatArray> arrX = vtkSmartPointer<vtkFloatArray>::New();
+		arrX->SetName("X Axis");
+		tables.back()->AddColumn(arrX);
+
+		vtkSmartPointer<vtkFloatArray> arrY = vtkSmartPointer<vtkFloatArray>::New();
+		arrY->SetName("Y axis");
+		tables.back()->AddColumn(arrY);
+
+		/*	if (n != 0)
+				{
+				int nrow = numPoints / 20;
+				tables.back()->SetNumberOfRows(nrow);
+
+				int kk = 0;
+				for (int jj = 0; jj < numPoints; jj++)
+				{
+				if (jj % 20 == 0 && kk<nrow)
+				{
+				tables.back()->SetValue(kk, 0, Xdata[i][jj]);
+				tables.back()->SetValue(kk, 1, Ydata[i][jj]);
+				kk++;
+				}
+				}
+				}*/
+
+		//		if (n == 0)
+		//		{
+
+		tables.back()->SetNumberOfRows(endpointLoc - startPoint);
+
+		for (int jj = startPoint; jj < endpointLoc; jj++)
+		{
+			tables.back()->SetValue(jj, 0, Xdata[i][jj]);
+			tables.back()->SetValue(jj, 1, Ydata[i][jj]);
+			if (Ydata[i][jj] > ymax)
+				ymax = Ydata[i][jj];
+			if (Ydata[i][jj] < ymin)
+				ymin = Ydata[i][jj];
+		}
+		//	}
+
+		line->SetInputData(tables.back(), 0, 1);
+		line->SetColor(color[0], color[1], color[2]);
+		line->SetWidth(width);
+
+		for (int k = 0; k < dashed.size(); k++)
+		{
+			if (dashed[k] == j)
+				line->GetPen()->SetLineType(2);
+		}
+	}
+
+	/*if (0 == n)
+	{
+			chart->GetAxis(vtkAxis::BOTTOM)->SetUnscaledMaximum(0.85);
+			chart->GetAxis(vtkAxis::BOTTOM)->SetUnscaledMinimum(-0.02);
+			chart->GetAxis(vtkAxis::BOTTOM)->SetBehavior(vtkAxis::FIXED);
+
+			chart->GetAxis(vtkAxis::LEFT)->SetUnscaledMaximum(0.22);
+			chart->GetAxis(vtkAxis::LEFT)->SetUnscaledMinimum(-0.02);
+			chart->GetAxis(vtkAxis::LEFT)->SetBehavior(vtkAxis::FIXED);
+	}*/
+
+	double xmax = chart->GetAxis(vtkAxis::BOTTOM)->GetUnscaledMaximum();
+	double xmin = chart->GetAxis(vtkAxis::BOTTOM)->GetUnscaledMinimum();
+
+	// chart->GetAxis(vtkAxis::BOTTOM)->SetNumberOfTicks(props[1]);
+
+	vtkSmartPointer<vtkDoubleArray> ar = vtkSmartPointer<vtkDoubleArray>::New();
+
+	if (props.size() == 0)
+	{
+		return;
+	}
+
+	if (props[1] != -1)
+	{
+		double dx = (xmax - xmin) / props[1];
+
+		dx = floor(dx * 10) / 10;
+
+		if (xmin < 0 && xmin + dx > 0)
+			xmin = 0;
+
+		for (int i = 0; i < props[1] + 1; i++)
+			ar->InsertNextValue(double(xmin + double(i) * dx));
+
+		// chart->GetAxis(vtkAxis::BOTTOM)->SetTickPositions(ar);
+
+		chart->GetAxis(vtkAxis::BOTTOM)->SetGridVisible(false);
+		// ar->RemoveFirstTuple();
+	}
+	if (props[2] != -1)
+	{
+		chart->GetAxis(vtkAxis::LEFT)->SetNumberOfTicks(props[2]);
+		chart->GetAxis(vtkAxis::LEFT)->SetGridVisible(false);
+	}
+
+	/*chart->GetAxis(vtkAxis::BOTTOM)->SetTitle(xName.c_str());
+	chart->GetAxis(vtkAxis::BOTTOM)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::BOTTOM)->GetLabelProperties()->SetFontSize(labelFont);
+
+
+	chart->GetAxis(vtkAxis::LEFT)->SetTitle(yName.c_str());
+	chart->GetAxis(vtkAxis::LEFT)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::LEFT)->GetLabelProperties()->SetFontSize(labelFont);*/
+
+	chart->GetAxis(vtkAxis::BOTTOM)->SetTitle(xName.c_str());
+	chart->GetAxis(vtkAxis::BOTTOM)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::BOTTOM)->GetLabelProperties()->SetFontSize(labelFont);
+
+	chart->GetAxis(vtkAxis::LEFT)->SetBehavior(vtkAxis::AUTO);
+	chart->GetAxis(vtkAxis::BOTTOM)->SetBehavior(vtkAxis::AUTO);
+
+	chart->GetAxis(vtkAxis::LEFT)->SetTitle(yName.c_str());
+	chart->GetAxis(vtkAxis::LEFT)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::LEFT)->GetLabelProperties()->SetFontSize(labelFont);
+
+	// chart->GetAxis(vtkAxis::LEFT)->SetBehavior(vtkAxis::);
+	//	ymax = chart->GetAxis(vtkAxis::LEFT)->GetUnscaledMaximum();
+	//	ymin = chart->GetAxis(vtkAxis::LEFT)->GetUnscaledMinimum();
+}
+
+
+void vtkComponent::addVisualizationDataPlots(const std::vector<std::vector<double>>& Xdata,
+                                             const std::vector<std::vector<double>>& Ydata, const float* color,
+                                             float width, std::string xName, std::string yName, int n, int Distrtype,
+                                             std::vector<int> props, float yMin, float yMax)
+{
+	xName                   = xName + std::string("\n ");
+	yName                   = yName + std::string("\n ");
+	int              nPlots = int(Ydata.size());
+	std::vector<int> dashed;
+	std::vector<int> indexes;
+
+	if (0 == n)
+	{
+		indexes.resize(nPlots);
+		for (int i     = 0; i < nPlots; i++)
+			indexes[i] = i;
+
+		dashed = {1, 2, 10, 11};
+	}
+	else
+	{
+		if (Distrtype == 0)
+		{
+			indexes.resize(nPlots);
+			for (int i     = 0; i < nPlots; i++)
+				indexes[i] = i;
+
+			for (int i = 0; i < nPlots - n; i++)
+			{
+				int k = rand() % indexes.size();
+				indexes.erase(indexes.begin() + k);
+			}
+		}
+		if (Distrtype == 1)
+		{
+			std::vector<int> indexesTmp;
+
+			indexesTmp.resize(nPlots);
+			for (int i        = 0; i < nPlots; i++)
+				indexesTmp[i] = i;
+
+			std::sort(indexesTmp.begin(), indexesTmp.end(), [&](int i, int j) { return Xdata[i][0] > Xdata[j][0]; });
+
+			int dn = nPlots / n;
+
+			for (int i = 0; i < n; i++)
+				indexes.push_back(indexesTmp[dn * i]);
+		}
+	}
+
+	//	view->GetScene()->AddItem(chart);
+	int flag = 0;
+	for (int j = 0; j < indexes.size(); j++)
+	{
+		int i = indexes[j];
+
+		int numPoints = int(Xdata[i].size());
+		if (numPoints < 2)
+			flag = 1;
+		// continue;
+		if (numPoints == 0)
+			continue;
+
+		vtkPlot* line;
+
+		if (flag == 0)
+			line = chart->AddPlot(vtkChart::LINE);
+
+		if (flag == 1)
+		{
+			line = chart->AddPlot(vtkChart::POINTS);
+			vtkPlotPoints::SafeDownCast(line)->SetMarkerStyle(vtkPlotPoints::CIRCLE);
+			vtkPlotPoints::SafeDownCast(line)->SetMarkerSize(width);
+		}
+
+		tables.push_back(vtkSmartPointer<vtkTable>::New());
+		vtkSmartPointer<vtkFloatArray> arrX = vtkSmartPointer<vtkFloatArray>::New();
+		arrX->SetName("X Axis");
+		tables.back()->AddColumn(arrX);
+
+		vtkSmartPointer<vtkFloatArray> arrY = vtkSmartPointer<vtkFloatArray>::New();
+		arrY->SetName("Y axis");
+		tables.back()->AddColumn(arrY);
+
+		/*	if (n != 0)
+		{
+		int nrow = numPoints / 20;
+		tables.back()->SetNumberOfRows(nrow);
+
+		int kk = 0;
+		for (int jj = 0; jj < numPoints; jj++)
+		{
+		if (jj % 20 == 0 && kk<nrow)
+		{
+		tables.back()->SetValue(kk, 0, Xdata[i][jj]);
+		tables.back()->SetValue(kk, 1, Ydata[i][jj]);
+		kk++;
+		}
+		}
+		}*/
+
+		//		if (n == 0)
+		//		{
+		tables.back()->SetNumberOfRows(numPoints);
+
+		for (int jj = 0; jj < numPoints; jj++)
+		{
+			tables.back()->SetValue(jj, 0, Xdata[i][jj]);
+			tables.back()->SetValue(jj, 1, Ydata[i][jj]);
+		}
+		//	}
+
+		line->SetInputData(tables.back(), 0, 1);
+		line->SetColor(color[0], color[1], color[2]);
+		line->SetWidth(width);
+
+		for (int k = 0; k < dashed.size(); k++)
+		{
+			if (dashed[k] == j)
+				line->GetPen()->SetLineType(2);
+		}
+	}
+
+	chart->GetAxis(vtkAxis::BOTTOM)->SetTitle(xName.c_str());
+
+	chart->GetAxis(vtkAxis::BOTTOM)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::BOTTOM)->GetLabelProperties()->SetFontSize(labelFont);
+
+	chart->GetAxis(vtkAxis::LEFT)->SetTitle(yName.c_str());
+	chart->GetAxis(vtkAxis::LEFT)->GetTitleProperties()->SetFontSize(titleFont);
+	chart->GetAxis(vtkAxis::LEFT)->GetLabelProperties()->SetFontSize(labelFont);
+
+	// chart->GetAxis(vtkAxis::LEFT)->GetLabelProperties()->SetBold(5);
+	// chart->GetAxis(vtkAxis::BOTTOM)->GetLabelProperties()->SetBold(10);
+
+	chart->GetAxis(vtkAxis::LEFT)->SetUnscaledMaximum(yMax);
+	chart->GetAxis(vtkAxis::LEFT)->SetUnscaledMinimum(yMin);
+	chart->GetAxis(vtkAxis::LEFT)->SetBehavior(vtkAxis::FIXED);
+
+	vtkSmartPointer<vtkStringArray> labelArray = vtkSmartPointer<vtkStringArray>::New();
 }
 
 void vtkComponent::addVisualizationDataPlots(const std::vector<std::vector<float>>& Xdata,

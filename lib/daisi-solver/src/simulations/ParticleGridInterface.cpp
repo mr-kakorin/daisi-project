@@ -16,6 +16,7 @@
 template <class PointType>
 long long ParticleGridInterface<PointType>::GetMemorySize()
 {
+
     long long result = 0;
     result           = result + Dmath::vectorsize(CICArray);
     result           = result + Dmath::vectorsize(isBoundary);

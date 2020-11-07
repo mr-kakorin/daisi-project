@@ -99,14 +99,14 @@ void SimpleShowChart(vtkComponent* input, const std::vector<float>& data)
 void ShowLinacResultsTraces(vtkComponent* input, ModelInterface* currentModel, std::shared_ptr<DynamicsData> data,
                             int flag, int Distrtype, std::vector<int> props, int numberOfTraces)
 {
-    float ymax;
+   /* float ymax;
     float ymin;
     input->CheckType(1);
     input->clear();
     std::string                     yName, xName;
-    std::vector<std::vector<float>> tmp;
-    std::vector<float>              Zav(data->data[1][0].size());
-    std::vector<float>              beta = data->dataAdd[4];
+    std::vector<std::vector<double>> tmp;
+    std::vector<double>              Zav(data->data[1][0].size());
+    std::vector<double>              beta = data->dataAdd[4];
     float                           gamma;
     float                           en;
     switch (flag)
@@ -151,7 +151,7 @@ void ShowLinacResultsTraces(vtkComponent* input, ModelInterface* currentModel, s
                             s++;
                     }
             }
-            Zav[k] = Zav[k] / s;*/
+            Zav[k] = Zav[k] / s;
 
             for (int i = 0; i < data->TimeArray.size(); i++)
             {
@@ -177,8 +177,8 @@ void ShowLinacResultsTraces(vtkComponent* input, ModelInterface* currentModel, s
 
         input->addVisualizationDataPlotsAutoY(data->data[0], tmp, colors::blackcolor, 1, xName, yName, numberOfTraces,
                                               Distrtype, props, ymax, ymin);
-        input->addVisualizationDataPlot(data->dataAdd[6], data->dataAdd[7], 2, xName, yName, std::string("Channel"),
-                                        ymax, ymin);
+ //       input->addVisualizationDataPlot(data->dataAdd[6], data->dataAdd[7], 2, xName, yName, std::string("Channel"),
+//                                        ymax, ymin);
 
         break;
     case 3:
@@ -310,13 +310,13 @@ void ShowLinacResultsTraces(vtkComponent* input, ModelInterface* currentModel, s
                                               props, ymax, ymin);
     }
     break;
-    }
+    }*/
 };
 
 void ShowLinacResultsChar(vtkComponent* input, ModelInterface* currentModel, std::shared_ptr<DynamicsData> data,
                           int flag, int Distrtype, std::vector<int> props, int numberOfTraces)
 {
-    input->CheckType(1);
+/*    input->CheckType(1);
     input->clear();
     std::string yName, xName;
     float       ymax;
@@ -328,22 +328,22 @@ void ShowLinacResultsChar(vtkComponent* input, ModelInterface* currentModel, std
     case 7:
         yName = "R chan";
         xName = "T, ns";
-        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[0], 2, xName, yName, std::string("R channel"),
-                                        ymax, ymin);
+//        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[0], 2, xName, yName, std::string("R channel"),
+ //                                       ymax, ymin);
         yName = "R beam";
         xName = "T, ns";
-        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[1], 2, xName, yName, std::string("R beam"),
-                                        ymax, ymin);
+//        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[1], 2, xName, yName, std::string("R beam"),
+  //                                      ymax, ymin);
         break;
     case 8:
         yName = "Transmission";
         xName = "T, ns";
-        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[2], 2, xName, yName,
-                                        std::string("Transmission"), ymax, ymin);
+//        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[2], 2, xName, yName,
+//                                        std::string("Transmission"), ymax, ymin);
         yName = "Acceleration";
         xName = "T, ns";
-        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[3], 2, xName, yName,
-                                        std::string("Acceleration"), ymax, ymin);
+//        input->addVisualizationDataPlot(data->TimeArrayAdd, data->dataAdd[3], 2, xName, yName,
+ //                                       std::string("Acceleration"), ymax, ymin);
         break;
 
     case 9:
@@ -356,9 +356,9 @@ void ShowLinacResultsChar(vtkComponent* input, ModelInterface* currentModel, std
     case 10:
         yName                    = "Energy, Ev";
         xName                    = "Z, m";
-        std::vector<float> tmp   = data->data[3][0];
-        std::vector<float> tmpT  = data->TimeArray[0];
-        std::vector<float> tmpT1 = data->dataAdd[14];
+        std::vector<double> tmp   = data->data[3][0];
+        std::vector<double> tmpT  = data->TimeArray[0];
+        std::vector<double> tmpT1 = data->dataAdd[14];
 
         en = LIGHT_VELOCITY * LIGHT_VELOCITY * data->mass;
 
@@ -383,10 +383,10 @@ void ShowLinacResultsChar(vtkComponent* input, ModelInterface* currentModel, std
                 tmpT1[i] = tmpT1[i] - PI;
         }
         // input->addVisualizationDataPlot(data->data[0][0], tmpT, 2, xName, yName, std::string("Velocity"));
-        input->addVisualizationDataPlot(cells, tmpT1, 2, xName, yName, std::string("Velocity"), ymax, ymin);
+        //input->addVisualizationDataPlot(cells, tmpT1, 2, xName, yName, std::string("Velocity"), ymax, ymin);
 
         // input->addVisualizationDataPlot(data->TimeArray[0], tmp, 2, xName, yName, std::string("Velocity"));
-    }
+    }*/
 };
 
 void ShowRFQRFQCavityParametersPlots(vtkComponent* input, ModelInterface* currentModel, int flag)
@@ -880,8 +880,8 @@ void Show3PositionsWithGeometryPlane(vtkComponent* input, ModelInterface* curren
             if (data->data[1][i][0] < 0.025 && data->data[1][i][0] > 0.01 &&
                 data->TimeArray[i].back() - data->TimeArray[i][0] > 7)
             {
-                input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
-                                                xName, 0, 1, 0);
+               // input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
+                //                                xName, 0, 1, 0);
                 break;
             }
         }
@@ -892,8 +892,8 @@ void Show3PositionsWithGeometryPlane(vtkComponent* input, ModelInterface* curren
             if (data->data[1][i][0] < 0.26 && data->data[1][i][0] > 0.25 &&
                 data->TimeArray[i].back() - data->TimeArray[i][0] > 7)
             {
-                input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
-                                                xName, 0, 1, 0);
+              //  input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
+            //                                  xName, 0, 1, 0);
                 //	input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::redcolor, 1.5,
                 // yName, xName, 0, 2, 0);
                 break;
@@ -905,8 +905,8 @@ void Show3PositionsWithGeometryPlane(vtkComponent* input, ModelInterface* curren
             // if (data->data[1][i][0]>0.475 && data->TimeArray[i].back() - data->TimeArray[i][0]>20)
             if (data->data[1][i][0] > 0.475 && data->TimeArray[i].back() - data->TimeArray[i][0] > 7)
             {
-                input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
-                                                xName, 0, 1, 0);
+              //  input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::blackcolor, 1.5, yName,
+             //                                   xName, 0, 1, 0);
                 //	input->addVisualizationDataPlot(data->data[1][i], data->data[0][i], colors::bluecolor, 2.5,
                 // yName, xName, 0, 5, 0);
                 break;
@@ -1097,12 +1097,12 @@ void ShowEnergy(vtkComponent* input, ModelInterface* currentModel, std::shared_p
         Ydata.push_back(Xtmp);
     }
 
-    if (xName == "time, ns")
-        input->addVisualizationDataPlotsAutoY(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName,
-                                              numberOfTraces, Distrtype, props, ymax, ymin);
-    if (xName == "Z, m")
-        input->addVisualizationDataPlotsAutoY(data->data[2], Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
-                                              Distrtype, props, ymax, ymin);
+    //if (xName == "time, ns")
+    //    input->addVisualizationDataPlotsAutoY(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName,
+     //                                         numberOfTraces, Distrtype, props, ymax, ymin);
+    //if (xName == "Z, m")
+    //    input->addVisualizationDataPlotsAutoY(data->data[2], Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
+     //                                         Distrtype, props, ymax, ymin);
 }
 
 void ShowErrors(vtkComponent* input, ModelInterface* currentModel)
@@ -1404,8 +1404,8 @@ void ShowEnergyPolar(vtkComponent* input, ModelInterface* currentModel, std::sha
         Ydata.push_back(Xtmp);
     }
 
-    input->addVisualizationDataPlotsAutoY(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
-                                          Distrtype, props, ymax, ymin);
+   // input->addVisualizationDataPlotsAutoY(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
+  //                                        Distrtype, props, ymax, ymin);
 }
 
 void ShowEnergyEphiPolar(vtkComponent* input, ModelInterface* currentModel, std::shared_ptr<DynamicsData> data,
@@ -1436,8 +1436,8 @@ void ShowEnergyEphiPolar(vtkComponent* input, ModelInterface* currentModel, std:
         Ydata.push_back(Xtmp);
     }
 
-    input->addVisualizationDataPlots(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
-                                     Distrtype, props, ymax, ymin);
+  //  input->addVisualizationDataPlots(data->TimeArray, Ydata, colors::blackcolor, 1, xName, yName, numberOfTraces,
+   //                                  Distrtype, props, ymax, ymin);
 }
 
 void ShowValueAlongConductor(vtkComponent* input, ModelInterface* currentModel, int conductor, int flag)

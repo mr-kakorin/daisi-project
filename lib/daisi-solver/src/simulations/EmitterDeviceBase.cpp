@@ -329,7 +329,6 @@ std::vector<int> EmitterDeviceBase<PointType>::GetBoundariesList()
 
 template <class PointType>
 EmitterDeviceBase<PointType>::EmitterDeviceBase(int DistributionStyleIn)
-    : get_energy_distribution( nullptr )
 {
     if (DistributionStyleIn == 0)
     {

@@ -6,7 +6,7 @@
 #include "GridData.h"
 #include "geomTools.h"
 #include <Constants.h>
-
+#include <sstream>
 
 template <class PointType>
 void ParticleSource2d<PointType>::SetFlowCurrent(double res)
@@ -170,8 +170,7 @@ std::vector<PointType> ParticleSource2d<PointType>::GetParticle(PointType L1, Po
 }
 
 template <class PointType>
-bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L2,
-                                                                int flag, PointType*const& out)
+bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L2, int flag, PointType*const& out, double const timestep)
 {
 	PointType              lMiddle = (L1 + L2) / 2;
 	int                    j       = 0;
@@ -180,7 +179,7 @@ bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L
 
 	int middle;
 
-	while (1)
+	while (true)
 	{
 		if (j + 1 == j1 || j == j1)
 			break;
@@ -194,15 +193,62 @@ bool ParticleSource2d<PointType>::GetParticleOptimized(PointType L1, PointType L
 			j1 = middle;
 	};
 
+	int start = -1;
+	int end = -1;
+	for ( int i = 0; i < sourceSurface.size(); ++i)
+	{
+		if ( start == -1 && sourceSurface[i].curveLength >= L1 )
+			start = i;
+		if ( end == -1 && sourceSurface[i].curveLength >= L2 )
+			end = i;
+		if ( start != -1 && end != -1 )
+			break;
+	}
+
+	out[2] = 0;
+	for ( int i = start; i < end; ++i )
+	{
+		double jC = std::min(double(sourceSurface[i].currentDensity),
+		                     double(sourceSurface[i].maximalCurrentDensity));
+
+		if (flag == 0)
+			out[2] += sourceSurface[i].extractingEdge->length() * jC; // for 2d case
+		if (flag == 1)
+			out[2] += sourceSurface[i].extractingEdge->length() * jC * 2 * PI() * sourceSurface[i].extractingEdge->Middle().x;
+	}
+	out[2] += sourceSurface[j].accumulatedCurrentDensity;
+	std::stringstream ss;
+	ss << j << "," << out[2] <<"," << timestep <<","<< timestep * out[2] <<","<< std::abs( ELECTRON_CHARGE() ) << "," <<std::endl;
+	std::cout << ss.str();
+	if ( std::isnan( out[2] ) ) {
+		double p = sourceSurface[j].accumulatedCurrentDensity;
+		double ppp = out[2];
+	}
+
+
+	if ( timestep * out[2] < std::abs( ELECTRON_CHARGE()) )
+	{
+		sourceSurface[j].accumulatedCurrentDensity = out[2];
+		out[2] = 0;
+	}
+	else
+	{
+		sourceSurface[j].accumulatedCurrentDensity = 0;
+	}
+//	std::stringstream log;
+//	log << out[2] << " vs " << ( (L2 - L1) * std::min(double(sourceSurface[j].currentDensity),double(sourceSurface[j].maximalCurrentDensity)) * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x ) << " "
+//	<< out[2] / ( (L2 - L1) * std::min(double(sourceSurface[j].currentDensity),double(sourceSurface[j].maximalCurrentDensity)) * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x ) * 100 <<  "% new from old."  << std::endl;
+//	std::cout << log.str();
+
 	out[0]    = sourceSurface[j].extractingEdge->Middle().x;
 	out[1]    = sourceSurface[j].extractingEdge->Middle().y;
-	double jC = std::min(double(sourceSurface[j].currentDensity),
-	                     double(sourceSurface[j].maximalCurrentDensity));
-
-	if (flag == 0)
-		out[2] = (L2 - L1) * jC; // for 2d case
-	if (flag == 1)
-		out[2] = (L2 - L1) * jC * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x;
+//	double jC = std::min(double(sourceSurface[j].currentDensity),
+//	                     double(sourceSurface[j].maximalCurrentDensity));
+//
+//	if (flag == 0)
+//		out[2] = (L2 - L1) * jC; // for 2d case
+//	if (flag == 1)
+//		out[2] = (L2 - L1) * jC * 2 * PI() * sourceSurface[j].extractingEdge->Middle().x;
 
 	PointType tmp;
 	PointType tmp1;
@@ -735,6 +781,8 @@ ParticleSourceEdge<PointType>::ParticleSourceEdge(DGeo::Edge<PointType>& Edge,
     cellNumber            = cell;
     alphaNormal           = X;
     flagNormal            = Y;
+
+	accumulatedCurrentDensity = 0;
 }
 
 template <class PointType>

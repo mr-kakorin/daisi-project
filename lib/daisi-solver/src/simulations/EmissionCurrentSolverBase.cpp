@@ -290,9 +290,14 @@ void EmissionCurrentSolverBase<PointType>::init(
 
     int n = 1;
     istartstmp.push_back(0);
-
+	std::vector<DGeo::Point<PointType>> points_grad;
+	points_grad.resize( source->sourceSurface.size() );
     for (int i = 0; i < source->sourceSurface.size(); i++)
     {
+	    DGeo::Point<PointType> middle;
+	    middle.x = source->sourceSurface[i].extractingEdge->Middle().x;
+	    middle.y = source->sourceSurface[i].extractingEdge->Middle().y;
+	    points_grad[i] = middle;
         LCurrent = source->sourceSurface[i].curveLength;
 
         int flagLast = 1;
@@ -339,7 +344,7 @@ void EmissionCurrentSolverBase<PointType>::init(
         K.back()[j] = 0.1;
 
     istartstmp.back();
-    gradients.emplace_back( DGeo::calc_grad2d( points1tmp ) );
+    gradients.emplace_back( DGeo::calc_grad2d( points_grad ) );
     points1.push_back(points1tmp);
     points2.push_back(points2tmp);
 

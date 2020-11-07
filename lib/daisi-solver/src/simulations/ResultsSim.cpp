@@ -78,8 +78,8 @@ void DynamicsData::load(Archive& ar, const unsigned int)
     ar& tag;
 }
 
-void DynamicsData::SetAdditionalData(const std::vector<float>&        TimeArrayAddIn,
-                                     std::vector<std::vector<float>>& dataAddIn)
+void DynamicsData::SetAdditionalData(const std::vector<double>&        TimeArrayAddIn,
+                                     std::vector<std::vector<double>>& dataAddIn)
 {
     TimeArrayAdd = TimeArrayAddIn;
     dataAdd      = dataAddIn;
